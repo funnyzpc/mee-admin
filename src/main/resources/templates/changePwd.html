@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <!-- 头部静态: js、css、image -->
+    <#include "../../decorator/head.html"/>
+    <title>MEE</title>
+    <style>
+        .content{margin:5% auto;}
+        .content h3,h4{text-align:center;}
+        #user-form{width:80%;margin:2% auto;}
+    </style>
+</head>
+<body data-catalog="service">
+<!-- 顶部菜单 -->
+<#include "../../decorator/banner.html"/>
+<div class="container-fluid">
+    <div id="user-form"></div>
+</div>
+<script type="text/javascript">
+$(function(){
+	seajs.use("changePwd", function(changePwd){
+		<#-- changePwd.init(${sessionScope.user.initialPwd}, ${sessionScope.user.expired}); -->
+		changePwd.init(false,false);
+	});
+});
+</script>
+</body>
+<!-- 底部静态 -->
+<#include "../../decorator/foot.html"/>
+</html>

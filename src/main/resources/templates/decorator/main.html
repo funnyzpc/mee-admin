@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "head.html"/>
+    <script>
+        alert("templates/decorator/main.html");
+    </script>
+</head>
+    <#-- <body class="${param.t}"> -->
+<body>
+    <#include "banner.html"/>
+
+    <sitemesh:write property="body"/>
+</body>
+    <#include "foot.html"/>
+</html>

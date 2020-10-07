@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mee.xml.SysMenu">
+
+    <!-- 查询所有菜单 -->
+    <select id="findMenus" resultType="java.util.Map" useCache="true">
+        select code as id,parent_code  as parent,"name"||'['||code||']' as "text" from sys_menu where show_flag=1 order by code asc
+    </select>
+
+    <select id="findList" resultType="com.mee.sys.entity.SysMenu" useCache="true">
+        select * from sys_menu
+        <where>
+            <if test="id != null and id != ''">
+                and id = cast(#{id} as numeric)
+            </if>
+            <if test="code != null and code!=''">
+                and code = #{code}
+            </if>
+            <if test="name != null and name != ''">
+                and name like #{name}
+            </if>
+        </where>
+        order by id asc
+    </select>
+
+
+    <insert id="insert">
+        insert into sys_menu(
+            id,
+            "name",
+            show_flag,
+            create_date,
+            create_by,
+            code,
+            parent_code
+        ) values (
+            cast(#{id} as numeric),
+            #{name},
+            #{show_flag},
+            now(),
+            #{create_by},
+            #{code},
+            #{parent_code}
+        )
+    </insert>
+
+
+    <update id="update" parameterType="com.mee.sys.entity.SysDict">
+        update sys_menu
+        <set>
+            <if test="name != null and name !='' " >  "name" = #{name,jdbcType=VARCHAR},</if>
+            <if test="code != null and code !='' " >code = #{code,jdbcType=VARCHAR},</if>
+            <if test="parent_code != null and parent_code !='' " >parent_code=#{parent_code,jdbcType=VARCHAR},</if>
+            <if test="show_flag != null" >"show_flag" = #{show_flag},</if>
+        </set>
+        where ID = cast(#{id} as numeric)
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_menu where id = cast(#{id} as numeric)
+    </delete>
+
+    <select id="findByRoleID" resultType="com.mee.sys.entity.SysMenu">
+        select m.* from sys_menu as m inner join  sys_role_menu as mr on m.code = mr.menu_code
+        where mr.role_id = cast(#{role_id} as numeric)
+    </select>
+
+    <!-- 查找是否有子节点 -->
+    <select id="findChildNodeCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1) from sys_menu where parent_code = #{code}
+    </select>
+</mapper>

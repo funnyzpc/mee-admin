@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mee.xml.SysLog">
+
+    <select id="findList" resultType="com.mee.sys.entity.SysLog">
+        select * from sys_log
+        <where>
+            <if test="id != null and id != ''"> and id = #{id} </if>
+            <if test="log_type != null and log_type != ''"> and log_type = #{log_type} </if>
+            <if test="log_date != null and log_date != ''"> and log_date >= to_date(#{log_date},'yyyy-mm-dd')</if>
+            <if test="log_title != null and log_title != ''"> and log_title like #{log_title} </if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insert">
+        insert into sys_log(
+            id,
+            log_type,
+            log_title,
+            log_date,
+            remote_address,
+            log_content
+        ) values (
+            cast(#{id} as numeric),
+            #{log_type},
+            #{log_title},
+            #{log_date},
+            #{remote_address},
+            #{log_content}
+        )
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_log where id = #{id}
+    </delete>
+
+</mapper>

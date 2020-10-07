@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.4.RELEASE</version>
+		<relativePath/>
+	</parent>
+	<groupId>com.mee</groupId>
+	<artifactId>mee</artifactId>
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
+	<name>mee</name>
+	<packaging>jar</packaging>
+	<description>mee by Spring Boot</description>
+
+	<properties>
+		<application.name>mee</application.name>
+		<java.version>1.8</java.version>
+		<shiro.version>1.4.2</shiro.version>
+<!--		<freemarker.version>2.2.2.RELEASE</freemarker.version>-->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.yaml</groupId>
+					<artifactId>snakeyaml</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>2.1.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+<!--
+		<dependency>
+			<groupId>org.springframework.restdocs</groupId>
+			<artifactId>spring-restdocs-mockmvc</artifactId>
+			<scope>test</scope>
+		</dependency>
+-->
+
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+
+		<!-- shiro support freemarker -->
+		<dependency>
+			<groupId>net.mingsoft</groupId>
+			<artifactId>shiro-freemarker-tags</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.10.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.3.10</version>
+		</dependency>
+
+		<!-- 解/压缩zip文件之使用 -->
+		<dependency>
+			<groupId>net.lingala.zip4j</groupId>
+			<artifactId>zip4j</artifactId>
+			<version>2.6.2</version>
+		</dependency>
+
+		<!-- 大文件读取使用 -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+
+		<!-- poi依赖太大 -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.17</version>
+		</dependency>
+
+		<!--
+		<dependency>
+			<groupId>com.github.liaochong</groupId>
+			<artifactId>myexcel</artifactId>
+			<version>3.9.5</version>
+		</dependency>
+		-->
+
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<profileActive>dev</profileActive>
+				<env.warname>${application.name}</env.warname>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>test</id>
+			<properties>
+				<profileActive>test</profileActive>
+				<env.warname>${application.name}</env.warname>
+			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+
+
+		<profile>
+			<id>prod</id>
+			<properties>
+				<profileActive>prod</profileActive>
+				<env.warname>${application.name}</env.warname>
+			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+
+	</profiles>
+
+	<build>
+		<finalName>${name}</finalName>
+		<!--
+		<filters>
+			<filter>src/main/resources/application-${environment}.properties</filter>
+		</filters>
+		-->
+		<resources>
+			<!-- 必须处理resources目录的下字体文件，否则打包会损坏字体文件 -->
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>static/fonts/**</exclude>
+					<exclude>static/css/font/**</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>static/fonts/**</include>
+					<include>static/css/font/**</include>
+				</includes>
+			</resource>
+
+			<!--
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>application-{profiles.active}.properties</exclude>
+				</excludes>
+			</resource>
+			-->
+			<resource>
+				<!-- 配置需要被替换的资源文件路径 -->
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>dao/*</include>
+					<include>public/*</include>
+					<!-- 加入 banner 打印输出文件 -->
+					<include>static/*</include>
+					<!-- 加入 dubbo 配置文件 -->
+					<include>templates/*/*</include>
+					<include>webapp/*/*</include>
+					<include>application.properties</include>
+					<include>application-${profileActive}.properties</include>
+				</includes>
+			</resource>
+
+		</resources>
+
+		<plugins>
+			<!--maven插件, 将项目打包成Jar-->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

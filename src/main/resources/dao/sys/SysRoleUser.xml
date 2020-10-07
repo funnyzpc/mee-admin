@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mee.xml.SysRoleUser">
+
+    <select id="findList" resultType="com.mee.sys.entity.SysRoleUser">
+        select * from sys_role_user
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="role_id != null and role_id != ''">
+                and role_id = cast(#{role_id} as numeric)
+            </if>
+            <if test="user_id != null and user_id != ''">
+                and user_id = #{user_id}
+            </if>
+            <if test="nick_name != null and nick_name != ''">
+                and nick_name like #{nick_name}
+            </if>
+        </where>
+    </select>
+
+    <!-- 删除用户&角色关系 -->
+    <delete id="delete">
+        delete from sys_role_user
+        <where>
+            <if test="id != null and id != ''">and id = cast(#{id} as numeric) </if>
+            <if test="user_id != null and user_id != ''">and user_id = #{user_id} </if>
+            <if test="role_id != null">and role_id = cast(#{role_id} as numeric)</if>
+        </where>
+    </delete>
+
+    <!-- 插入角色用户关系 -->
+    <insert id="insert">
+        insert into sys_role_user(
+            id,
+            user_id,
+            role_id
+        ) values (
+            cast(#{id} as numeric),
+            #{user_id},
+            cast(#{role_id} as numeric)
+        )
+    </insert>
+
+</mapper>

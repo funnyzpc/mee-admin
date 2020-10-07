@@ -1,0 +1,102 @@
+/** define your style **/
+body{font:13px "Microsoft YaHei",微软雅黑,simhei,SimSun,宋体,arial;margin-bottom: 51px;}
+
+.navbar{margin-bottom: 0;border-radius:0;background-color:#563D7C;padding: 0;min-height:0;height: 45px;overflow-y:hidden;}
+.navbar-header img{float: left;height:45px;}
+.navbar-brand{padding: 10px 15px;}
+.navbar *{color: #fff;}
+
+#navbar {margin-right: 30px;}
+#navbar p{line-height: 45px;}
+#navbar a{line-height: 45px; padding-top:0!important;padding-bottom:0!important;}
+
+#navbar-menu li.active{background: #fff;}
+#navbar-menu li.active a{color: #428bca;font-weight: bold;}
+#navbar-menu li.active a:HOVER{background-color: #fff;text-decoration: underline;}
+
+.sidebar {float:left;position: absolute;top: 47px;bottom: 1px;left: 1px;padding:0;display: block;overflow-x: hidden;overflow-y: auto;background-color: #f5f5f5;border-right: 1px solid #eee;}
+.sidebar li.active{background-color:#C8BED8;z-index: 9999;border-right:3px solid #6610f2;}
+.sidebar li.active a{text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);}
+
+/*
+.menu {margin: 0;padding: 0;list-style: none;}
+.menu li{display: block;padding-left: 20px; line-height: 30px;}
+.menu li.header{margin-top: 10px;padding-left: 5px;background-color: #ccc;}
+.menu li.header a{color: #000;font-weight: bold;}
+*/
+
+/****菜单样式*****/
+/*.menu {margin:5px 0 0 0;width:227px;} */
+.menu {margin:4px 0 0 0;min-width:160px;}
+
+.menu a:link,a:visited{text-decoration:none;}
+.menu ul{list-style:none;padding:0;}
+.menu ul li{background-color:#dedede;border-bottom: 1px solid #cecece; border-top: 1px solid #fff;}
+.menu ul li a{color: #2b2b2b;text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.4);padding-left:10px;font-size:12px;font-weight:bold;display:block;height:36px;line-height:36px;position: relative;}
+/*
+.menu ul li .inactive {background:url(../img/off.gif) no-repeat 192px center;}
+.menu ul li .inactives{background:url(../img/on.gif) no-repeat 192px center;}
+*/
+.menu ul li ul{display: none;}
+.menu ul li ul li {border-left:0;
+    border-right:0; border-bottom: 1px solid #bcc8ff;
+    border-top: 1px solid #fff;
+    background-color: #fcfcfc; color: #727272;
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);
+    }
+.menu ul li ul li ul{display: none;}
+.menu ul li ul li a{padding-left:20px;color:#453a3a;font-weight:normal;}
+.menu ul li ul li ul li {background-color:#f4f4f4;}
+.last{ background-color:#d6e6f1; border-color:#6196bb;}
+.menu ul li ul li ul li a{padding-left:30px;}
+.menu ul li a .inactive,.inactives {border-bottom:1px solid #cecece;}
+.menu ul li ul li:last-child {border-bottom:none;}
+
+
+/** 侧栏菜单基本样式 **/
+.menu .icon-item{font-size: 16px;margin-right:4px;}
+.menu ul li a{font-size:14px;}
+
+/** icon 样式 **/
+i.menu-rights:before{content:"\f007";color:#593196;}
+i.menu-system:before{content:"\f013";color:#593196;}
+i.menu-other:before{content:"\f01c";color:#593196;}
+
+.main{margin: 6px 6px 6px 2px;}
+
+.table{margin-bottom: 0;}
+.form-paging, .form-search{background-color: #f5f5f5; padding: 10px;}
+.form-search .btn, .form-paging .btn{margin-top: -5px;}
+
+.table>thead>tr>th{background-color:#dedede;color:black;}
+.table th{text-align: center;}
+.table tbody tr{cursor: pointer;}
+
+/*
+.loading{height: 100px;width:100%;background: #fff url(../img/loading.gif) no-repeat center center;}
+*/
+.loading{height:80px;width:80px;margin:8px auto;background:url(../img/loading2.gif);background-size:80px 80px;background-repeat:no-repeat;}
+
+input.date{width:108px;}
+input.datetime{width: 150px;}
+
+form.form-horizontal div.group{background-color: #f5f5f5;color:#333;padding:10px 15px;border-top: 1px solid #ddd;border-bottom: 1px solid #ddd;}
+div.table-group{margin-bottom: 0;}
+
+.seprator{margin: auto 10px;}
+
+.status-1{background-color: blue;color: #fefefe;}
+.status-2{background-color: yellow;}
+.status-3{background-color: blue;color: #fefefe;}
+.status-4{background-color: yellow;}
+.status-5{background-color: blue;color: #fefefe;}
+.status-6{background-color: yellow;}
+.status-7{background-color: blue;color: #fefefe;}
+.status-8{background-color: red;}
+/*
+.status-3{background-color: green;color: #fefefe;}
+.status-4{background-color: red;color: #fefefe;}
+*/
+.checkstatus-0{background-color: red;color: #fefefe;}
+
+#data-list{color:block;outline:none;}

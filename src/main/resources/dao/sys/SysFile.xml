@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mee.xml.SysFile">
+
+    <select id="findList" resultType="com.mee.sys.entity.SysFile">
+        select * from sys_file
+        <where>
+            <if test="id != null and id != ''">  and id = #{id} </if>
+            <if test="original_name != null and original_name != ''">  original_name id like #{original_name} </if>
+            <if test="name != null and name != ''">  and name like #{name} </if>
+            <if test="dts != null ">  and create_date &gt;= #{dts} </if>
+            <if test="dte != null ">  and create_date &lt;= #{dte} </if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insert">
+        insert into sys_file(
+            "id",
+            original_name,
+            "name",
+            file_path,
+            file_type,
+            category,
+            create_date,
+            create_by
+        ) values (
+            #{id},
+            #{original_name},
+            #{name},
+            #{file_path},
+            #{file_type},
+            #{category},
+            #{create_date},
+            #{create_by}
+        )
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_dic where id = #{id}
+    </delete>
+
+</mapper>

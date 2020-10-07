@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <link rel="stylesheet" href="${ctxPath}/jstree/style.min.css">
+    <title>MEE-菜单管理</title>
+    <style>
+        #data-list{margin:1% 0%;padding: 1% 0%;}
+        .jstree-container-ul{padding:1%;border:1px dashed gray;font-size:15px;}
+    </style>
+</head>
+<body data-catalog="service">
+<#include "../decorator/banner.html"/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2 sidebar">
+            <#include "../decorator/sys_menu.html"/>
+        </div>
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="main">
+                <!-- 业务内容 -->
+                <form method="post" id="search-form" class="form-inline form-search">
+                    <!--
+                    <div style="font-weight:bold; font-size:18px;">
+                        菜单管理<span style="color:red;font-size:14px;font-weight:normal;"> （点击目录可添加下级节点）</span>
+                    </div>
+                    -->
+                    <label>菜单管理: </label>
+                    <button name="new" class="btn btn-sm btn-success">增加</button>
+                    <button name="mod" class="btn btn-sm btn-info">编辑</button>
+                    <button name="del" class="btn btn-sm btn-danger">删除</button>
+                    <span class="seprator"></span>
+                </form>
+
+                <div id="data-list">
+                    <div id="data-tree"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- 底部静态 -->
+<#include "../decorator/foot.html"/>
+<script type="text/javascript" src="${ctxPath}/jstree/jstree.js"></script>
+<script type="text/javascript">
+    $(function(){
+        seajs.use("sys/menu", function(dict){
+            dict.init();
+        });
+    });
+</script>
+</html>

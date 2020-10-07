@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html lang="zh-cn">
+<head>
+<jsp:include page="head.jsp"></jsp:include>
+</head>
+<body class="${param.t}" data-catalog="admin">
+	<jsp:include page="banner.jsp"></jsp:include>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-2 sidebar">
+<jsp:include page="admin-menu.jsp"></jsp:include>
+			</div>
+			<div class="col-sm-offset-2 col-sm-10">
+				<div class="main">
+				<sitemesh:write property="body" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<jsp:include page="foot.jsp"></jsp:include>
+</body>
+</html>

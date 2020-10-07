@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="http://www.padual.com/java/logback.xsd">
+    <!-- 定义日志的根目录 -->
+    <property name="LOG_HOME" value="./logs" />
+    <!-- 定义日志文件名称 -->
+    <property name="appName" value="mee"></property>
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} -> [%thread] -> %-5level %logger{50}:%L - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <appender name="appLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 指定日志文件的名称 -->
+        <file>${LOG_HOME}/${appName}.log</file>
+        　　 <append>true</append>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${appName}-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <MaxHistory>30</MaxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>200MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <!-- 日志输出格式： -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread - %-5level] %logger{50}:%line -%msg%n</pattern>
+        </layout>
+    </appender>
+    <!-- 文件输出-END -->
+
+    <!-- 异常日志输出文件 -->
+    <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level-%caller{1} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${appName}_error_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <maxFileSize>200MB</maxFileSize>
+            <maxHistory>15</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- mybatis logger -->
+    <logger name="org.mybatis" level="error"/>
+    <logger name="java.sql.Connection" level="DEBUG"/>
+    <logger name="java.sql.Statement" level="DEBUG"/>
+    <logger name="java.sql.PreparedStatement" level="DEBUG"/>
+    <!-- 自己项目的 -->
+    <logger name="com.mee" level="DEBUG"/>
+    <!-- dev环境 -->
+    <springProfile name="dev">
+        <root level="debug"><!-- 这里输出所有日志文件 -->
+            <!-- 控制台 -->
+            <appender-ref ref="console" />
+            <appender-ref ref="appLogAppender"/>
+            <appender-ref ref="errorAppender"/>
+        </root>
+    </springProfile>
+    <!-- test环境 -->
+    <springProfile name="test">
+        <root level="debug">
+            <!-- 控制台 -->
+            <appender-ref ref="console" />
+            <appender-ref ref="appLogAppender"/>
+            <appender-ref ref="errorAppender"/>
+        </root>
+    </springProfile>
+    <!-- 生产环境 -->
+    <springProfile name="prod">
+        <root level="debug">
+            <appender-ref ref="appLogAppender"/>
+            <appender-ref ref="errorAppender"/>
+        </root>
+    </springProfile>
+</configuration>

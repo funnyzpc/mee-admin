@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<#include "head.html"/>
+</head>
+<script> alert("service.html");</script>
+<body data-catalog="service">
+	<#include "banner.html"/>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-2 sidebar">
+				<#include "menu.html"/>
+			</div>
+			<div class="col-sm-offset-2 col-sm-10">
+				<div class="main">
+				<sitemesh:write property="body" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<#include "foot.html"/>
+</body>
+</html>

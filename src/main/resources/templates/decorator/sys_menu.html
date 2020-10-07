@@ -1,0 +1,62 @@
+
+<!-- 系统模块菜单管理 -->
+<style>
+    .banner-04{background-color:#eee;font-weight:bold;color:blue !important;}
+    .banner-04>a{color:#11113a;}
+</style>
+<div class="menu">
+    <ul>
+        <@shiro.hasPermission name="0401">
+        <li>
+            <a href="#" class="inactive"><i class="icon-item menu-rights"></i>系统配置</a>
+            <ul style="display:none" class="list-child">
+
+                <@shiro.hasPermission name="040101">
+                    <li><a href="${ctxPath}/sys/user">用户配置</a></li>
+                </@shiro.hasPermission>
+
+                <@shiro.hasPermission name="040103">
+                    <li><a href="${ctxPath}/sys/menu">菜单配置</a></li>
+                </@shiro.hasPermission>
+
+                <@shiro.hasPermission name="040102">
+                    <li><a href="${ctxPath}/sys/role">角色分配</a></li>
+                </@shiro.hasPermission>
+
+                <@shiro.hasPermission name="040104">
+                    <li><a href="${ctxPath}/sys/user_role">角色&用户</a></li>
+                </@shiro.hasPermission>
+
+                <@shiro.hasPermission name="040105">
+                    <li><a href="${ctxPath}/sys/role_menu">角色&菜单</a></li>
+                </@shiro.hasPermission>
+
+            </ul>
+        </li>
+        </@shiro.hasPermission>
+
+        <@shiro.hasPermission name="0402">
+        <li><a href="#" class="inactive"><i class="icon-item menu-system"></i>基础配置</a>
+            <ul style="display:none;">
+
+                <@shiro.hasPermission name="040201">
+                     <li><a href="${ctxPath}/sys/dict">字典配置</a></li>
+                </@shiro.hasPermission>
+
+                <@shiro.hasPermission name="040202">
+                    <li><a href="${ctxPath}/sys/log/">日志管理</a></li>
+                </@shiro.hasPermission>
+
+                <@shiro.hasPermission name="040203">
+                    <li><a href="${ctxPath}/sys/monitor/#">监控管理</a></li>
+                </@shiro.hasPermission>
+
+                <@shiro.hasPermission name="040204">
+                    <li><a href="${ctxPath}/sys/file/">文件管理</a></li>
+                </@shiro.hasPermission>
+
+            </ul>
+        </li>
+        </@shiro.hasPermission>
+    </ul>
+</div>

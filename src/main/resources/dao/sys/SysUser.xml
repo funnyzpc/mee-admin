@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mee.xml.SysUser">
+    <!-- 角色:默认所有用户 -->
+    <select id="findUsers" resultType="java.util.Map" useCache="true">
+        select user_id as id,nick_name||' ('||user_name||')' as "text" from sys_user;
+    </select>
+
+    <select id="findList" resultType="com.mee.sys.entity.SysUser">
+        select * from sys_user
+        <where>
+            <if test="id != null and id != ''"> and id = cast(#{id} as numeric) </if>
+            <if test="nick_name != null and nick_name != ''">  and nick_name like #{nick_name}  </if>
+            <if test="user_name != null and user_name != ''">  and user_name like #{user_name} </if>
+            <if test="email != null and email != ''">  and email like #{email} </if>
+            <if test="status != null and status != ''"> and status = #{status} </if>
+        </where>
+    </select>
+
+    <select id="findByUserName" resultType="com.mee.sys.entity.SysUser">
+        select * from sys_user
+        <where>
+            <if test="user_name != null and user_name != ''">  and user_name = #{user_name} </if>
+            <if test="email != null and email != ''">  and email = #{email} </if>
+        </where>
+        limit 1
+    </select>
+
+    <insert id="insert">
+        insert into sys_user(
+            id,
+            user_id,
+            nick_name,
+            user_name,
+            email,
+            "password",
+            status,
+            register_date,
+            last_login_date,
+            create_date,
+            create_by
+        ) values (
+            cast(#{id} as numeric),
+            #{user_id},
+            #{nick_name},
+            #{user_name},
+            #{email},
+            #{password},
+            #{status},
+            #{register_date},
+            #{last_login_date},
+            now(),
+            #{create_by}
+        )
+    </insert>
+
+
+    <update id="update" parameterType="com.mee.sys.entity.SysUser">
+        update sys_user
+        <set>
+            <!-- <if test="user_id!=null and user_id!=''"> user_id = #{user_id} ,</if> -->
+            <if test="nick_name!=null and nick_name!=''"> nick_name = #{nick_name},</if>
+            <if test="user_name!=null and user_name!=''">user_name = #{user_name},</if>
+            <if test="email!=null and email!=''">email = #{email},</if>
+            <if test="password!=null and password!=''">"password" = #{password},</if>
+            <if test="status!=null and status!=''">status = #{status},</if>
+        </set>
+        where ID = cast(#{id} as numeric)
+    </update>
+
+    <delete id="delete">
+        delete from sys_user where id = cast(#{id} as numeric)
+    </delete>
+</mapper>

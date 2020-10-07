@@ -1,0 +1,30 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="/WEB-INF/tlds/hs.tld" prefix="hs"%>
+<div class="menu">
+	<ul>
+		<hs:auth auth="0101 0102 0103" or="true">
+		<li><a href="#" class="inactive inactives">系统管理</a>
+			<ul style="display: block">
+				<hs:auth auth="0101">
+				<li><a href="${app}/app/admin/role">角色管理</a></li>
+				</hs:auth>
+				<hs:auth auth="0102">
+				<li><a href="${app}/app/admin/userrole">权限分配</a></li>
+				</hs:auth>
+				<hs:auth auth="0103">
+				<li><a href="${app}/app/admin/user">用户管理</a></li>
+				</hs:auth>
+			</ul>
+		</li>
+		</hs:auth>
+		<hs:auth auth="0110" or="true">
+		<li><a href="#" class="inactive inactives">配置管理</a>
+			<ul style="display: block">
+				<hs:auth auth="0110">
+				<li><a href="${app}/app/admin/dictentry">数据字典</a></li>
+				</hs:auth>
+			</ul>
+		</li>
+		</hs:auth>
+	</ul>	
+</div>	

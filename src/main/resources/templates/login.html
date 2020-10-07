@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>登录</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=0.8,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <link rel="shortcut icon" href="${ctxPath}/static/img/favicon.png">
+    <style type="text/css">
+        body{margin:0px;background-color:#0f0224;}
+        div.login {
+            width: 320px;
+            margin: 150px auto;
+            padding: 32px 40px;
+            background-color: #f4f4ff;
+        }
+        input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], textarea {
+            border-style: solid;
+            border-color:#563D7C;
+            border-top-width: 0px;
+            border-left-width: 0px;
+            border-right-width: 0px;
+            border-bottom-width: 1px;
+            border-radius: 0px;
+            padding: 4px 0px;
+            background-color: #f4f4ff;
+            outline: none;
+            height:32px;
+            line-height: normal;
+            width: 100%;
+        }
+        input[type="submit"], input[type="reset"] {
+            border-color: #563D7C;
+            background-color: #563D7C;
+            color: #fff;
+            display: inline-block;
+            height: 32px;
+            min-width: 108px;
+            padding: 4px 12px 4px 12px;
+            position: relative;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            vertical-align: middle;
+            text-overflow: ellipsis;
+            touch-action: manipulation;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 0px;
+            cursor: pointer;
+        }
+        .form-submit{right: 44px;
+            text-align: right;
+            /* position: absolute; */
+            bottom: 44px;
+            margin-left: -2px;
+            margin-right: -2px;
+        }
+        .form-title,.form-group,.form-submit{padding:2px 4px;margin-top:4px;}
+        .form-submit{margin-top: 24px;padding:4px 2px;}
+        .form-title h3{margin:8px 0px;}
+        .login-copyright{color:#c3b4d3;text-align:center;width:100%;position:absolute;bottom:0;font-size:14px;}
+    </style>
+</head>
+<body>
+<div class="container-fluid login">
+    <form action="${reqCtx.contextPath}/login" method="post" class="form-horizontal">
+        <div class="form-title">
+            <div class="col-sm-10" style="color:#321166;">
+                <h3>登录</h3>
+            </div>
+        </div>
+        <div class="form-group">
+            <!-- <label class="control-label col-sm-2">用户</label> -->
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="username" required placeholder="请输入用户名">
+            </div>
+        </div>
+        <div class="form-group">
+            <!-- <label class="form-label">密码</label> -->
+            <div class="col-sm-10">
+                <input type="password" class="form-control" name="password" required placeholder="请输入密码">
+            </div>
+        </div>
+        <!--
+        <div class="form-group">
+            <div style="color:red;"><#if msg??>${msg}</#if></div>
+        </div>
+        -->
+        <div class="form-submit">
+            <div class=" col-sm-offset-2 col-sm-10">
+                <input type="submit" value="登录">
+            </div>
+        </div>
+    </form>
+</div>
+<div class="login-copyright">
+    © 2020 MEE - Make By <a href="https://github.com/funnyzpc" target="_blank" style="color:#563D7C;font-style:italic;">funnyZpC V.0.1</a>
+</div>
+<script type="text/javascript">
+        var msg = "<#if msg??>${msg}</#if>";
+        window.setTimeout(function(){
+            if(msg){alert(msg);}
+        },2000);
+</script>
+</body>
+</html>

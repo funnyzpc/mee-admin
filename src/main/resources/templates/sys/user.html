@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <title>${applicationName}-用户管理</title>
+</head>
+<body data-catalog="service">
+<#include "../decorator/banner.html"/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2 sidebar">
+            <#include "../decorator/sys_menu.html"/>
+        </div>
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="main">
+                <!-- 业务内容 -->
+                <form method="post" id="search-form" class="form-inline form-search">
+                    <label class="form-label">状态</label>&nbsp;&nbsp;
+                    <select name="status" data-dict="user-status" class="input-sm"></select>&nbsp;&nbsp;
+
+                    <label class="form-label">昵称</label>&nbsp;&nbsp;
+                    <input type="text" name="nick_name" >&nbsp;&nbsp;
+                    <label class="form-label">登陆名称</label>&nbsp;&nbsp;
+                    <input type="text" name="user_name" >&nbsp;&nbsp;
+                    <label class="form-label">email</label>&nbsp;&nbsp;
+                    <input type="text" name="email" >&nbsp;&nbsp;
+
+                    <button name="query" type="submit" class="btn btn-sm btn-primary">查询</button>
+                    <span class="seprator"></span>
+                    <button name="new" class="btn btn-sm btn-success">增加</button>
+                    <button name="mod" class="btn btn-sm btn-info">编辑</button>
+                    <button name="del" class="btn btn-sm btn-danger">删除</button>
+                    <span class="seprator"></span>
+                </form>
+                <div id="data-list">
+                </div>
+
+                <script type="text/cc-template" id="template-data-list">
+                    <table class="table table-striped table-bordered table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th width="40px;">选择</th>
+                            <th>用户编号</th>
+                            <th>用户昵称</th>
+                            <th>登陆名称</th>
+                            <th>email</th>
+                            <!--
+                            <th>登陆密码</th>
+                            -->
+                            <th>用户状态</th>
+                            <th>注册日期</th>
+                            <th>最后登陆时间</th>
+                            <th>创建日期</th>
+                            <th>创建人</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each data}}
+                        <tr>
+                            <th><input type="radio" name="sel" value="{{@index}}"></th>
+                            <td>{{user_id}}</td>
+                            <td>{{nick_name}}</td>
+                            <td>{{user_name}}</td>
+                            <td>{{email}}</td>
+                            <!--
+                            <td>{{password}}</td>
+                            -->
+                            <td>{{user-status status}}</td>
+                            <td>{{register_date}}</td>
+                            <td>{{last_login_date}}</td>
+                            <td>{{create_date}}</td>
+                            <td>{{create_by}}</td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    <form class="form-paging">
+                        <label>当前第 {{idx}} 页 / 总 {{pageCount}} 页, 每页
+                            &nbsp;<select class="input-sm" name="pageSize" pageSize="{{size}}"></select>&nbsp;条</label>
+                        <span class="seprator"></span>
+                        <button name="firstpage" class="btn btn-sm">首页</button>
+                        <button name="prevpage" class="btn btn-sm">上一页</button>
+                        <button name="nextpage" class="btn btn-sm">下一页</button>
+                        <button name="lastpage" class="btn btn-sm">末页</button>
+                        <span class="seprator"></span>
+                        <label>第<input type="text" name="pageIdx" class="page" value="{{index}}" size="3"></input>页</label>
+                        <button name="gopage" class="btn btn-sm">GO</button>
+                    </form>
+                </script>
+                <script type="text/javascript">
+                    $(function(){
+                        seajs.use("sys/user", function(user){
+                            user.init();
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!-- 底部静态 -->
+<#include "../decorator/foot.html"/>
+</html>

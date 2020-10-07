@@ -1,0 +1,17 @@
+
+<div class="menu">
+	<ul>
+		<hs:auth auth="0301 0302" or="true">
+		<li><a href="#" class="inactive inactives">基础数据</a>
+			<ul style="display: block">
+				<hs:auth auth="0301">
+				<li><a href="${app}/app/base/project">项目管理</a></li>
+				</hs:auth>
+				<hs:auth auth="0302">
+				<li><a href="${app}/app/base/institution">机构信息</a></li>
+				</hs:auth>
+			</ul>
+		</li>
+		</hs:auth>
+	</ul>	
+</div>	
