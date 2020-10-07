@@ -75,23 +75,14 @@
  + new 2020-09-18
 
 #### Issues and inprove
-+ <del>导入导出功能模块缺失(finished)</del>
 + 输入框自动带出优化
 + bootstrap弹出框设计及构建
 + websocket消息推送功能
 + 功能开发文档编写
-+ <del>多数据源功能添加(finished)</del>
-+ <del>日志(基础或业务)记录功能(finished)</del>
-+ <del>日志记录功能完善(finished)</del>
 + JacksonUtil序列化安全问题
-+ <del>mybatis逻辑分页问题(finished)</del>
 + Controller params support LocalDateTime
 + 密码安全性问题
-+ <del>DefaultWebSessionManager需要用ShiroWebSessionManager重写(finished)</del>
-+ <del>writeCellValueDefault switch 替代if(finished)</del>
-+ <del>分页逻辑优化(finished)</del>
 + 分页缓存
-+ <del>统一SQL调用方法(finished)</del>
 + 数据库密码加密
 + 角色用户查询
 + 角色菜单查询  
