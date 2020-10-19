@@ -11,7 +11,7 @@
 
 #### Quick start
 
-+ Fork [MEE](https://github.com//funnyzpc/mee-admin/fork) to your repository
++ Fork [mee-admin](https://github.com//funnyzpc/mee-admin/fork) to your repository
 + git clone  `your fork project address `
 + add this to your idea _Program arguments_ `--spring.profiles.active=dev`
 + startup MEE in `MeeApplication`
