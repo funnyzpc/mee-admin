@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mee.xml.sys_shedlock">
+
+    <!-- 查询 -->
+    <select id="findList" resultType="com.mee.sys.entity.SysShedlock" useCache="true">
+        select * from sys_shedlock
+        <where>
+            <if test="name != null and name!=''">  and name = #{name} </if>
+            <if test="label != null and label != ''"> and label like #{label} </if>
+            <if test="locked_at_start != null and locked_at_start != ''"> and locked_at &gt;= TO_TIMESTAMP(#{locked_at_start},'yyyy-MM-dd hh24:mi:ss')</if>
+            <if test="locked_at_end != null and locked_at_end != ''"> and locked_at &lt;= TO_TIMESTAMP(#{locked_at_end},'yyyy-MM-dd hh24:mi:ss') </if>
+        </where>
+        order by locked_at asc
+    </select>
+
+
+    <insert id="insert">
+        insert into sys_shedlock(
+        id,
+        "name",
+        show_flag,
+        create_date,
+        create_by,
+        code,
+        parent_code
+        ) values (
+        cast(#{id} as numeric),
+        #{name},
+        #{show_flag},
+        now(),
+        #{create_by},
+        #{code},
+        #{parent_code}
+        )
+    </insert>
+
+
+    <update id="update" parameterType="com.mee.sys.entity.SysShedlock">
+        update sys_shedlock
+        <set>
+            <if test="label != null and label !='' "> "label"=#{label,jdbcType=VARCHAR},</if>
+        </set>
+        where "name" = #{name,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_shedlock where "name" = #{name}
+    </delete>
+
+</mapper>
+

@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mee.xml.SysRoleUser">
 
+    <!--
     <select id="findList" resultType="com.mee.sys.entity.SysRoleUser">
         select * from sys_role_user
         <where>
@@ -14,9 +15,25 @@
             <if test="user_id != null and user_id != ''">
                 and user_id = #{user_id}
             </if>
-            <if test="nick_name != null and nick_name != ''">
-                and nick_name like #{nick_name}
-            </if>
+        </where>
+    </select>
+    -->
+    <select id="findList" resultType="com.mee.sys.entity.SysRoleUser">
+        select
+            ru.id,
+            r.role_name,r.role_desc,
+            u.user_id,u.nick_name,u.user_name,u.email,u.create_date,u.status
+        from sys_role_user as ru
+        inner join sys_role as r on ru.role_id = r.id
+        inner join sys_user as u on ru.user_id = u.user_id
+        <where>
+            <if test="id != null and id != ''"> and ru.id = #{id} </if>
+            <if test="role_id != null and role_id != ''"> and ru.role_id = cast(#{role_id} as numeric) </if>
+            <if test="user_id != null and user_id != ''"> and ru.user_id = #{user_id} </if>
+
+            <if test="nick_name != null and nick_name != ''"> and u.nick_name like #{nick_name} </if>
+            <if test="role_desc != null and role_desc != ''"> and r.role_desc like #{role_desc} </if>
+
         </where>
     </select>
 

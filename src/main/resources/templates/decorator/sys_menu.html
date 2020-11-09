@@ -24,7 +24,7 @@
                 </@shiro.hasPermission>
 
                 <@shiro.hasPermission name="040104">
-                    <li><a href="${ctxPath}/sys/user_role">角色&用户</a></li>
+                    <li><a href="${ctxPath}/sys/role_user">角色&用户</a></li>
                 </@shiro.hasPermission>
 
                 <@shiro.hasPermission name="040105">
@@ -53,6 +53,10 @@
 
                 <@shiro.hasPermission name="040204">
                     <li><a href="${ctxPath}/sys/file/">文件管理</a></li>
+                </@shiro.hasPermission>
+
+                <@shiro.hasPermission name="040205">
+                    <li><a href="${ctxPath}/sys/shedlock/">定時任務</a></li>
                 </@shiro.hasPermission>
 
             </ul>

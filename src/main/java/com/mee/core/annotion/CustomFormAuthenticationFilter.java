@@ -12,7 +12,7 @@ import javax.servlet.ServletResponse;
 import java.io.IOException;
 
 /**
- * @shadow funnyzpc
+ * @auther funnyzpc
  * @description 重写FormAuthenticationFilter防止重定向错误
  */
 public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {

@@ -16,26 +16,31 @@
                 <!-- 业务内容 -->
                 <form method="post" id="search-form" class="form-inline form-search">
                     <label class="form-label">角色描述</label>&nbsp;&nbsp;
-                    <input type="text" name="role_desc" >&nbsp;&nbsp;
-                    <label class="form-label">菜单名称</label>&nbsp;&nbsp;
-                    <input type="text" name="name" >&nbsp;&nbsp;
+                    <input type="text" name="role_desc" placeholder="角色描述">&nbsp;&nbsp;
+
+                    <label class="form-label">用户名称</label>&nbsp;&nbsp;
+                    <input type="text" name="nick_name" placeholder="用户名称">&nbsp;&nbsp;
 
                     <button name="query" type="submit" class="btn btn-sm btn-primary">查询</button>
                     <span class="seprator"></span>
                     <button name="exp" class="btn btn-sm btn-default">导出</button>
 
                 </form>
-                <div id="data-list"> </div>
+                <div id="data-list">
+                </div>
 
                 <script type="text/cc-template" id="template-data-list">
                     <table class="table table-striped table-bordered table-hover table-condensed">
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>角色</th>
+                            <th>角色名称</th>
                             <th>角色描述</th>
-                            <th>菜单名称</th>
-                            <th>菜单编号</th>
+                            <th>用户状态</th>
+                            <th>用户名称</th>
+                            <th>登录名称</th>
+                            <th>用户email</th>
+                            <th>用户创建时间</th>
 
                         </tr>
                         </thead>
@@ -45,8 +50,16 @@
                             <td>{{id}}</td>
                             <td>{{role_name}}</td>
                             <td>{{role_desc}}</td>
-                            <td>{{name}}</td>
-                            <td>{{code}}</td>
+
+                            <!-- 用户状态 0:无效 1:有效 2:未激活(绑定邮箱) -->
+                            {{#equal status 0}}<td style="color:red;">已禁用</td>{{/equal}}
+                            {{#equal status 1}}<td style="color:green;">有效</td>{{/equal}}
+                            {{#equal status 2}}<td style="color:yellow;">未激活</td>{{/equal}}
+
+                            <td>{{nick_name}}</td>
+                            <td>{{user_name}}</td>
+                            <td>{{email}}</td>
+                            <td>{{create_date}}</td>
 
                         </tr>
                         {{/each}}
@@ -67,8 +80,8 @@
                 </script>
                 <script type="text/javascript">
                     $(function(){
-                        seajs.use("sys/role_menu", function(role_menu){
-                            role_menu.init();
+                        seajs.use("sys/role_user", function(role_user){
+                            role_user.init();
                         });
                     });
                 </script>

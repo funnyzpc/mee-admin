@@ -12,7 +12,7 @@ public class SeqGenUtil {
     private static final Logger log = LoggerFactory.getLogger(SeqGenUtil.class);
 
     private static final ZoneId zoneId = ZoneId.of("Asia/Shanghai");
-    private static final AtomicInteger SHOT_STATIC_IT = new AtomicInteger(9000);
+    private static final AtomicInteger SHOT_STATIC_IT = new AtomicInteger(1000);
     private static final DateTimeFormatter DATE_SHORT_FORMAT = DateTimeFormatter.ofPattern("yyMMddHHmmss");
 
 

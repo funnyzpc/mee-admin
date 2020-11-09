@@ -15,7 +15,9 @@ import java.util.Date;
  */
 public class DateUtil {
 
+    // 格式化样式
     public static final DateTimeFormatter FORMAT_DAY = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static final DateTimeFormatter FORMAT_DAY2 = DateTimeFormatter.ofPattern("yyyyMMdd");
     public static final DateTimeFormatter FORMAT_DAY_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public static final ZoneId zoneId = ZoneId.of("Asia/Shanghai");
 
@@ -39,6 +41,10 @@ public class DateUtil {
 
     public static LocalDateTime now(){
         return LocalDateTime.now(zoneId);
+    }
+
+    public static LocalDate nowDay(){
+        return LocalDate.now(zoneId);
     }
 
     /**
@@ -69,7 +75,4 @@ public class DateUtil {
         return DateTimeFormatter.ofPattern(fmtPattern).format(localDateTime);
     }
 
-    public static void main(String[] args) {
-        System.out.println(addDays(-1L));
-    }
 }

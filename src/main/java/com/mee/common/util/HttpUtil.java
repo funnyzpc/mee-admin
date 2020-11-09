@@ -17,12 +17,12 @@ public class HttpUtil {
                 ip =request.getRemoteAddr();
             }
             if(StringUtils.isEmpty(ip)){
-                log.error("获得客户端真实IP为空");
-                throw new Exception("获得客户端真实IP为空");
+                log.error("client IP is empty");
+                throw new Exception("Get client IP is empty");
             }
             String forwardip = request.getHeader("x-forwarded-for");
             if(!ip.equalsIgnoreCase(forwardip)){
-                log.error("获得客户端真实IP:{}和forwarded:{},信息不符合，有伪造嫌疑",ip,forwardip);
+                log.error("get client IP:{},forwarded:{} not equal",ip,forwardip);
             }
             log.info("IP获取 REAL_IP:{},forwarded_IP:{}",ip,forwardip);
             return ip;

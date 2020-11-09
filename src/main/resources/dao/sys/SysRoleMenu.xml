@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mee.xml.SysRoleMenu">
 
+    <!--
     <select id="findList" resultType="com.mee.sys.entity.SysRoleMenu">
         select * from sys_role_menu
         <where>
@@ -17,6 +18,22 @@
             <if test="nick_name != null and nick_name != ''">
                 and nick_name like #{nick_name}
             </if>
+        </where>
+    </select>
+    -->
+    <select id="findList" resultType="com.mee.sys.entity.SysRoleMenu">
+        select
+            rm.*,
+            r.role_name,r.role_desc,
+            m.name,m.code
+        from sys_role_menu as rm
+        inner join sys_role as r on rm.role_id = r.id
+        inner join sys_menu as m on rm.menu_code = m.code
+        <where>
+            <if test="id != null and id != ''"> and rm.id = #{id} </if>
+
+            <if test="role_desc != null and role_desc != ''"> and r.role_desc like #{role_desc} </if>
+            <if test="name != null and name != ''"> and m.name like #{name} </if>
         </where>
     </select>
 

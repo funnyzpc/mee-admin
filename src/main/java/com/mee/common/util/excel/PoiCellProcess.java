@@ -245,6 +245,7 @@ public class PoiCellProcess {
         log.error("\r\n>>>未知的数据类型{}", value.getClass().getName());
     }
 
+    @Deprecated
     public static void writeCellValueDefault(SXSSFCell bodyCell, Object value) {
         bodyCell.setCellType(CellType.STRING);
         if (null == value) {

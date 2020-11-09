@@ -1,8 +1,5 @@
 package com.mee.common.util;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.slf4j.Logger;
@@ -10,18 +7,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /***
- * @auther funnyzpc
+ * @auther shadow
  * @description CSV读写工具类
  */
 public class CSVUtils {
     private static final Logger log = LoggerFactory.getLogger(CSVUtils.class);
-    // 获取csv文件内容
+
+    // 获取csv文件内容 need import:commons-csv
+    /*
     public static List<Map> listCsvData(File file){
         try {
             if(null == file || !file.exists()){
@@ -59,6 +58,7 @@ public class CSVUtils {
             return null;
         }
     }
+    */
 
     public static List<Map> listGigCsv(File file){
         if(null == file || file.isDirectory() || !file.exists()){
@@ -69,7 +69,7 @@ public class CSVUtils {
         List<Map> dataList = new ArrayList<Map>(100);
         try (LineIterator it = FileUtils.lineIterator(file, "UTF-8")){
             while (it.hasNext()) {
-                String line = it.nextLine();
+                String line = it.nextLine().replaceAll("\uFEFF","");
                 if(null == headers){
                     // 首行为空的禁止往下读
                     if(StringUtils.isEmpty(line)){
@@ -81,6 +81,15 @@ public class CSVUtils {
                 }
                 String[] dataArr = line.substring(1,line.length()-1).split("\",\"");
                 Map<String,Object> data = new HashMap<>(dataArr.length,1);
+                if(headers.length>dataArr.length){
+                    dataArr = (line+it.nextLine().replaceAll("\uFEFF","")).split("\",\"");
+                    if(dataArr[0].startsWith("\"")){
+                        dataArr[0] = dataArr[0].substring(1);
+                    }
+                    if(dataArr[dataArr.length-1].endsWith("\"")){
+                        dataArr[dataArr.length-1] = dataArr[dataArr.length-1].substring(0,dataArr[dataArr.length-1].length()-1);
+                    }
+                }
                 for(int i=0;i<headers.length;i++){
                     data.put(headers[i],dataArr[i]);
                 }
@@ -93,14 +102,5 @@ public class CSVUtils {
         }
     }
 
-    public static void main(String[] args) {
-        File f = new File("D:\\tmp\\unzipdir\\22\\11.csv");
-        List<Map> dataList = listGigCsv(f);
-        List<Map> filterResult = dataList.parallelStream().filter(i->
-                i.get("宝贝名称").toString().contains("一叶子") || i.get("宝贝名称").toString().contains("韩束")
-        ).collect(Collectors.toCollection(ArrayList::new));
 
-        System.out.println("过滤后大小"+filterResult.size()/*+"及数据:"+JacksonUtil.toJsonString(filterResult)*/);
-        System.out.println(JacksonUtil.toJsonString(filterResult.get(1)));
-    }
 }

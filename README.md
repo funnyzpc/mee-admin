@@ -21,7 +21,7 @@
 
 #### 项目技术相关
 
-+ 使用`springboot 2.3.4.RELEASE`作为基础框架
++ 使用`springboot 2.3.5.RELEASE`作为基础框架
 + 使用`mybatis`作为`dao`框架
 + 使用`postgreSQL` 作为框架DB(可支持`Mysql`及`Oracle`)
 + 使用`shiro`做权限管理
@@ -56,17 +56,19 @@
 
 #### deploy script
 >>> local(windows) deploy
-+ ` java -jar mee.jar --server.port=8001 `
++ Program arguments: ` java -jar mee.jar --server.port=8000 `
++ VM options: `-Djasypt.encryptor.password="YOUR PASSWORD SALT"`
+
 
 >>> test deploy
 + `echo 正在启动mee模块.....`
 + `ps -ef|grep mee.jar|grep java|awk '{print $2}'|xargs kill -9`
-+ `cd /mnt/app/8001-mee && nohup /usr/local/java/jdk1.8.0_261/bin/java -jar /mnt/app/8001-mee/mee.jar --server.port=8001 --spring.profiles.active=test  1>/mnt/app/8001-mee/logs/mee_ALL.log 2>/mnt/app/8001-mee/logs/mee_ALL.log &`
++ `cd /mnt/app/8000-mee && nohup /usr/local/java/bin/java -Djasypt.encryptor.password="YOUR PASSWORD SALT" -jar /mnt/app/8000-mee/mee.jar --server.port=8000 --spring.profiles.active=test  1>/mnt/app/8000-mee/logs/mee_ALL.log 2>/mnt/app/8000-mee/logs/mee_ALL.log &`
 
 >>> prod deploy[TODO need edit](#)
 + `echo 正在启动mee模块.....`
 + `ps -ef|grep mee.jar|grep java|awk '{print $2}'|xargs kill -9`
-+ `cd /mnt/app/8001-mee && nohup /usr/local/java/jdk1.8.0_261/bin/java -jar /mnt/app/8001-mee/mee.jar --server.port=8001 --spring.profiles.active=test  1>/mnt/app/8001-mee/logs/mee_ALL.log 2>/mnt/app/8001-mee/logs/mee_ALL.log &`
++ `cd /mnt/app/8000-mee && nohup /usr/local/java/bin/java -Djasypt.encryptor.password="YOUR PASSWORD SALT" -jar /mnt/app/8000-mee/mee.jar --server.port=8000 --spring.profiles.active=test  1>/mnt/app/8000-mee/logs/mee_ALL.log 2>/mnt/app/8000-mee/logs/mee_ALL.log &`
 
 #### 功能模块
 + 系统及全局配置

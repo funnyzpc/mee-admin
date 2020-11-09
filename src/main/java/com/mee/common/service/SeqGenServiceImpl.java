@@ -21,12 +21,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SeqGenServiceImpl {
     private static final Logger log = LoggerFactory.getLogger(SeqGenServiceImpl.class);
 
-    private static final AtomicInteger it = new AtomicInteger(999000);
+    private static final AtomicInteger it = new AtomicInteger(100000);
     private static final DateTimeFormatter DATE_SHORT_FORMAT = DateTimeFormatter.ofPattern("yyMMddHHmmss");
     private static final ZoneId zoneId = ZoneId.of("Asia/Shanghai");
 
     private static final ZoneOffset ZONE_OFF_SET = ZoneOffset.of("+8");
-    private static final AtomicInteger SHOT_IT = new AtomicInteger(9000);
+    private static final AtomicInteger SHOT_IT = new AtomicInteger(1000);
 
 
     @Autowired
