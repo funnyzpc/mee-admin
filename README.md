@@ -1,21 +1,30 @@
 
 ### mee-admin
 
-#### Preface
-
-```
-  这是一个开放的时代，我们不能总是把东西揣在口袋里面自己乐呵。
-  正如名言所说的“如果你有两块面包，你当用其中一块去换一朵水仙花”
-  所以，继上一次把我的两个个人项目开源之后今天我再一次把自有的后台页面也开源出来，以回馈整个开源世界。
-```
+```多用途后台系统MEE```
 
 #### Quick start
 
 + Fork [mee-admin](https://github.com//funnyzpc/mee-admin/fork) to your repository
 + git clone  `your fork project address `
++ 创建数据库(为`mee`)并导入`PG-mee-20201109.sql (postgres) or mysql_init.sql(mysql)`
++ 修改 `application-dev.properties` 配置文件DB连接
 + add this to your idea _Program arguments_ `--spring.profiles.active=dev`
-+ startup MEE in `MeeApplication`
++ add this to your idea _VM options_ `-Djasypt.encryptor.password="4489GoEncc8(HIYI101"`
++ startup `MeeApplication`
++ login:  `admin/1233`
 
+#### 更新(NEW)
+ + 升级 springboot升级至`2.3.5 release`
+ + 更新 数据库初始化脚本
+ + 增加 角色用户查询
+ + 增加 角色菜单查询
+ + 增加 集群定时任务
+ + 优化 DB密码加密(建议在IDE或脚本内)
+ + 优化 CSV读取问题
+ + 优化 excel读取(ExcelReadUtil)及写入(ExcelWriteUtil)问题
+ 
+ 
 #### 项目结构概述
 
   mee-admin是由我的个人`mee`项目开源而来,`mee-admin`项目是一个前后端一体化的项目,不过在代码上实现了页面与数据分离，是一个非常好的
@@ -40,13 +49,13 @@
 + 封装了序列(`ID`)生成器(支持分布式)
     - `SeqGenServiceImpl` 序列生成器(支持分布式)
     - `SeqGenUtil` 普通序列生成器
-+ 封装了`Jackson`的`json`库，完全可替代`fastjson`
-+ 封装了物理分页`PhysicalPageInterceptor`及逻辑分页`LogicalPageIntercepter`(两个可任选其一)，完全替代`RowBounds`及一众分页依赖
-+ 封装了`Excel`及`CSV`工具
++ 封装`Jackson`的`json`库，完全可替代`fastjson`
++ 封装物理分页`PhysicalPageInterceptor`及逻辑分页`LogicalPageIntercepter`(两个可任选其一)，完全替代`RowBounds`及一众分页依赖
++ 封装`Excel`及`CSV`工具
   - `ExcelReadUtil` EXCEL读工具
   - `ExcelWriteUtil` EXCEL写工具
   - `CSVUtils` CSV读工具
-+ 简单封装了java8日期工具类 `DateUtil`
++ 简单封装java8日期工具类 `DateUtil`
 
 #### IDE start config
 + --spring.profiles.active=dev
@@ -100,7 +109,6 @@
     - 使用seajs作为模块管理工具
     - 基本增删改查参考tablex
     
-    
 + 对于后端
     - 使用springboot作为基础框架
     — 使用jdk8作为应用运行环境
@@ -111,21 +119,21 @@
   - [freemarker+shiro相关](https://github.com/fuce1314/Springboot_v2)
   - [前后端结合](https://github.com/enilu/web-flash)
   - [shiro权限参考](https://www.cnblogs.com/Jimc/p/10031094.html)
-
-#### 最新进度
- + new 2020-09-18
+  
++ 登录密码加密参见: `PwdEncTest` 
++ 数据库密码加密参见: `DBEncTest` (请自行学习jasypt的使用)
++ 接入MySQL数据库需较少修改xml(mybatis),建议初始化使用PG数据库
++ 初始化建议使用PG-mee-20201109.sql
++ `tcnative-1.dll`为tomcat优化,建议jdk版本>1.8
 
 #### Issues and inprove
 + 输入框自动带出优化
 + bootstrap弹出框设计及构建
 + websocket消息推送功能
 + 功能开发文档编写
-+ JacksonUtil序列化安全问题
 + Controller params support LocalDateTime
-+ 密码安全性问题
 + 分页缓存
-+ 数据库密码加密
-+ 角色用户查询
-+ 角色菜单查询  
-+ 集群定时任务
-+ 角色&用户&菜单联合查询
++ <del>数据库密码加密</del>
++ <del>角色用户查询</del>
++ <del>角色菜单查询</del>
++ <del>集群定时任务</del>
