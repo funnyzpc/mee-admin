@@ -9,6 +9,13 @@
   所以，继上一次把我的两个个人项目开源之后今天我再一次把自有的后台页面也开源出来，以回馈整个开源世界。
 ```
 
+#### Quick start
+
++ Fork [mee-admin](https://github.com//funnyzpc/mee-admin/fork) to your repository
++ git clone  `your fork project address `
++ add this to your idea _Program arguments_ `--spring.profiles.active=dev`
++ startup MEE in `MeeApplication`
+
 #### 项目结构概述
 
   mee-admin是由我的个人`mee`项目开源而来,`mee-admin`项目是一个前后端一体化的项目,不过在代码上实现了页面与数据分离，是一个非常好的
@@ -120,3 +127,5 @@
 + 数据库密码加密
 + 角色用户查询
 + 角色菜单查询  
++ 集群定时任务
++ 角色&用户&菜单联合查询
