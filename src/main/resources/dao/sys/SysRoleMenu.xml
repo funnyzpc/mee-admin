@@ -2,15 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mee.xml.SysRoleMenu">
 
-    <!--
-    <select id="findList" resultType="com.mee.sys.entity.SysRoleMenu">
+    <select id="findList0" resultType="com.mee.sys.entity.SysRoleMenu">
         select * from sys_role_menu
         <where>
             <if test="id != null and id != ''">
                 and id = #{id}
             </if>
             <if test="role_id != null and role_id != ''">
-                and role_id = cast(#{role_id} as numeric)
+                and role_id = #{role_id}::numeric
             </if>
             <if test="menu_code != null and menu_code != ''">
                 and menu_code = #{menu_code}
@@ -20,7 +19,7 @@
             </if>
         </where>
     </select>
-    -->
+
     <select id="findList" resultType="com.mee.sys.entity.SysRoleMenu">
         select
             rm.*,

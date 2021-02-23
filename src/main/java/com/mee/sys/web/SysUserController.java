@@ -1,6 +1,7 @@
 package com.mee.sys.web;
 
 import com.mee.common.service.SeqGenServiceImpl;
+import com.mee.common.service.ShiroAccountLockedServiceImpl;
 import com.mee.common.util.MD5Util;
 import com.mee.common.util.ResultBuild;
 import com.mee.core.dao.DBSQLDao;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,12 +25,14 @@ import java.util.Map;
 @Controller
 @RequestMapping("/sys/user")
 public class SysUserController {
-    private static final Logger log = LoggerFactory.getLogger(SysMenuController.class);
+    private static final Logger log = LoggerFactory.getLogger(SysUserController.class);
 
     @Autowired
-    private DBSQLDao dbsqlDao;
+    private DBSQLDao dbSQLDao;
     @Autowired
     private SeqGenServiceImpl seqGenService;
+    @Resource
+    private ShiroAccountLockedServiceImpl shiroAccountLockedService;
 
     @RequiresPermissions("040101")
     @GetMapping
@@ -46,7 +50,7 @@ public class SysUserController {
         if(null != email && !"".equals(email)){ params.put("email",email.trim()+"%"); }
         if(null != status){ params.put("status",status); }
         return new HashMap<String,Object>(1,1){{
-            put("data",dbsqlDao.list("com.mee.xml.SysUser.findList",params,pageIdx,pageSize));
+            put("data", dbSQLDao.list("com.mee.xml.SysUser.findList",params,pageIdx,pageSize));
         }};
     }
 
@@ -65,7 +69,7 @@ public class SysUserController {
             sysUser.setUser_id(seqGenService.genShortPrimaryKey());
             sysUser.setRegister_date(LocalDateTime.now());
             sysUser.setPassword(MD5Util.encode(sysUser.getPassword()));
-            String recordId = dbsqlDao.create("com.mee.xml.SysUser.insert",sysUser);
+            String recordId = dbSQLDao.create("com.mee.xml.SysUser.insert",sysUser);
             log.info("创建sys_dict结果:{}",recordId);
             return ResultBuild.SUCCESS;
         }
@@ -73,7 +77,7 @@ public class SysUserController {
             put("id",sysUser.getId());
         }};
         if(!StringUtils.isEmpty(sysUser.getPassword())) {
-            SysUser oldUser = dbsqlDao.queryOne("com.kans.xml.SysUser.findList", queryParam);
+            SysUser oldUser = dbSQLDao.queryOne("com.mee.xml.SysUser.findList", queryParam);
             if (null == oldUser) {
                 return ResultBuild.fail("用户不存在:" + sysUser.getUser_name());
             }
@@ -82,7 +86,7 @@ public class SysUserController {
             }
         }
         // 更新数据
-        int updateCount = dbsqlDao.update("com.mee.xml.SysUser.update",sysUser);
+        int updateCount = dbSQLDao.update("com.mee.xml.SysUser.update",sysUser);
         log.info("更新sys_dict结果:{}",updateCount);
         return ResultBuild.SUCCESS;
     }
@@ -103,7 +107,7 @@ public class SysUserController {
         SysUser sysUser = new SysUser();
         sysUser.setId(id);
         sysUser.setStatus(status);
-        int updateCount = dbsqlDao.update("com.mee.xml.SysUser.update",sysUser);
+        int updateCount = dbSQLDao.update("com.mee.xml.SysUser.update",sysUser);
 
 
         log.info("更新sys_dict结果:{},删除用户角色关系:{}",updateCount);
@@ -127,7 +131,7 @@ public class SysUserController {
         Map<String,Object> queryParam = new HashMap<String,Object>(1,1){{
             put("id",id);
         }};
-        SysUser user = dbsqlDao.queryOne("com.mee.xml.SysUser.findList",queryParam);
+        SysUser user = dbSQLDao.queryOne("com.mee.xml.SysUser.findList",queryParam);
         if(null == user){
             return ResultBuild.fail("用户信息不存在!");
         }
@@ -135,14 +139,27 @@ public class SysUserController {
         Map<String,Object> params = new HashMap<String,Object>(1,1){{
             put("user_id",user.getUser_id());
         }};
-        int deleteRoleUserCount = dbsqlDao.delete("com.mee.xml.SysRoleUser.delete",params);
+        int deleteRoleUserCount = dbSQLDao.delete("com.mee.xml.SysRoleUser.delete",params);
 
         Map<String,Object> delParams = new HashMap<String,Object>(1,1){{
             put("id",id);
         }};
         // 更新数据
-        int updateCount = dbsqlDao.update("com.mee.xml.SysUser.delete",delParams);
+        int updateCount = dbSQLDao.update("com.mee.xml.SysUser.delete",delParams);
         log.info("删除sys_dict结果:{},id:{},deleteRoleUserCount:{}",updateCount,id,deleteRoleUserCount);
+        return ResultBuild.SUCCESS;
+    }
+
+    /** 解除锁定 **/
+    @RequiresPermissions("040101")
+    @RequestMapping("/unlock")
+    @ResponseBody
+    public Map unlock(String user_name){
+        // 参数校验
+        if(!StringUtils.hasText(user_name)){
+            return ResultBuild.FAIL;
+        }
+        shiroAccountLockedService.clearCounter(user_name);
         return ResultBuild.SUCCESS;
     }
 

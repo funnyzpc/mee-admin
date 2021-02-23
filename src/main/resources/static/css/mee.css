@@ -1,21 +1,22 @@
 /** define your style **/
 body{font:13px "Microsoft YaHei",微软雅黑,simhei,SimSun,宋体,arial;margin-bottom: 51px;}
 
-.navbar{margin-bottom: 0;border-radius:0;background-color:#563D7C;padding: 0;min-height:0;height: 45px;overflow-y:hidden;}
+.navbar{margin-bottom: 0;border-radius:0;background-color:#2a1b41;padding: 0;min-height:0;height:44px;overflow-y:hidden;}
 .navbar-header img{float: left;height:45px;}
 .navbar-brand{padding: 10px 15px;}
 .navbar *{color: #fff;}
 
-#navbar {margin-right: 30px;}
 #navbar p{line-height: 45px;}
 #navbar a{line-height: 45px; padding-top:0!important;padding-bottom:0!important;}
 
+#navbar-menu { font-size: 18px; }
 #navbar-menu li.active{background: #fff;}
 #navbar-menu li.active a{color: #428bca;font-weight: bold;}
 #navbar-menu li.active a:HOVER{background-color: #fff;text-decoration: underline;}
 
-.sidebar {float:left;position: absolute;top: 47px;bottom: 1px;left: 1px;padding:0;display: block;overflow-x: hidden;overflow-y: auto;background-color: #f5f5f5;border-right: 1px solid #eee;}
-.sidebar li.active{background-color:#C8BED8;z-index: 9999;border-right:3px solid #6610f2;}
+.sidebar {float:left;position:absolute;top:42px;bottom:0px;padding-left:2px;padding-right:2px;display: block;
+overflow-x:hidden;overflow-y: auto;background-color:#2f1f48;color:white;/*border-right: 1px solid #eee;*/}
+.sidebar li.active{background-color:#4d5369;/*border-right:4px solid white;*/background-image: linear-gradient(to right, #371e5d, #57358e, #b98dfe);;}
 .sidebar li.active a{text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);}
 
 /*
@@ -31,36 +32,39 @@ body{font:13px "Microsoft YaHei",微软雅黑,simhei,SimSun,宋体,arial;margin-
 
 .menu a:link,a:visited{text-decoration:none;}
 .menu ul{list-style:none;padding:0;}
-.menu ul li{background-color:#dedede;border-bottom: 1px solid #cecece; border-top: 1px solid #fff;}
-.menu ul li a{color: #2b2b2b;text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.4);padding-left:10px;font-size:12px;font-weight:bold;display:block;height:36px;line-height:36px;position: relative;}
+/*.menu ul li{border-bottom: 1px solid #151c40;}*/
+.menu ul li a{color:white;padding-left:10px;font-size:12px;font-weight:bold;display:block;height:36px;line-height:36px;position: relative;}
 /*
 .menu ul li .inactive {background:url(../img/off.gif) no-repeat 192px center;}
 .menu ul li .inactives{background:url(../img/on.gif) no-repeat 192px center;}
 */
 .menu ul li ul{display: none;}
-.menu ul li ul li {border-left:0;
-    border-right:0; border-bottom: 1px solid #bcc8ff;
-    border-top: 1px solid #fff;
-    background-color: #fcfcfc; color: #727272;
-    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);
+.menu ul li ul li {
+    border-left:0;
+    border-right:0;
+/*    border-bottom: 1px solid #bcc8ff;
+    border-top: 1px solid #fff;*/
+    background-color:#341c59;
+    /*color: #727272;*/
     }
 .menu ul li ul li ul{display: none;}
-.menu ul li ul li a{padding-left:20px;color:#453a3a;font-weight:normal;}
+.menu ul li ul li a{padding-left:20px;color:#ddd;font-weight:normal;}
 .menu ul li ul li ul li {background-color:#f4f4f4;}
 .last{ background-color:#d6e6f1; border-color:#6196bb;}
 .menu ul li ul li ul li a{padding-left:30px;}
-.menu ul li a .inactive,.inactives {border-bottom:1px solid #cecece;}
+/*.menu ul li a .inactive,.inactives {border-bottom:1px solid #ddd;}*/
 .menu ul li ul li:last-child {border-bottom:none;}
 
 
 /** 侧栏菜单基本样式 **/
+.list-child {font-size: 14px;font-weight: normal;background-color: #091137;}
 .menu .icon-item{font-size: 16px;margin-right:4px;}
 .menu ul li a{font-size:14px;}
 
 /** icon 样式 **/
-i.menu-rights:before{content:"\f007";color:#593196;}
-i.menu-system:before{content:"\f013";color:#593196;}
-i.menu-other:before{content:"\f01c";color:#593196;}
+i.menu-rights:before{content:"\f007";color:white;}
+i.menu-system:before{content:"\f013";color:white;}
+i.menu-other:before{content:"\f01c";color:white;}
 
 .main{margin: 6px 6px 6px 2px;}
 
@@ -68,7 +72,7 @@ i.menu-other:before{content:"\f01c";color:#593196;}
 .form-paging, .form-search{background-color: #f5f5f5; padding: 10px;}
 .form-search .btn, .form-paging .btn{margin-top: -5px;}
 
-.table>thead>tr>th{background-color:#dedede;color:black;}
+.table>thead>tr>th{background-color:#d4cce1;color:black;}
 .table th{text-align: center;}
 .table tbody tr{cursor: pointer;}
 

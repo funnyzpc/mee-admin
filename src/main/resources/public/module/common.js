@@ -63,10 +63,18 @@ define(function (require, exports, module) {
 				return;
 		// $.post(module.opts.url + "/query.json", querys, function(d) {
 		$.post(module.opts.url, querys, function(d) {
+		    // 登录超时
+            if(!d || !d.data){
+               alert("登入超时");
+               return window.location.href=app+"/login";
+            }
 			module.page = d.data;
-			if (module.opts.events.query2)
-				if(false == module.opts.events.query2(d.data))
-					return;
+			if (module.opts.events.query2){
+			    if(false == module.opts.events.query2(d.data)){
+			        return;
+			    }
+			}
+
 			showList();
 		});
 	}

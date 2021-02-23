@@ -35,9 +35,12 @@ public class SysDictController {
 
     @PostMapping
     @ResponseBody
-    public Map<String,Object> list(int pageIdx, int pageSize){
+    public Map<String,Object> list(String series,String series_desc,int pageIdx, int pageSize){
+        Map<String,Object> query_param = new HashMap<String,Object>(2,1);
+        if(null != series && !"".equals(series)){ query_param.put("series",series.trim()+"%"); }
+        if(null != series_desc && !"".equals(series_desc)){ query_param.put("series_desc",series_desc.trim()+"%"); }
         return new HashMap<String,Object>(1,1){{
-            put("data",dbsqlDao.list("com.mee.xml.SysDict.findList",new HashMap<String,Object>(),pageIdx,pageSize));
+            put("data",dbsqlDao.list("com.mee.xml.SysDict.findList",query_param,pageIdx,pageSize));
         }};
     }
 

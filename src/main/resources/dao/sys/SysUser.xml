@@ -13,7 +13,7 @@
             <if test="nick_name != null and nick_name != ''">  and nick_name like #{nick_name}  </if>
             <if test="user_name != null and user_name != ''">  and user_name like #{user_name} </if>
             <if test="email != null and email != ''">  and email like #{email} </if>
-            <if test="status != null and status != ''"> and status = #{status} </if>
+            <if test="status != null"> and status = #{status} </if>
         </where>
     </select>
 
@@ -71,4 +71,8 @@
     <delete id="delete">
         delete from sys_user where id = cast(#{id} as numeric)
     </delete>
+    <!-- update last login date -->
+    <update id="updateLastLoginDate" parameterType="com.mee.sys.entity.SysUser">
+        update sys_user set last_login_date = #{last_login_date} where ID = #{id}::numeric
+    </update>
 </mapper>

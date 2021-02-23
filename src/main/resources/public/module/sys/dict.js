@@ -1,7 +1,5 @@
 define(function (require, exports, module) {
 	var dicts = require("dicts");
-	// 显示菜单
-    document.querySelector(".menu-system").parentNode.nextElementSibling.style.display="block";
 	function init(){
 		module.tablex = require("common");
 		module.tablex.init({

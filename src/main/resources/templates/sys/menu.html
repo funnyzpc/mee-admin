@@ -3,7 +3,7 @@
 <head>
     <#include "../decorator/head.html"/>
     <link rel="stylesheet" href="${ctxPath}/jstree/style.min.css">
-    <title>MEE-菜单管理</title>
+    <title>${applicationName}-菜单管理</title>
     <style>
         #data-list{margin:1% 0%;padding: 1% 0%;}
         .jstree-container-ul{padding:1%;border:1px dashed gray;font-size:15px;}
@@ -14,7 +14,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-2 sidebar">
-            <#include "../decorator/sys_menu.html"/>
+            <#include "../decorator/menu/sys_menu.html"/>
         </div>
         <div class="col-sm-offset-2 col-sm-10">
             <div class="main">
@@ -25,9 +25,10 @@
                         菜单管理<span style="color:red;font-size:14px;font-weight:normal;"> （点击目录可添加下级节点）</span>
                     </div>
                     -->
-                    <label>菜单管理: </label>
                     <button name="new" class="btn btn-sm btn-success">增加</button>
+                    <span class="seprator"></span>
                     <button name="mod" class="btn btn-sm btn-info">编辑</button>
+                    <span class="seprator"></span>
                     <button name="del" class="btn btn-sm btn-danger">删除</button>
                     <span class="seprator"></span>
                 </form>
@@ -45,9 +46,11 @@
 <#include "../decorator/foot.html"/>
 <script type="text/javascript" src="${ctxPath}/jstree/jstree.js"></script>
 <script type="text/javascript">
+	// 显示菜单
+    document.querySelector(".menu-rights").parentNode.nextElementSibling.style.display="block";
     $(function(){
-        seajs.use("sys/menu", function(dict){
-            dict.init();
+        seajs.use("sys/menu", function(menu){
+            menu.init();
         });
     });
 </script>

@@ -114,6 +114,7 @@ public class ExcelWriteUtil {
         }
         fileObject = new File(fileObject.getPath().concat(File.separator).concat(SeqGenUtil.genSeq()).concat(EXPORT_FILE_END));
         try(SXSSFWorkbook workbook = new SXSSFWorkbook(null,ROW_ACCESS_WINDOW_SIZE,true,true);  FileOutputStream outputStream = new FileOutputStream(fileObject);){
+            workbook.setCompressTempFiles(true); // temp files will be gzipped
             CellStyle headerCellStyle = PoiCellStyleProcess.headerCellStyle(workbook);
             if(null == dataList || dataList.size()==0){
                 SXSSFSheet sheet = workbook.createSheet("0~0");

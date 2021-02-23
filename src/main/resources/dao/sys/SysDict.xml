@@ -5,9 +5,9 @@
     <select id="findList" resultType="com.mee.sys.entity.SysDict">
         select * from sys_dict
         <where>
-            <if test="id != null and id != ''">
-                and id = #{id}
-            </if>
+            <if test="id != null and id != ''"> and id = #{id}::numeric  </if>
+            <if test="series != null and series != ''"> and series like #{series}  </if>
+            <if test="series_desc != null and series_desc != ''"> and series_desc like #{series_desc}  </if>
             and del_flag = '${@com.mee.common.enums.DeletedEnum@NORMAL.code}'
         </where>
     </select>

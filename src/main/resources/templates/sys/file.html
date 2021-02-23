@@ -2,14 +2,14 @@
 <html lang="zh-cn">
 <head>
     <#include "../decorator/head.html"/>
-    <title>MEE-文件管理</title>
+    <title>${applicationName}-文件管理</title>
 </head>
 <body data-catalog="service">
 <#include "../decorator/banner.html"/>
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-2 sidebar">
-            <#include "../decorator/sys_menu.html"/>
+            <#include "../decorator/menu/sys_menu.html"/>
         </div>
         <div class="col-sm-offset-2 col-sm-10">
             <div class="main">
@@ -74,11 +74,12 @@
                         <button name="nextpage" class="btn btn-sm">下一页</button>
                         <button name="lastpage" class="btn btn-sm">末页</button>
                         <span class="seprator"></span>
-                        <label>第<input type="text" name="pageIdx" class="page" value="{{index}}" size="3"></input>页</label>
-                        <button name="gopage" class="btn btn-sm">GO</button>
+                        <label>第<input type="text" name="pageIdx" class="page" value="{{index}}" size="3"/>页</label>
+                        <button name="gopage" class="btn btn-sm btn-default">GO</button>
                     </form>
                 </script>
                 <script type="text/javascript">
+                	document.querySelector(".menu-system").parentNode.nextElementSibling.style.display="block";
                     $(function(){
                         seajs.use("sys/file", function(file){
                             file.init();

@@ -26,11 +26,8 @@ import java.util.Map;
 
 
 /**
- * 权限配置文件
- * @ClassName: ShiroConfiguration
  * @author shadow
- * @date 2018年8月25日
- *
+ * @description 权限配置文件
  */
 @Configuration
 public class ShiroConfiguration {
@@ -46,17 +43,16 @@ public class ShiroConfiguration {
         Map<String, Filter> filters = new HashMap<String, Filter>(1,1);
         filters.put("authc", new CustomFormAuthenticationFilter());
         shiroFilterFactoryBean.setFilters(filters);
-        //登录
+        // 登录
         shiroFilterFactoryBean.setLoginUrl("/login");
-        //首页
-        shiroFilterFactoryBean.setSuccessUrl("/mee/main");
+        // 登录成功
+        // shiroFilterFactoryBean.setSuccessUrl("/mee/main");
+        shiroFilterFactoryBean.setSuccessUrl("/mee/login");
         //错误页面，认证不通过跳转
         //TODO shiroFilterFactoryBean.setUnauthorizedUrl("/error/403");
         shiroFilterFactoryBean.setUnauthorizedUrl("/error/404");
-
         //页面权限控制
         shiroFilterFactoryBean.setFilterChainDefinitionMap(ShiroFilterMapFactory.shiroFilterMap());
-
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         return shiroFilterFactoryBean;
     }
@@ -86,19 +82,20 @@ public class ShiroConfiguration {
     @Bean
     public  DefaultWebSessionManager sessionManager() {
         DefaultWebSessionManager defaultWebSessionManager=new DefaultWebSessionManager();
-        // 设置session过期时间60分钟
-        Long timeout=60*60*1000L;//毫秒
-        defaultWebSessionManager.setGlobalSessionTimeout(timeout);
+        defaultWebSessionManager.setGlobalSessionTimeout(30*60*1000L);// 设置session过期时间30分钟 (单位为毫秒)
 
         // 自定义sessionID,防止与servlet JSESSIONID串
         defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
-        defaultWebSessionManager.setSessionIdUrlRewritingEnabled(false);
+        defaultWebSessionManager.setSessionIdUrlRewritingEnabled(false);// //登录时不保存sessionId,禁止URL地标后面添加JSESSIONID
+        defaultWebSessionManager.setSessionValidationInterval(30*60*1000L);//定时查询所有session是否过期的时间
         defaultWebSessionManager.setSessionIdCookieEnabled(true);
+        defaultWebSessionManager.setDeleteInvalidSessions(true);// 删除无效的session
+
          SimpleCookie cookie = new SimpleCookie("MEE_SID");
          cookie.setHttpOnly(true);
          // cookie.setSecure(Boolean.TRUE);
          cookie.setVersion(1);
-         cookie.setMaxAge(60 * 60 * 1000);// 60分钟
+        cookie.setMaxAge(60*60);// 60分钟 (单位为秒)
         defaultWebSessionManager.setSessionIdCookie(cookie);
         return defaultWebSessionManager;
     }
@@ -150,15 +147,6 @@ public class ShiroConfiguration {
     }
 
     /**
-     * 启用shiro方言，这样能在页面上使用shiro标签
-     * @return
-     */
-/*    @Bean
-    public ShiroDialect shiroDialect() {
-        return new ShiroDialect();
-    }*/
-
-    /**
      * 启用shiro注解
      *加入注解的使用，不加入这个注解不生效
      */
@@ -178,11 +166,6 @@ public class ShiroConfiguration {
         return new LifecycleBeanPostProcessor();
     }
 
-    /**
-     * 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions),需借助SpringAOP扫描使用Shiro注解的类,并在必要时进行安全逻辑验证
-     * 配置以下两个bean(DefaultAdvisorAutoProxyCreator(可选)和AuthorizationAttributeSourceAdvisor)即可实现此功能
-     * @return
-     */
     @Bean
     @DependsOn({"lifecycleBeanPostProcessor"})
     public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator(){

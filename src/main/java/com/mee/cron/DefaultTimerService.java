@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author funnyzpc
- * @description 集群分佈式定時任務測試(測試建议>=2個實例)
+ * @description 集群分佈式定時任務測試(測試需要>=2個實例)
  */
 @Service
 public class DefaultTimerService {

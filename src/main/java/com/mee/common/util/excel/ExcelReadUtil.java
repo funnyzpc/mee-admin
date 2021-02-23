@@ -1,7 +1,12 @@
 package com.mee.common.util.excel;
 
 
+import com.mee.common.util.DateUtil;
 import com.mee.common.util.SeqGenUtil;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -221,6 +226,118 @@ public class ExcelReadUtil {
             case "STRING":
                 return cell.getStringCellValue();
             case "NUMERIC":
+                // 强制转
+                cell.setCellType(CellType.STRING);
+                String cellValue = cell.getStringCellValue();
+                // return String.valueOf(cell.getNumericCellValue());
+                // 包含科学计数法的格式化为小数四位
+                if(cellValue.contains("E")){
+                    return new BigDecimal(cellValue).setScale(4, BigDecimal.ROUND_HALF_UP).toPlainString();
+                }
+                return cellValue;
+            case "BOOLEAN":
+                return String.valueOf(cell.getBooleanCellValue());
+            case "BLANK":
+                return "";
+            default:
+                log.error("导入>未知数据类型!");
+                return null;
+        }
+    }
+
+    public static List<Map> xls2Map(File file, int colCount) {
+        return xls2Map(file,colCount,0,null);
+    }
+
+    public static List<Map> xls2Map(File file, int colCount,Map<String,String> field_mapping) {
+        return xls2Map(file,colCount,0,field_mapping);
+    }
+
+    /**
+     * @ see this <a>https://poi.apache.org/components/spreadsheet/</a>
+     * @param file 上传文件
+     * @param colCount 最大列 1~max
+     * @param startRow 开始行 0~max
+     * @param field_mapping 字段映射
+     * @return
+     */
+    public static List<Map> xls2Map(File file, int colCount,int startRow,Map<String,String> field_mapping) {
+        if(!file.exists()){
+            return new ArrayList<Map>(0);
+        }
+        try(FileInputStream fi = new FileInputStream(file);
+            HSSFWorkbook wb = new HSSFWorkbook(fi);
+        ){
+            //Sheet1 下标0开始
+            HSSFSheet sheet= wb.getSheetAt(0);
+            //取得最后一行的行号
+            int rowNum = sheet.getLastRowNum() + 1;
+            List<Map> dataList = new ArrayList<Map>(rowNum);
+            // header
+            String[] header_arr = new String[colCount];
+            //第二行循环开始 startrow:1
+            for (int i = startRow; i < rowNum; i++) {
+                //行
+                HSSFRow row = sheet.getRow(i);
+                if(null == row ){
+                    break;
+                }
+                Map<String,String> dataItem = new HashMap<String,String>(colCount,1);
+                //每行的最后一个单元格位置
+                //int cellNum = row.getLastCellNum();
+                //每行的第一列循环开始 startcol
+                for (int j = 0; j < colCount; j++) {
+                    // XSSFCell cell = row.getCell(Short.parseShort(j + ""));
+                    HSSFCell cell = row.getCell( j );
+
+                    if(startRow==i) {
+                        // header row
+                        if (null != cell && !"".equals(cell.getCellTypeEnum().name())) {
+                            header_arr[j] = readXlsCellValue(cell);
+                            if(null!=field_mapping){
+                                String mapping_value = field_mapping.get(header_arr[j]);
+                                header_arr[j]= StringUtils.isEmpty(mapping_value)?header_arr[j]:mapping_value;
+                                continue;
+                            }
+                            // 定义别名了使用英文别名作为字段名
+                            if(header_arr[j].contains("\n")){
+                                header_arr[j]=header_arr[j].split("\n")[1];
+                                continue;
+                            }
+                        } else {
+                            header_arr[j] = "NULL_CELL_" + i + "_" + j;
+                        }
+                    }else{
+                        // data row
+                        if (null != cell && !"".equals(cell.getCellTypeEnum().name())) {
+                            dataItem.put(header_arr[j], readXlsCellValue(cell));
+                        } else {
+                            dataItem.put(header_arr[j], null);
+                        }
+                    }
+                }
+                // 不为空则添加
+                if(!dataItem.isEmpty()) {
+                    dataList.add(dataItem);
+                }
+            }
+            return dataList;
+        } catch (IOException iOException) {
+            log.error("错误 file:{}",file,iOException);
+            return new ArrayList();
+        }
+    }
+
+    private static String readXlsCellValue(HSSFCell cell){
+        // 判断excel单元格内容的格式，并对其进行转换，以便插入数据库
+        String cellType = cell.getCellTypeEnum().name();
+        switch (cellType){
+            case "STRING":
+                return cell.getStringCellValue();
+            case "NUMERIC":
+                if(org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)){
+                    return DateUtil.format(cell.getDateCellValue(), "yyyy-MM-dd");
+                }
                 // 强制转
                 cell.setCellType(CellType.STRING);
                 String cellValue = cell.getStringCellValue();

@@ -1,6 +1,5 @@
 define(function (require, exports, module) {
 	var dicts = require("dicts");
-	document.querySelector(".menu-system").parentNode.nextElementSibling.style.display="block";
 	function init(){
 		module.tablex = require("common");
 		module.tablex.init({

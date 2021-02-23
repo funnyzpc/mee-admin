@@ -1,6 +1,4 @@
 define(function (require, exports, module) {
-    // 展开目录
-	document.querySelector(".menu-rights").parentNode.nextElementSibling.style.display="block";
 	var roleForm = {
 			title:"角色",
 			fields:[

@@ -64,6 +64,11 @@
 <body>
 <div class="container-fluid login">
     <form action="${reqCtx.contextPath}/login" method="post" class="form-horizontal">
+        <!--[if IE]>
+        <em style="color:red;">&nbsp;&nbsp;当前系统无法使用IE浏览器，
+            请使用较新版本的 Chrome、Firefox、Safari ~</em>
+        <![endif]-->
+
         <div class="form-title">
             <div class="col-sm-10" style="color:#321166;">
                 <h3>登录</h3>
@@ -94,13 +99,13 @@
     </form>
 </div>
 <div class="login-copyright">
-    © 2020 MEE - Make By <a href="https://github.com/funnyzpc" target="_blank" style="color:#563D7C;font-style:italic;">funnyZpC V.0.1</a>
+    © 2022 MEE - Make By <a href="https://github.com/funnyzpc" target="_blank" style="color:#563D7C;font-style:italic;">funnyZpC V.0.5</a>
 </div>
 <script type="text/javascript">
         var msg = "<#if msg??>${msg}</#if>";
         window.setTimeout(function(){
             if(msg){alert(msg);}
-        },2000);
+        },200);
 </script>
 </body>
 </html>

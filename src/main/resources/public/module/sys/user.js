@@ -1,6 +1,5 @@
 define(function (require, exports, module) {
 	var dicts = require("dicts");
-	document.querySelector(".menu-rights").parentNode.nextElementSibling.style.display="block";
 	function init(){
 		module.tablex = require("common");
 		module.tablex.init({
@@ -16,24 +15,42 @@ define(function (require, exports, module) {
 		                {name:"email",label: "email",width:4,validate:{required:"required"},nl:true},
 		                {name:"password",label: "密码",width:4,validate:{required:"required"}},
 		                // {name:"role_id",label: "角色编号",width:4,validate:{required:"required"},nl:true},
-		                {name:"status",label: "用户状态",type:"select",width:4,validate:{required:"required"},attr:{"data-dict":"user-status"}},
+		                {name:"status",label: "用户状态",type:"select",width:4,validate:{required:"required"},attr:{"data-dict":"user_status"}},
 				        ]},
-			events:{
-				form0:form0
-			}
+			events:{form0:form0},
+			toolbar:{"unlock":unlock}
 		});
 		module.tablex.doQuery();
 	}
 
-    Handlebars.registerHelper("user-status", function(d1){
-        if(0 == d1){ return new Handlebars.SafeString("无效用户");  }
-        if(1 == d1){ return new Handlebars.SafeString("有效用户");  }
-        if(2 == d1){ return new Handlebars.SafeString("未激活用户");  }
-        return new Handlebars.SafeString("NONE");
-    });
 	function form0(form){
 		form.find("input[name=password]").attr({type:"password"});
 	}
-	
+	    function unlock(event){
+            if (event){
+                event.preventDefault();
+            }
+            let data = module.tablex.getSelected();
+            if(0==data.length){
+               alert("请选择一条记录");
+               return;
+            }
+           let formData = new FormData();
+           // 韩束抖音投放日报
+           formData.append("user_name",data[0].user_name);
+
+            fetch(app + "/sys/user/unlock",{
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data =>
+                function () {
+                    alert(data.msg);
+                }()
+            )
+            .catch(error => console.log("请求超时,请刷新后重试~")
+            );
+        }
 	exports.init = init;
 });

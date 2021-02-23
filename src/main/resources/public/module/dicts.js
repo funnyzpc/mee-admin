@@ -5,34 +5,34 @@ define(function (require, exports, module) {
 		    };
 	
 	function init(elem){
-		if (module.dicts){
-			initDictTemplate();
-			let $elems = elem ? $(elem) : $(document.body);
-			initSelectFiled($elems);
-			initDateField($elems);
-			initCurrencyField($elems);
-			initProjectField($elems);
-		}else{
-			// $.post(app + "/app/common/dict/list", function(d){
-			$.post(app + "/common/dict/list", function(lst){
-			    if(!lst){ lst = []; }
-				var dict = {};
-				for(var i in lst){
-					if (!lst[i].series){
-					    lst[i].series = {};
-					}
-					if (!dict[lst[i].series]){
-    					dict[lst[i].series] = {};
-					}
-					// dict[lst[i].series.key][lst[i].key]=lst[i];
-					dict[lst[i].series][lst[i].key]=lst[i];
-				}
-				module.dicts = dict;
-				init(elem);
-			});
-		}
-		return exports;
-	}
+        if (module.dicts){
+            initDictTemplate();
+            var $elems = elem ? $(elem) : $(document.body);
+            initSelectFiled($elems);
+            initDateField($elems);
+            initCurrencyField($elems);
+            // initProjectField($elems);
+        }else{
+            // $.post(app + "/app/common/dict/list", function(d){
+            $.post(app + "/common/dict/list", function(lst){
+                if(!lst){ lst = []; }
+                let dict = {};
+                for(var i in lst){
+                    if (!lst[i].series){
+                        lst[i].series = {};
+                    }
+                    if (!dict[lst[i].series]){
+                        dict[lst[i].series] = {};
+                    }
+                    // dict[lst[i].series.key][lst[i].key]=lst[i];
+                    dict[lst[i].series][lst[i].key]=lst[i];
+                }
+                module.dicts = dict;
+                init(elem);
+            });
+        }
+        return exports;
+    }
 	
 	function get(name, id){
 		if (!name)
@@ -43,14 +43,14 @@ define(function (require, exports, module) {
 	}
 	
 	function initDictTemplate(){
-		for(var i in dicts){
-	        Handlebars.registerHelper("dict" + i, dictTemplate(dicts[i]));
+		for(var i in module.dicts){
+	        Handlebars.registerHelper(i, dictTemplate(i));
 		}
 	}
 	
 	function dictTemplate(n){
 		return function(d){
-	        return new Handlebars.SafeString(module.dicts[n][d]?module.dicts[n][d].name : "");		
+	        return new Handlebars.SafeString(module.dicts[n][d]?module.dicts[n][d].value : "");
 		}
 	}
 
@@ -302,10 +302,10 @@ define(function (require, exports, module) {
 		return module.projects;
 	}
 	
-	{
+	/*{
 		$.validator.addMethod("project", function(v, elem){
 			var code = $(elem).parents("form")[0].projectCode.value;
 			return code;
 		},"请选择一个项目");
-	}
+	}*/
 });

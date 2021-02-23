@@ -30,7 +30,7 @@ public class SysRoleController {
     private static final Logger log = LoggerFactory.getLogger(SysRoleController.class);
 
     @Autowired
-    private DBSQLDao dbsqlDao;
+    private DBSQLDao dbSQLDao;
 
     @RequiresPermissions("040102")
     @GetMapping
@@ -54,7 +54,7 @@ public class SysRoleController {
         if(null != role_desc && !"".equals(role_desc)){ params.put("role_desc",role_desc.trim()+"%"); }
         if(null != status){ params.put("status",status); }
         return new HashMap<String,Object>(1,1){{
-            put("data",dbsqlDao.query("com.mee.xml.SysRole.findList",params/*,pageIdx,pageSize*/));
+            put("data", dbSQLDao.query("com.mee.xml.SysRole.findList",params/*,pageIdx,pageSize*/));
         }};
     }
 
@@ -64,7 +64,7 @@ public class SysRoleController {
     @ResponseBody
     public Map<String,Object> menus(){
         return new HashMap<String,Object>(1,1){{
-            put("data",dbsqlDao.query("com.mee.xml.SysMenu.findMenus"));
+            put("data", dbSQLDao.query("com.mee.xml.SysMenu.findMenus"));
         }};
     }
 
@@ -80,7 +80,7 @@ public class SysRoleController {
             put("role_id",id);
         }};
         return new HashMap<String,Object>(1,1){{
-            put("data",dbsqlDao.query("com.mee.xml.SysRoleMenu.findList",params));
+            put("data", dbSQLDao.query("com.mee.xml.SysRoleMenu.findList0",params));
         }};
     }
 
@@ -90,7 +90,7 @@ public class SysRoleController {
     @ResponseBody
     public Map<String,Object> users(){
         return new HashMap<String,Object>(1,1){{
-            put("users",dbsqlDao.query("com.mee.xml.SysUser.findUsers"));
+            put("users", dbSQLDao.query("com.mee.xml.SysUser.findUsers"));
         }};
     }
 
@@ -106,56 +106,62 @@ public class SysRoleController {
             put("role_id",role_id);
         }};
         return new HashMap<String,Object>(1,1){{
-            put("roleUsers",dbsqlDao.query("com.mee.xml.SysRoleUser.findList",params));
+            put("roleUsers", dbSQLDao.query("com.mee.xml.SysRoleUser.findList",params));
         }};
     }
 
-    /** 保存(用户关系、菜单关系) **/
+    /** 保存(用户关系、菜单关系) NEW **/
     @RequiresPermissions("040102")
     @PostMapping("/saveAll")
     @ResponseBody
     @Transactional(rollbackFor = Exception.class,readOnly = false)
     public Map<String,Object> saveAll(SysRole role, String[] menus, String[] users/* String[] depts*/){
         // validate
-        if(null == menus || null==users){
+        if(null == role){
             log.error("传入菜单和用户为空 menus:{},users:{}",menus,users);
-            return new HashMap<String,Object>(1,1){{
-                put("data",role);
-            }};
+            return ResultBuild.fail("传入参数为空 role");
         }
-        role.setStatus(1);
-        // save or delete role
-        if(StringUtils.isEmpty(role.getId())){
-            // do save
-            dbsqlDao.create("com.mee.xml.SysRole.insert",role);
-        }else{
-            // do update and delete relationship
-            dbsqlDao.update("com.mee.xml.SysRole.update",role);
-            Map<String,Object> deleParam = new HashMap<String,Object>(1,1){{
+
+        /** 先删除 再 新增 **/
+        if(!StringUtils.isEmpty(role.getId())){
+            // this.delete(role.getId(),role.getRole_name());
+            Map<String,Object> params = new HashMap<String,Object>(1,1){{
                 put("role_id",role.getId());
             }};
-            dbsqlDao.delete("com.mee.xml.SysRoleMenu.delete",deleParam);
-            dbsqlDao.delete("com.mee.xml.SysRoleUser.delete",deleParam);
+            // 这里必须删除,否则无法更新保存
+            int deleteRoleCount = dbSQLDao.delete("com.mee.xml.SysRole.delete",params);
+            int deleteRoleUserCount = dbSQLDao.delete("com.mee.xml.SysRoleMenu.delete",params);
+            int deleteRoleMenuCount = dbSQLDao.delete("com.mee.xml.SysRoleUser.delete",params);
+            log.info("已删除 {} - {} 角色用户关系{}条,删除角色菜单关系{}条.",deleteRoleCount,role.getRole_name(),deleteRoleUserCount,deleteRoleMenuCount);
         }
 
+        // 默认开启状态
+        if(null== role.getStatus()){ role.setStatus(1); }
+
+        // 创建角色
+        //if(StringUtils.isEmpty(role.getId())) {
+        role.setId(null);
+        dbSQLDao.create("com.mee.xml.SysRole.insert", role);
+        //}
         // 新增角色用户关系
-        for(String userId:users){
-            SysRoleUser roleUser = new SysRoleUser();
-            roleUser.setRole_id(role.getId());
-            roleUser.setUser_id(userId);
-            dbsqlDao.create("com.mee.xml.SysRoleUser.insert",roleUser);
+        if(null!=users && users.length>0) {
+            for (String userId : users) {
+                SysRoleUser roleUser = new SysRoleUser();
+                roleUser.setRole_id(role.getId());
+                roleUser.setUser_id(userId);
+                dbSQLDao.create("com.mee.xml.SysRoleUser.insert", roleUser);
+            }
         }
-
         // 新增角色菜单关系
-        for(String menuCode:menus){
-            SysRoleMenu roleMenu = new SysRoleMenu();
-            roleMenu.setRole_id(role.getId());
-            roleMenu.setMenu_code(menuCode);
-            dbsqlDao.create("com.mee.xml.SysRoleMenu.insert",roleMenu);
+        if(null!=menus && menus.length>0) {
+            for (String menuCode : menus) {
+                SysRoleMenu roleMenu = new SysRoleMenu();
+                roleMenu.setRole_id(role.getId());
+                roleMenu.setMenu_code(menuCode);
+                dbSQLDao.create("com.mee.xml.SysRoleMenu.insert", roleMenu);
+            }
         }
-        return new HashMap<String,Object>(1,1){{
-           put("data",role);
-        }};
+        return ResultBuild.SUCCESS;
     }
 
 
@@ -175,9 +181,9 @@ public class SysRoleController {
         Map<String,Object> params = new HashMap<String,Object>(1,1){{
             put("role_id",role_id);
         }};
-        int deleteRoleCount = dbsqlDao.delete("com.mee.xml.SysRole.delete",params);
-        int deleteRoleUserCount = dbsqlDao.delete("com.mee.xml.SysRoleMenu.delete",params);
-        int deleteRoleMenuCount = dbsqlDao.delete("com.mee.xml.SysRoleUser.delete",params);
+        int deleteRoleCount = dbSQLDao.delete("com.mee.xml.SysRole.delete",params);
+        int deleteRoleUserCount = dbSQLDao.delete("com.mee.xml.SysRoleMenu.delete",params);
+        int deleteRoleMenuCount = dbSQLDao.delete("com.mee.xml.SysRoleUser.delete",params);
         log.info("already remove RoleCount:{},RoleUserCount:{},deleteRoleMenuCount:{}",deleteRoleCount,deleteRoleUserCount,deleteRoleMenuCount);
         return ResultBuild.SUCCESS;
     }

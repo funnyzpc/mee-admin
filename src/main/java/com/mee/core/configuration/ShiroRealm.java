@@ -1,16 +1,15 @@
 package com.mee.core.configuration;
 
 import com.mee.common.service.LogServiceImpl;
+import com.mee.common.service.ShiroAccountLockedServiceImpl;
+import com.mee.common.util.DateUtil;
 import com.mee.common.util.HttpUtil;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.sys.entity.SysMenu;
 import com.mee.sys.entity.SysRole;
 import com.mee.sys.entity.SysUser;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -33,10 +32,10 @@ public class ShiroRealm extends AuthorizingRealm {
 
     @Resource
     private DBSQLDao dbSQLDao;
-
     @Resource
     private LogServiceImpl logService;
-
+    @Resource
+    private ShiroAccountLockedServiceImpl shiroAccountLockedService;
     /**
      * 认证登陆
      */
@@ -48,8 +47,11 @@ public class ShiroRealm extends AuthorizingRealm {
         }
         String username = (String) token.getPrincipal();
         // String password = new String((char[]) token.getCredentials());
-        // 通过username从数据库中查找 User对象，如果找到，没找到.
-        // 实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
+
+        // check locked 账户是否锁定
+        if(shiroAccountLockedService.isLocked(username)){
+            throw new LockedAccountException("账户已锁定:"+username);
+        }
 
         Map<String,Object> params = new HashMap<String,Object>(1,1){{
             put("user_name",username);
@@ -59,19 +61,24 @@ public class ShiroRealm extends AuthorizingRealm {
             return null;
         }
         SysUser sysUser = sysUserList.get(0);
-        if (sysUser == null)
-            return null;
-        else{
-            // record log
-            logService.log(sysUser.getUser_id(),1,username, HttpUtil.getRemoteAddr(ShiroUtils.getRequest()),"user login record");
+        sysUser.setLast_login_date(DateUtil.now());
 
-            SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                    sysUser, // 用户对象
-                    sysUser.getPassword(), // 密码
-                    getName() // realm name
-            );
-            return authenticationInfo;
-        }
+        // record log
+        logService.log(sysUser.getUser_id(),1,username, HttpUtil.getRemoteAddr(ShiroUtils.getRequest()),"user login record");
+
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
+                sysUser, // 用户对象
+                sysUser.getPassword(), // 密码
+                getName() // realm name
+        );
+        // record last_login_date
+        dbSQLDao.update("com.mee.xml.SysUser.updateLastLoginDate",sysUser);
+        // record log
+        logService.log(sysUser.getUser_id(),1,username, HttpUtil.getRemoteAddr(ShiroUtils.getRequest()),"user login record");
+        // check single
+        // this.kickOutAccount(username);
+        return authenticationInfo;
+
 
     }
 

@@ -1,6 +1,4 @@
 define(function (require, exports, module) {
-	// 显示菜单
-    document.querySelector(".menu-rights").parentNode.nextElementSibling.style.display="block";
 	var menuForm = {
 			title:"菜单",
 			fields:[

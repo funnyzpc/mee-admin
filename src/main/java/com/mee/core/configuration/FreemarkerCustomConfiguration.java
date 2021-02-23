@@ -2,6 +2,8 @@ package com.mee.core.configuration;
 
 
 import com.jagregory.shiro.freemarker.ShiroTags;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +14,7 @@ import javax.annotation.PostConstruct;
 
 @Configuration
 public class FreemarkerCustomConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(FreemarkerCustomConfiguration.class);
 
     @Autowired
     private FreeMarkerConfigurer freeMarkerConfigurer;
@@ -25,11 +28,19 @@ public class FreemarkerCustomConfiguration {
     @Value("${spring.application.name}")
     private String applicationName;
 
+    @Value("${spring.profiles.active}")
+    private String env;
+
     /** 使freemarker支持shiro标签 **/
     @Bean
     public freemarker.template.Configuration getFreemarkerConfiguration(){
         freemarker.template.Configuration configuration = freeMarkerConfigurer.getConfiguration();
         configuration.setSharedVariable("shiro",new ShiroTags());
+        if(!env.equals("dev")) {
+            log.info("===>配置freemarker线上环境刷新策略:{}",env);
+            configuration.setTemplateUpdateDelayMilliseconds(60 * 1000L);
+            configuration.setCacheStorage(new freemarker.cache.MruCacheStorage(24, 96));
+        }
         return configuration;
     }
 

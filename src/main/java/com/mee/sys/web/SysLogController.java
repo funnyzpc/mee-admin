@@ -32,7 +32,7 @@ public class SysLogController {
     private static final Logger log = LoggerFactory.getLogger(SysLogController.class);
 
     @Autowired
-    private DBSQLDao dbsqlDao;
+    private DBSQLDao dbSQLDao;
 
     @RequiresPermissions("040202")
     @GetMapping
@@ -50,7 +50,7 @@ public class SysLogController {
         if(!StringUtils.isEmpty(log_date)){queryParam.put("log_date",log_date);}
         if(!StringUtils.isEmpty(log_title)){queryParam.put("log_title",log_title+"%");}
         return new HashMap<String,Object>(1,1){{
-            put("data",dbsqlDao.list("com.mee.xml.SysLog.findList",queryParam,pageIdx,pageSize));
+            put("data",dbSQLDao.list("com.mee.xml.SysLog.findList",queryParam,pageIdx,pageSize));
         }};
     }
 
@@ -61,7 +61,7 @@ public class SysLogController {
         Map<String,Object> params = new HashMap<String,Object>(1,1){{
             put("id",id);
         }};
-        int deleteCount = dbsqlDao.delete("com.mee.xml.SysLog.delete",params);
+        int deleteCount = dbSQLDao.delete("com.mee.xml.SysLog.delete",params);
         if(deleteCount>0){
             return ResultBuild.SUCCESS;
         }
@@ -78,9 +78,9 @@ public class SysLogController {
     @GetMapping("/export")
     public void export(HttpServletResponse response,int pageIdx, int pageSize){
         log.info("开始查询数据 pageIdx:{}, pageSize:{}",pageIdx,pageSize);
-        List<SysLog> dataList = dbsqlDao.list("com.mee.xml.SysLog.findList",new HashMap<String,Object>(),pageIdx,pageSize).getData();
+        List<SysLog> dataList = dbSQLDao.list("com.mee.xml.SysLog.findList",new HashMap<String,Object>(),pageIdx,pageSize).getData();
         dataList.parallelStream().forEach(item->{
-            item.setLog_type_desc(1==item.getLog_type()?"手动上传":"其它");
+            item.setLog_type_desc(1==item.getLog_type()?"登录":"其它");
         });
         File file = ExcelWriteUtil.toXlsxByObj(dataList,header_field,data_field);
         ResultBuild.toResponse(response,file);

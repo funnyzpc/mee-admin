@@ -42,11 +42,11 @@ INSERT INTO sys_dict VALUES (202001061603360080100002, 'request-method', '请求
 INSERT INTO sys_dict VALUES (201912261746190080100000, 'ppppp', 'ppppp', 'ppppp', 'ppppp', 'ppppp', '1', '2019-12-26 17:46:19.083', 'sys');
 INSERT INTO sys_dict VALUES (202001061618370080100003, 'show-flag', '是否显示', '0', '不显示', '不显示标识', '1', '2020-01-06 16:18:37.698', 'sys');
 INSERT INTO sys_dict VALUES (202001061619080080100004, 'show-flag', '是否显示', '1', '显示', '显示标识', '1', '2020-01-06 16:19:08.512', 'sys');
-INSERT INTO sys_dict VALUES (202001171559560080100001, 'user-status', '用户状态', '1', '有效用户', '用户状态', '0', '2020-01-17 15:59:56.449', 'sys');
-INSERT INTO sys_dict VALUES (202001171600370080100002, 'user-status', '用户状态', '2', '未激活用户', '用户状态', '0', '2020-01-17 16:00:37.514', 'sys');
-INSERT INTO sys_dict VALUES (202001171559300080100000, 'user-status', '用户状态', '0', '无效用户', '用户状态', '0', '2020-01-17 15:59:30.767', 'sys');
-INSERT INTO sys_dict VALUES (202009141136250080100003, 'role-status', '角色状态', '0', '关闭角色', '关闭角色', '0', '2020-09-14 11:36:25.763', 'sys');
-INSERT INTO sys_dict VALUES (202009141136500080100004, 'role-status', '角色状态', '1', '开启角色', '开启角色', '0', '2020-09-14 11:36:50.884', 'sys');
+INSERT INTO sys_dict VALUES (202001171559560080100001, 'user_status', '用户状态', '1', '有效用户', '用户状态', '0', '2020-01-17 15:59:56.449', 'sys');
+INSERT INTO sys_dict VALUES (202001171600370080100002, 'user_status', '用户状态', '2', '未激活用户', '用户状态', '0', '2020-01-17 16:00:37.514', 'sys');
+INSERT INTO sys_dict VALUES (202001171559300080100000, 'user_status', '用户状态', '0', '无效用户', '用户状态', '0', '2020-01-17 15:59:30.767', 'sys');
+INSERT INTO sys_dict VALUES (202009141136250080100003, 'role_status', '角色状态', '0', '关闭角色', '关闭角色', '0', '2020-09-14 11:36:25.763', 'sys');
+INSERT INTO sys_dict VALUES (202009141136500080100004, 'role_status', '角色状态', '1', '开启角色', '开启角色', '0', '2020-09-14 11:36:50.884', 'sys');
 
 DROP TABLE IF EXISTS sys_menu;
 CREATE TABLE sys_menu (

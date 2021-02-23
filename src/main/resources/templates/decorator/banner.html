@@ -11,8 +11,8 @@
 				<span class="icon-bar"></span>
 			</button>
 			<#-- <img src="${ctxPath}/static/img/logo_cust.png"> -->
-			<a class="navbar-brand" href="${ctxPath}/main">
-			<strong>MEE</strong>
+			<a class="navbar-brand" href="${ctxPath}/main" style="font-weight:bold;font-size:28px;">
+				MEE
 			</a>
 		</div>
 
@@ -42,8 +42,7 @@
 
 		</ul>
 			<ul id="userinfo" class="nav navbar-nav navbar-right">
-				<#-- <li><p>${sessionScope.user.name}， 你好。</p></li> -->
-				<li><p>你好
+				<li><p>
 					<#if Session.user??>
 						<#if Session.user.nick_name??>
 							${Session.user.nick_name}
@@ -53,10 +52,12 @@
 					<#else>
 						<#-- <@shiro.principal/> -->
 				        <@shiro.principal property="nick_name"/>
-					</#if>
+					</#if>你好(^_^)&nbsp;&nbsp;
 				</p></li>
-				<li><a href="${ctxPath}/changePwd">修改密码</a></li>
-				<li><a href="${ctxPath}/logout" class="btn-warning">EXIST</a></li>
+				<!--<li><a href="${ctxPath}/changePwd">修改密码</a></li>
+				<li><a href="${ctxPath}/logout" class="btn-warning">EXIST</a></li>-->
+				<li><a href="${ctxPath}/changePwd" style="color: #cecece;font-weight: bold;background-color:#341c59;">修改密码</a></li>
+				<li><a href="${ctxPath}/logout" class="btn-warning" style="line-height:44px">EXIST</a></li>
 			</ul>
 		</div>
 

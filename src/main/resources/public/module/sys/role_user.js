@@ -1,5 +1,4 @@
 define(function (require, exports, module) {
-	document.querySelector(".menu-rights").parentNode.nextElementSibling.style.display="block";
 	function init(){
 		module.tablex = require("common");
 		module.tablex.init({
