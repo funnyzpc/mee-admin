@@ -8,10 +8,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableAsync // 开启异步调用
 @EnableScheduling // 开启定时任务
-public class MeeApplication {
+public class MeeAdminApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MeeApplication.class, args);
+		SpringApplication.run(MeeAdminApplication.class, args);
 	}
 
 }
