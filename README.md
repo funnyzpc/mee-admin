@@ -25,7 +25,7 @@
 + add this to your idea _VM options_ `-Djasypt.encryptor.password="0989GoEncc}{||>.<||}0101"`
 + startup MEE in `MeeApplication`
 + change password,see `MD5Util`
-+ init sql: [mee-admin_20211104(new).sql](./document/mee-admin_20211104(new).sql)
++ init sql(postgres): [mee-admin_20211104(new).sql](./document/mee-admin_20211104(new).sql)
 + 默认用户名密码: admin/1233
 
 #### packaging
