@@ -25,7 +25,7 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
         return false;
     }
 
-    private static void redirectToSavedRequest(ServletRequest request, ServletResponse response, String fallbackUrl,String context_path)throws IOException {
+    private void redirectToSavedRequest(ServletRequest request, ServletResponse response, String fallbackUrl,String context_path)throws IOException {
         String successUrl = null;
         SavedRequest savedRequest = WebUtils.getAndClearSavedRequest(request);
         if (savedRequest != null && savedRequest.getMethod().equalsIgnoreCase(AccessControlFilter.GET_METHOD)) {

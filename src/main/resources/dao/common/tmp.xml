@@ -1,0 +1,90 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mee.admin.dao1.normal.TmpDao">
+
+    <select id="findList" resultType="java.util.Map">
+        select * from tmp
+        <where>
+            <if test="id != null and id != ''"> and id = #{id} </if>
+            <if test="name != null and name != ''"> and name = #{name} </if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insert">
+        insert into tmp(
+            id,
+            name
+        ) values (
+            #{id},
+            #{name}
+        )
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from tmp where id = #{id}
+    </delete>
+
+    <insert id="insertBatch">
+        insert into test(
+            id,
+            order_id,
+            name,
+            type,
+            price,
+            label,
+            sale_count,
+            create_date
+
+
+        ) values
+        <foreach collection ="list" item="i" separator =",">
+            (
+            cast(#{i.id} as numeric),
+            #{i.order_id},
+            #{i.name},
+            #{i.type},
+            #{i.price},
+            #{i.label},
+            #{i.sale_count},
+            now()
+            )
+        </foreach>
+    </insert>
+
+    <select id="echo" resultType="java.lang.Integer">
+        select 1
+    </select>
+
+    <!-- 数据权限 -->
+    <select id="findScope" resultType="java.util.Map">
+        select * from  sys_dept2
+        <where>
+<!--            ${@com.mee.admin.core.annotion.MeeDataScopeFilter@filter('create_by')}-->
+<!--            ${@com.mee.admin.core.annotion.MeeDataScopeFilter@filter(null,2)}-->
+            ${@com.mee.admin.core.annotion.MeeDataScopeFilter@filter(null,2,4)}
+        </where>
+    </select>
+
+
+<!--    <select id="findList2" resultType="com.mee.admin.module.monitor.entity.SysLoginLog"  useCache="false">
+        select l.*,u.user_name,d.name as dept_name
+        from  sys_login_log  as l
+        left join  sys_user as u on l.user_id = u.user_id
+        left join  sys_dept as d on u.dept_id = d.dept_id
+        <where>
+            <if test="id != null" > and id = #{id}</if>
+            <if test="user_id != null" > and l.user_id = #{user_id}</if>
+            <if test="login_name != null and login_name!=''" > and login_name like #{login_name}</if>
+            <if test="login_status != null and login_status!=''" > and login_status = #{login_status}</if>
+            <if test="expires_at != null" > and expires_at = #{expires_at}</if>
+            <if test="token != null and token!=''" > and token like #{token}</if>
+            <if test="ip != null and ip!=''" > and ip like #{ip}</if>
+            <if test="browser != null and browser!=''" > and browser like #{browser}</if>
+            <if test="os != null and os!=''" > and os like #{os}</if>
+            <if test="online_status != null and online_status!=''" > and online_status = #{online_status}</if>
+            &lt;!&ndash;${@com.mee.admin.core.annotion.MeeDataScopeFilter@filter('l.user_id')}&ndash;&gt;
+        </where>
+        order by l.id desc
+    </select>-->
+
+</mapper>

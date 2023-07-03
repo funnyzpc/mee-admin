@@ -1,0 +1,15 @@
+<!-- 完整分页 -->
+<form id="_page-form">
+    <label>当前第{{index}}页 / 共{{pageCount}}页{{total}}条,每页
+        &nbsp;<select name="_page_size" pageSize="{{size}}">
+            <option value="10" {{#equal size '10'}}selected{{/equal}}>10</option>
+            <option value="15" {{#equal size '15'}}selected{{/equal}}>15</option>
+            <option value="30" {{#equal size '30'}}selected{{/equal}}>30</option>
+            <option value="100" {{#equal size '100'}}selected{{/equal}}>100</option>
+        </select>条</label>
+    <span class="seprator"></span>
+    <button name="first_page" class="btn btn-outline-dark">首页</button>
+    <button name="previous_page" class="btn btn-outline-dark">上一页</button>
+    <button name="next_page" class="btn btn-outline-dark">下一页</button>
+    <button name="last_page" class="btn btn-outline-dark">末页</button>
+</form>

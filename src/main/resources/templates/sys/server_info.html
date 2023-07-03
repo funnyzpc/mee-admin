@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <title>${applicationName}-系统信息</title>
+</head>
+<body>
+<div class="row">
+    <!-- 查询表单 -->
+    <div id="data-search">
+        <h5>系统信息</h5>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form" class="form-search">
+            <div class="row">
+                <button _func="query" type="submit" class="btn btn-primary">刷新</button>
+            </div>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+    <!-- dialog -->
+    <div id="data-dialog"> </div>
+</div>
+</body>
+<#include "../decorator/foot.html"/>
+<script type="text/cc-template" id="template-data-list">
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr><th>CPU</th></tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th>CPU数</th><td>{{cpu.cpuNum}}</td>
+        <th>total</th><td>{{cpu.total}}</td>
+        <th>sys</th><td>{{cpu.sys}}</td>
+        <th>used</th><td>{{cpu.used}}</td>
+    </tr>
+    <tr>
+        <th>wait</th><td>{{cpu.wait}}</td>
+        <th>free</th><td>{{cpu.free}}</td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    </tbody>
+    <!-- 内存 -->
+    <thead>
+    <tr><th>内存</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>内存大小</th><td>{{mem.total}}GB</td>
+            <th>已使用</th><td>{{mem.used}}</td>
+            <th>空闲</th><td>{{mem.free}}</td>
+            <th>使用率</th><td>{{mem.usage}}%</td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+    </tbody>
+    <!-- jvm虚拟机 -->
+    <thead>
+    <tr><th>JVM虚拟机</th></tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th>total</th><td>{{jvm.total}}</td>
+        <th>max</th><td>{{jvm.max}}</td>
+        <th>free</th><td>{{jvm.free}}</td>
+        <th>JAVA版本</th><td>{{jvm.version}}</td>
+    </tr>
+    <tr>
+        <th>JDK位置</th><td>{{jvm.home}}</td>
+        <th>名称</th><td style="max-width:240px;" class="hidden-item" title="{{jvm.name}}">{{jvm.name}}</td>
+        <th>used</th><td>{{jvm.used}}</td>
+        <th>运行时间</th><td>{{jvm.runTime}}</td>
+    </tr>
+    <tr>
+        <th>运行时参数</th><td style="max-width:240px;" class="hidden-item" title="{{jvm.inputArgs}}">{{jvm.inputArgs}}</td>
+        <th>启动时间</th><td>{{jvm.startTime}}</td>
+        <th>usage</th><td>{{jvm.usage}}</td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    </tbody>
+
+    <!-- 操作系统 -->
+    <thead>
+    <tr><th>操作系统</th></tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th>机器名称</th><td>{{sys.computerName}}</td>
+        <th>机器IP</th><td>{{sys.computerIp}}</td>
+        <th>应用目录</th><td>{{sys.userDir}}</td>
+        <th>OS名称</th><td>{{sys.osName}}</td>
+    </tr>
+    <tr>
+        <th>osArch</th><td>{{sys.osArch}}</td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+    </tbody>
+
+    <!-- 文件系统 -->
+    <thead>
+    <tr><th>文件系统</th></tr>
+    </thead>
+    <tbody>
+    {{#each sysFiles}}
+    <tr>
+        <th>挂在位置</th><td>{{dirName}}</td>
+        <th>文件系统</th><td>{{sysTypeName}}</td>
+        <th>typeName</th><td>{{typeName}}</td>
+        <th>总计大小</th><td>{{total}}</td>
+    </tr>
+    <tr>
+        <th></th><td></td>
+        <th>空闲大小</th><td>{{free}}</td>
+        <th>已使用</th><td>{{used}}</td>
+        <th>使用占比</th><td>{{usage}}%</td>
+    </tr>
+    {{/each}}
+    <tr><td>&nbsp;</td></tr>
+    </tbody>
+</table>
+</script>
+<script type="module">
+    import * as SysUserFunc from "${ctxPath}/public/sys/server_info.js"
+    SysUserFunc.init();
+</script>
+<style>
+    table>thead>tr>th{font-size:14pt;font-weight:bold;padding:12px 40px;}
+    table>tbody>tr>th{font-size:12pt;font-weight:bold;padding:12px 40px;}
+    table>tbody>tr>td{font-size:11pt;padding:12px 56px;}
+</style>
+</html>

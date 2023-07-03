@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    数据字典详情 SysDictDetail2(sys_dict_detail) Dao
+@author         shadow
+@date           2023-05-15 10:27:31
+-->
+<mapper namespace="com.mee.xml.SysDictDetail">
+
+    <!-- 慎用二级缓存，尤其是在集群环境下!!! -->
+    <cache-ref namespace="com.mee.xml.SysDictDetail"/>
+    <cache eviction="FIFO" flushInterval="6000" size="256" readOnly="true"/>
+
+    <!-- 字段 -->
+    <resultMap type="com.mee.sys.entity.SysDictDetail" id="SysDictDetailResult">
+        <result property="id" column="id"/>
+        <result property="dict_id" column="dict_id"/>
+        <result property="label" column="label"/>
+        <result property="value" column="value"/>
+        <result property="sort" column="sort"/>
+        <result property="create_by" column="create_by"/>
+        <result property="update_by" column="update_by"/>
+        <result property="create_time" column="create_time"/>
+        <result property="update_time" column="update_time"/>
+    </resultMap>
+
+    <!-- 查询 -->
+    <select id="findList" resultMap="SysDictDetailResult">
+        select * from sys_dict_detail
+        <where>
+            <if test="id != null and id != ''"> and id = #{id}</if>
+            <if test="dict_id != null and dict_id != ''"> and dict_id = #{dict_id}</if>
+            <if test="label != null and label != ''"> and label like #{label}</if>
+            <if test="value != null and value != ''"> and value like #{value}</if>
+            <if test="sort != null"> and sort = #{sort}</if>
+            <if test="create_by != null"> and create_by = #{create_by}</if>
+            <if test="update_by != null"> and update_by = #{update_by}</if>
+            <if test="create_time != null"> and create_time = #{create_time}</if>
+            <if test="update_time != null"> and update_time = #{update_time}</if>
+        </where>
+        order by sort asc
+    </select>
+
+    <!-- 按主键id查询 -->
+    <select id="findById" resultMap="SysDictDetailResult">
+        select * from sys_dict_detail
+        where id=#{id}
+    </select>
+
+    <!-- 插入 -->
+    <insert id="insert">
+        insert into sys_dict_detail(
+            id,
+            dict_id,
+            label,
+            value,
+            sort,
+            create_by,
+            update_by,
+            create_time,
+            update_time
+        ) values (
+            #{id},
+            #{dict_id},
+            #{label},
+            #{value},
+            #{sort},
+            #{create_by},
+            #{update_by},
+            #{create_time},
+            #{update_time}
+        )
+    </insert>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch">
+        insert into sys_dict_detail(
+           id,
+           dict_id,
+           label,
+           value,
+           sort,
+           create_by,
+           update_by,
+           create_time,
+           update_time
+        ) values
+        <foreach collection ="list" item="i" separator =",">
+        (
+           #{i.id},
+           #{i.dict_id},
+           #{i.label},
+           #{i.value},
+           #{i.sort},
+           #{i.create_by},
+           #{i.update_by},
+           #{i.create_time},
+           #{i.update_time}
+        )
+        </foreach>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update">
+        update sys_dict_detail
+        <set>
+            <if test="dict_id != null and dict_id != ''">dict_id=#{dict_id},</if>
+            <if test="label != null and label != ''">label=#{label},</if>
+            <if test="value != null and value != ''">value=#{value},</if>
+            <if test="sort != null">sort=#{sort},</if>
+            <if test="update_by != null">update_by=#{update_by},</if>
+            <if test="update_time != null">update_time=#{update_time},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!-- 按主键id删除 -->
+    <delete id="deleteById">
+        delete from sys_dict_detail where id=#{id}
+    </delete>
+
+    <delete id="deleteByDictId">
+        delete from sys_dict_detail where dict_id=#{dict_id}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="deleteBatch">
+        delete from sys_dict_detail where id in
+        <foreach collection ="list" item="item" open="(" close=")" separator =",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 按名称(EN)查询,已启用缓存（这里跨表用缓存缓存会丢失）-->
+    <select id="findByNames" resultType="java.util.Map" useCache="false">
+        select d.name,dd.id as detail_id,dd.dict_id ,dd."label" ,dd.value ,dd.sort  from sys_dict as d left join sys_dict_detail dd
+        on d.id=dd.dict_id
+        where d.name in
+        <foreach collection ="list" item="item" open="(" close=")" separator =",">
+            #{item}
+        </foreach>
+<!--        ('sys_oper_type','sys_job_status')-->
+        order by d.name,dd.sort  asc
+    </select>
+
+    <select id="findByNames" resultType="java.util.Map" useCache="false" databaseId="mysql">
+        select d.name,dd.id as detail_id,dd.dict_id ,dd.`label` ,dd.value ,dd.`sort` from sys_dict as d
+        left join sys_dict_detail as dd on d.id=dd.dict_id
+        where d.name in
+        <foreach collection ="list" item="item" open="(" close=")" separator =",">
+            #{item}
+        </foreach>
+        order by d.name,dd.`sort` asc
+    </select>
+
+</mapper>

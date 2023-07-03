@@ -1,6 +1,7 @@
 package com.mee.common.web;
 
 import com.mee.common.util.DateUtil;
+import com.mee.common.util.MeeResult;
 import com.mee.common.util.ResultBuild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,12 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.File;
-import java.util.Map;
 
 /**
  * @author  funnyzpc
  * @description 上传文件测试
  */
+@Deprecated
 //@RestController
 public class FileUploadController {
     private static final Logger log = LoggerFactory.getLogger(FileUploadController.class);
@@ -28,8 +29,13 @@ public class FileUploadController {
         }
     }
 
+    /**
+     * 文件上传
+     * @param request 请求对象
+     * @return
+     */
     //@PostMapping("/fileUpload")
-    private Map<String,Object> uploadFile(MultipartRequest request) {
+    private MeeResult uploadFile(MultipartRequest request) {
         try{
             MultipartFile uploadFile =request.getFile("file");
             // 是否存在
@@ -50,10 +56,10 @@ public class FileUploadController {
             uploadFile.transferTo(file);
             log.info("已上传文件:{}",file.getName());
             // 返回信息
-            return ResultBuild.SUCCESS;
+            return ResultBuild.SUCCESS();
         }catch(Exception ex){
             log.error("上传文件发生错误:",ex);
-            return ResultBuild.FAIL;
+            return ResultBuild.FAIL();
         }
     }
 }

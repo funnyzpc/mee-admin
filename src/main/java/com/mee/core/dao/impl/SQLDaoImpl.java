@@ -1,9 +1,6 @@
 package com.mee.core.dao.impl;
 
-import com.mee.common.entity.BaseEntity;
 import com.mee.common.service.SeqGenServiceImpl;
-import com.mee.common.util.JacksonUtil;
-import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.core.model.Page;
 import org.apache.ibatis.session.RowBounds;
@@ -13,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
@@ -41,34 +37,34 @@ public class SQLDaoImpl implements DBSQLDao {
 		this.sqlSession = sqlSession;
 	}
 	@Override
-	public List query(String id) {
+	public List find(String id) {
 		return sqlSession.selectList(id);
 	}
 	@Override
-	public List query(String id, int count) {
+	public List find(String id, int count) {
 		return sqlSession.selectList(id, null, new RowBounds(0, count));
 	}
 
 	@Override
-	public List query(String id, Map params) {
+	public List find(String id, Map params) {
 		return sqlSession.selectList(id, params);
 	}
 	@Override
-	public List query(String id, Map params, int count) {
+	public List find(String id, Map params, int count) {
 		return sqlSession.selectList(id, params, new RowBounds(0, count));
 	}
 
 	@Override
-	public <T> T queryOne(String id,Map params){
+	public <T> T findOne(String id, Map params){
 		return sqlSession.selectOne(id,params);
 	}
 
 	@Override
-	public int create(String id, Map params) {
-		return sqlSession.insert(id, params);
+	public int insert(String id, Object obj) {
+		return sqlSession.insert(id, obj);
 	}
 
-	@Override
+/*	@Override
 	public <P extends BaseEntity> String create(String id, P params) {
 		if(null != params.getId() && !"".equals(params.getId())){
 			LOGGER.error("记录已存在：{}", JacksonUtil.toJsonString(params));
@@ -84,13 +80,14 @@ public class SQLDaoImpl implements DBSQLDao {
 			return  params.getId();
 		}
 		return null;
-	}
-	@Override
-	public int update(String id, Map params) {
-		return sqlSession.update(id, params);
-	}
+	}*/
 
 	@Override
+	public int update(String id, Object obj) {
+		return sqlSession.update(id, obj);
+	}
+
+/*	@Override
 	public <P extends BaseEntity> int update(String id, P params) {
 		// 空ID不更新
 		if(null == params.getId() || "".equals(params.getId().trim())){
@@ -98,6 +95,11 @@ public class SQLDaoImpl implements DBSQLDao {
 			return 0;
 		}
 		return sqlSession.update(id, params);
+	}*/
+
+	@Override
+	public <P> int delete(String id, P params) {
+		return sqlSession.delete(id, params);
 	}
 
 	@Override
@@ -106,7 +108,7 @@ public class SQLDaoImpl implements DBSQLDao {
 	}
 
 	@Override
-	public List query(String id, List list) {
+	public List find(String id, List list) {
 		return sqlSession.selectList(id, list);
 	}
 	
@@ -116,7 +118,7 @@ public class SQLDaoImpl implements DBSQLDao {
 	}
 
 	@Override
-	public Page list(String id, Map params, int pageIdx, int pageSize) {
+	public <T> Page<T> list(String id, Map params, int pageIdx, int pageSize) {
   		Page p = new Page<>(params, pageIdx, pageSize);
 		return p.setData(sqlSession.selectList(id, p));
 	}

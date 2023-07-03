@@ -18,9 +18,12 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 
 /**
- * @auther funnyzpc
- * @description 公共文件下载
- */
+* 公共文件下载
+* @className    CommonFileController
+* @author       shadow
+* @date         2023/7/3 14:04
+* @version      1.0
+*/
 @Controller
 @RequestMapping("/common/file")
 public class CommonFileController {
@@ -29,6 +32,12 @@ public class CommonFileController {
     @Value("${mee.file.upload-dir}")
     private String file_base_dir;
 
+    /**
+     * 文件下载
+     * @param response 响应体
+     * @param filePath 文件路径
+     * @param fileName 文件名称
+     */
     @GetMapping
     public void download(HttpServletResponse response,String filePath,String fileName) {
         File file = new File(file_base_dir+File.separator + filePath);

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <link rel="stylesheet" href="${ctxPath}/static/css/fix-table.css">
+    <title>${applicationName}-文件管理</title>
+</head>
+<body>
+<div class="row">
+    <h5>文件管理</h5>
+    <div id="data-search">
+        <!-- 业务内容 -->
+        <form method="GET" class="form-inline form-search">
+            <label class="form-label">上传文件名称</label>
+            <input type="text" name="original_name" >&nbsp;&nbsp;
+            <label class="form-label">保存文件名</label>
+            <input type="text" name="name" >&nbsp;
+            <label class="form-label">上传日期</label>
+            <input type="datetime-local" name="dts" step="1">~<input type="datetime-local" name="dte" step="1">&nbsp;&nbsp;
+
+            <button _func="query" type="submit" class="btn btn-sm btn-primary">查询</button>
+        </form>
+    </div>
+    <div id="data-list"></div>
+</div>
+<script type="text/cc-template" id="template-data-list">
+    <div style="overflow-x: scroll; white-space: nowrap;overflow: auto;">
+    <table class="table table-bordered table-hover ">
+        <thead>
+        <tr>
+            <th>上传文件名称</th>
+            <th>文件表ID</th>
+            <th>保存文件名</th>
+            <th>文件保存路径</th>
+            <th>文件类型</th>
+            <th>文件分类</th>
+            <th>创建时间</th>
+            <th>创建人</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{original_name}}</td>
+            <td>{{id}}</td>
+            <td>{{name}}</td>
+            <td title="点击链接即可下载"><a href="${ctxPath}/common/file?fileName={{original_name}}&filePath={{file_path}}" target="_blank">{{file_path}}</a></td>
+            <td>{{file_type}}</td>
+            <td>
+                {{category}}<!-- -{{#equal category 1}} 手动上传 {{/equal}} -->
+            </td>
+            <td>{{create_date}}</td>
+            <td>{{create_by}}</td>
+            <td><a href="#" func="delete">删除</a></td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    </div>
+    <#include "../decorator/page-form.html"/>
+</script>
+</body>
+<!-- 底部静态 -->
+<#include "../decorator/foot.html"/>
+<script type="module">
+    import {init} from "${ctxPath}/public/sys/sys_file.js"
+    init();
+</script>
+</html>

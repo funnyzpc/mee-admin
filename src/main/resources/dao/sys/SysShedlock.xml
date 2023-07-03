@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mee.xml.SysShedlock">
+
+    <!-- 查询 -->
+    <select id="findList" resultType="com.mee.sys.entity.SysShedlock">
+        select * from SYS_SHEDLOCK
+        <where>
+            <if test="name != null and name!=''">  and name like #{name} </if>
+            <if test="label != null and label != ''"> and label like #{label} </if>
+            <if test="locked_at_start != null"> and locked_at &gt;= #{locked_at_start}</if>
+            <if test="locked_at_end != null"> and locked_at &lt;= #{locked_at_end}</if>
+        </where>
+        order by locked_at asc
+    </select>
+
+    <update id="update" parameterType="com.mee.sys.entity.SysShedlock">
+        update sys_shedlock
+        <set>
+            <if test="label != null and label !='' "> "label"=#{label,jdbcType=VARCHAR},</if>
+            <if test="lock_until != null"> lock_until=#{lock_until},</if>
+            <if test="status != null"> status=#{status},</if>
+        </set>
+        where "name" = #{name}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from sys_shedlock where "name" = #{name}
+    </delete>
+
+</mapper>
+

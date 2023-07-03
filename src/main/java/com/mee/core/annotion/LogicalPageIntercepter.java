@@ -55,7 +55,7 @@ public class LogicalPageIntercepter implements Interceptor {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see org.apache.ibatis.plugin.Interceptor#plugin(java.lang.Object)
+	 * @see Interceptor#plugin(Object)
 	 */
 	@Override
 	public Object plugin(Object target) {
@@ -66,7 +66,7 @@ public class LogicalPageIntercepter implements Interceptor {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.apache.ibatis.plugin.Interceptor#setProperties(java.util.Properties)
+	 * Interceptor#setProperties(Properties)
 	 */
 	@Override
 	public void setProperties(Properties properties) {

@@ -1,78 +1,230 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    系统::用户信息表 SysUser2(sys_user) Dao
+@author         shadow
+@date           2023-05-30 20:59:40
+-->
 <mapper namespace="com.mee.xml.SysUser">
-    <!-- 角色:默认所有用户 -->
-    <select id="findUsers" resultType="java.util.Map" useCache="true">
-        select user_id as id,nick_name||' ('||user_name||')' as "text" from sys_user;
-    </select>
 
-    <select id="findList" resultType="com.mee.sys.entity.SysUser">
+    <!-- 字段 -->
+    <resultMap type="com.mee.sys.entity.SysUser" id="SysUserResult">
+        <result property="id" column="id"/>
+        <result property="dept_id" column="dept_id"/>
+        <result property="user_name" column="user_name"/>
+        <result property="nick_name" column="nick_name"/>
+        <result property="gender" column="gender"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="register_date" column="register_date"/>
+        <result property="last_login_date" column="last_login_date"/>
+        <result property="pwd_reset_time" column="pwd_reset_time"/>
+        <result property="status" column="status"/>
+        <result property="del_flag" column="del_flag"/>
+        <result property="create_time" column="create_time"/>
+        <result property="create_by" column="create_by"/>
+        <result property="update_time" column="update_time"/>
+        <result property="update_by" column="update_by"/>
+    </resultMap>
+
+    <!-- 查询 -->
+    <select id="findList" resultMap="SysUserResult">
         select * from sys_user
         <where>
-            <if test="id != null and id != ''"> and id = cast(#{id} as numeric) </if>
-            <if test="nick_name != null and nick_name != ''">  and nick_name like #{nick_name}  </if>
-            <if test="user_name != null and user_name != ''">  and user_name like #{user_name} </if>
-            <if test="email != null and email != ''">  and email like #{email} </if>
-            <if test="status != null"> and status = #{status} </if>
+            <if test="id != null and id != ''"> and id = #{id}</if>
+            <if test="dept_id != null"> and dept_id = #{dept_id}</if>
+            <if test="user_name != null and user_name != ''"> and user_name like #{user_name}</if>
+            <if test="nick_name != null and nick_name != ''"> and nick_name like #{nick_name}</if>
+            <if test="gender != null and gender != ''"> and gender = #{gender}</if>
+            <if test="phone != null and phone != ''"> and phone like #{phone}</if>
+            <if test="email != null and email != ''"> and email like #{email}</if>
+<!--            <if test="password != null and password != ''"> and password = #{password}</if>-->
+            <if test="register_date != null"> and register_date = #{register_date}</if>
+            <if test="last_login_date != null"> and last_login_date = #{last_login_date}</if>
+            <if test="pwd_reset_time != null"> and pwd_reset_time = #{pwd_reset_time}</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+            <if test="del_flag != null and del_flag != ''"> and del_flag = #{del_flag}</if>
+<!--            <if test="create_time != null"> and create_time = #{create_time}</if>-->
+<!--            <if test="create_by != null and create_by != ''"> and create_by = #{create_by}</if>-->
+<!--            <if test="update_time != null"> and update_time = #{update_time}</if>-->
+<!--            <if test="update_by != null and update_by != ''"> and update_by = #{update_by}</if>-->
         </where>
+        order by id desc
     </select>
 
-    <select id="findByUserName" resultType="com.mee.sys.entity.SysUser">
-        select * from sys_user
+    <!-- 查询 -->
+    <select id="findListForRole" resultMap="SysUserResult">
+        <!-- 其实是可以用in来做的，只是in在mysql中实在太慢 -->
+        select u.* from sys_user as u left join (
+            select user_id from sys_role_user where role_id=#{role_id}
+        ) as ru on u.id=ru.user_id
         <where>
-            <if test="user_name != null and user_name != ''">  and user_name = #{user_name} </if>
-            <if test="email != null and email != ''">  and email = #{email} </if>
+            and ru.user_id is null
+            <if test="user_name != null and user_name != ''"> and u.user_name like #{user_name}</if>
+            <if test="nick_name != null and nick_name != ''"> and u.nick_name like #{nick_name}</if>
+            <if test="phone != null and phone != ''"> and u.phone like #{phone}</if>
+            <if test="del_flag != null and del_flag != ''"> and u.del_flag = #{del_flag}</if>
+            <if test="status != null and status != ''"> and u.status = #{status}</if>
         </where>
-        limit 1
+        order by id desc
     </select>
 
+    <!-- 按主键id查询 -->
+    <select id="findById" resultMap="SysUserResult">
+        select * from sys_user
+        where id=#{id}
+    </select>
+
+    <!-- 插入 -->
     <insert id="insert">
         insert into sys_user(
             id,
-            user_id,
-            nick_name,
+            dept_id,
             user_name,
+            nick_name,
+            gender,
+            phone,
             email,
-            "password",
-            status,
+            password,
             register_date,
             last_login_date,
-            create_date,
-            create_by
+            pwd_reset_time,
+            status,
+            del_flag,
+            create_time,
+            create_by,
+            update_time,
+            update_by
         ) values (
-            cast(#{id} as numeric),
-            #{user_id},
-            #{nick_name},
+            #{id},
+            #{dept_id},
             #{user_name},
+            #{nick_name},
+            #{gender},
+            #{phone},
             #{email},
             #{password},
-            #{status},
             #{register_date},
             #{last_login_date},
-            now(),
-            #{create_by}
+            #{pwd_reset_time},
+            #{status},
+            #{del_flag},
+            #{create_time},
+            #{create_by},
+            #{update_time},
+            #{update_by}
         )
     </insert>
 
+    <!-- 批量插入 -->
+    <insert id="insertBatch">
+        insert into sys_user(
+           id,
+           dept_id,
+           user_name,
+           nick_name,
+           gender,
+           phone,
+           email,
+           password,
+           register_date,
+           last_login_date,
+           pwd_reset_time,
+           status,
+           del_flag,
+           create_time,
+           create_by,
+           update_time,
+           update_by
+        ) values
+        <foreach collection ="list" item="i" separator =",">
+        (
+           #{i.id},
+           #{i.dept_id},
+           #{i.user_name},
+           #{i.nick_name},
+           #{i.gender},
+           #{i.phone},
+           #{i.email},
+           #{i.password},
+           #{i.register_date},
+           #{i.last_login_date},
+           #{i.pwd_reset_time},
+           #{i.status},
+           #{i.del_flag},
+           #{i.create_time},
+           #{i.create_by},
+           #{i.update_time},
+           #{i.update_by}
+        )
+        </foreach>
+    </insert>
 
-    <update id="update" parameterType="com.mee.sys.entity.SysUser">
+    <!-- 更新 -->
+    <update id="update">
         update sys_user
         <set>
-            <!-- <if test="user_id!=null and user_id!=''"> user_id = #{user_id} ,</if> -->
-            <if test="nick_name!=null and nick_name!=''"> nick_name = #{nick_name},</if>
-            <if test="user_name!=null and user_name!=''">user_name = #{user_name},</if>
-            <if test="email!=null and email!=''">email = #{email},</if>
-            <if test="password!=null and password!=''">"password" = #{password},</if>
-            <if test="status!=null and status!=''">status = #{status},</if>
+            <if test="dept_id != null">dept_id=#{dept_id},</if>
+<!--            <if test="user_name != null and user_name != ''">user_name=#{user_name},</if>-->
+            <if test="nick_name != null and nick_name != ''">nick_name=#{nick_name},</if>
+            <if test="gender != null and gender != ''">gender=#{gender},</if>
+            <if test="phone != null and phone != ''">phone=#{phone},</if>
+            <if test="email != null and email != ''">email=#{email},</if>
+<!--            <if test="password != null and password != ''">password=#{password},</if>-->
+<!--            <if test="register_date != null">register_date=#{register_date},</if>-->
+<!--            <if test="last_login_date != null">last_login_date=#{last_login_date},</if>-->
+<!--            <if test="pwd_reset_time != null">pwd_reset_time=#{pwd_reset_time},</if>-->
+            <if test="status != null and status != ''">status=#{status},</if>
+<!--            <if test="del_flag != null and del_flag != ''">del_flag=#{del_flag},</if>-->
+            <if test="update_time != null">update_time=#{update_time},</if>
+            <if test="update_by != null and update_by != ''">update_by=#{update_by},</if>
         </set>
-        where ID = cast(#{id} as numeric)
+        where id=#{id}
     </update>
 
-    <delete id="delete">
-        delete from sys_user where id = cast(#{id} as numeric)
-    </delete>
-    <!-- update last login date -->
-    <update id="updateLastLoginDate" parameterType="com.mee.sys.entity.SysUser">
-        update sys_user set last_login_date = #{last_login_date} where ID = #{id}::numeric
+    <!-- 用户自行更新信息 -->
+    <update id="updateInfoBySelf">
+        update sys_user set
+            nick_name=#{nick_name},
+            gender=#{gender},
+            phone=#{phone},
+            email=#{email}
+        where id=#{id}
     </update>
+
+    <!-- 按主键id删除 -->
+    <delete id="deleteById">
+<!--        delete from sys_user where id=#{id}-->
+        update sys_user set del_flag=#{del_flag} where  id=#{id}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="deleteBatch">
+        delete from sys_user where id in
+        <foreach collection ="list" item="item" open="(" close=")" separator =",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- change user status -->
+    <update id="changeStatus">
+        update sys_user set status = #{status} where id = #{id}
+    </update>
+
+    <!-- 更新密码 -->
+    <update id="updatePwd">
+        update sys_user set
+            password = #{password},
+            pwd_reset_time = #{pwd_reset_time},
+            update_time = #{update_time},
+            update_by = #{update_by}
+        where id = #{id}
+    </update>
+
+    <!-- update last login date -->
+    <update id="updateLastLoginDate">
+        update sys_user set last_login_date = #{last_login_date} where id = #{id}
+    </update>
+
 </mapper>

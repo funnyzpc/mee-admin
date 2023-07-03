@@ -4,6 +4,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+* 过滤器配置
+* @className    WebMvcConfig
+* @author       shadow
+* @date         2023/7/3 13:19
+* @version      1.0
+*/
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 

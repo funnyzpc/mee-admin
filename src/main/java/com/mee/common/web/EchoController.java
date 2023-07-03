@@ -17,9 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author funnyzpc
- * @description 公共接口测试用
- */
+* 公共接口测试用
+* @className    EchoController
+* @author       shadow
+* @date         2023/7/3 14:04
+* @version      1.0
+*/
 @RestController
 public class EchoController {
 
@@ -37,6 +40,12 @@ public class EchoController {
 
     private static final LocalDateTime STARTUP_TIME = DateUtil.now();
 
+    /**
+     * 测试
+     * @param reqData 请求数据
+     * @param request 请求对象
+     * @return 数据
+     */
     @GetMapping("/echo")
     public Map<String,Object> echo(String reqData,HttpServletRequest request){
         try {

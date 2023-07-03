@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -139,10 +140,27 @@ public class ExcelReadUtil {
     }
 
 
-    public static List<Map<String,String>> xlsx2Map(File file, int colCount) {
+    /**
+     * 文件的方式读取
+     * @param file 文件
+     * @param colCount 读取最大列
+     * @return
+     */
+    public static List<Map> xlsx2Map(File file, int colCount) {
         return xlsx2Map(file,colCount,0,null);
     }
-    public static List<Map<String,String>> xlsx2Map(File file, int colCount,Map<String,String> field_mapping) {
+
+    /**
+     * 流的方式读取
+     * @param fis    文件流
+     * @param colCount 读取最大列
+     * @return
+     */
+    public static List<Map> xlsx2Map(InputStream fis, int colCount) {
+        return xlsx2Map(fis,colCount,0,null);
+    }
+
+    public static List<Map> xlsx2Map(File file, int colCount,Map<String,String> field_mapping) {
         return xlsx2Map(file,colCount,0,field_mapping);
     }
 
@@ -153,7 +171,7 @@ public class ExcelReadUtil {
      * @param startRow 开始读取行(0~MAX)
      * @return
      */
-    public static List<Map<String,String>> xlsx2Map(File file, int colCount,int startRow,Map<String,String> field_mapping) {
+    public static List<Map> xlsx2Map(File file, int colCount,int startRow,Map<String,String> field_mapping) {
         try(FileInputStream fi = new FileInputStream(file);
             XSSFWorkbook wb = new XSSFWorkbook(fi);
         ){
@@ -161,7 +179,7 @@ public class ExcelReadUtil {
             XSSFSheet sheet= wb.getSheetAt(0);
             //取得最后一行的行号
             int rowNum = sheet.getLastRowNum() + 1;
-            List<Map<String,String>> dataList = new ArrayList<Map<String,String>>(rowNum);
+            List<Map> dataList = new ArrayList<Map>(rowNum);
             // header
             String[] header_arr = new String[colCount];
             //第二行循环开始 startrow:1
@@ -219,6 +237,72 @@ public class ExcelReadUtil {
         // file.delete();
     }
 
+    public static List<Map> xlsx2Map(InputStream fi, int colCount, int startRow, Map<String,String> field_mapping) {
+        try(fi;
+            XSSFWorkbook wb = new XSSFWorkbook(fi);
+        ){
+            //Sheet1 下标0开始
+            XSSFSheet sheet= wb.getSheetAt(0);
+            //取得最后一行的行号
+            int rowNum = sheet.getLastRowNum() + 1;
+            List<Map> dataList = new ArrayList<Map>(rowNum);
+            // header
+            String[] header_arr = new String[colCount];
+            //第二行循环开始 startrow:1
+            for (int i = startRow; i < rowNum; i++) {
+                //行
+                XSSFRow row = sheet.getRow(i);
+                if(null == row ){
+                    break;
+                }
+                Map<String,String> dataItem = new HashMap<String,String>(colCount,1);
+                //每行的最后一个单元格位置
+                //int cellNum = row.getLastCellNum();
+                //每行的第一列循环开始 startcol
+                for (int j = 0; j < colCount; j++) {
+                    // XSSFCell cell = row.getCell(Short.parseShort(j + ""));
+                    XSSFCell cell = row.getCell( j );
+
+                    if(startRow==i) {
+                        // header row
+                        if (null != cell && !"".equals(cell.getCellTypeEnum().name())) {
+                            header_arr[j] = readCellValue(cell);
+                            if(null!=field_mapping){
+                                String mapping_value = field_mapping.get(header_arr[j]);
+                                header_arr[j]= StringUtils.isEmpty(mapping_value)?header_arr[j]:mapping_value;
+                                continue;
+                            }
+                            // 定义别名了使用英文别名作为字段名
+                            if(header_arr[j].contains("\n")){
+                                header_arr[j]=header_arr[j].split("\n")[1];
+                                continue;
+                            }
+                        } else {
+                            header_arr[j] = "NULL_CELL_" + i + "_" + j;
+                        }
+                    }else{
+                        // data row
+                        if (null != cell && !"".equals(cell.getCellTypeEnum().name())) {
+                            dataItem.put(header_arr[j], readCellValue(cell));
+                        } else {
+                            dataItem.put(header_arr[j], null);
+                        }
+                    }
+                }
+                // 不为空则添加
+                if(!dataItem.isEmpty()) {
+                    dataList.add(dataItem);
+                }
+            }
+            return dataList;
+        } catch (IOException iOException) {
+            log.error("错误 file:",iOException);
+            return new ArrayList();
+        }
+        // 删除传入文件
+        // file.delete();
+    }
+
     private static String readCellValue(XSSFCell cell){
         // 判断excel单元格内容的格式，并对其进行转换，以便插入数据库
         String cellType = cell.getCellTypeEnum().name();
@@ -226,6 +310,9 @@ public class ExcelReadUtil {
             case "STRING":
                 return cell.getStringCellValue();
             case "NUMERIC":
+                if(org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)){
+                    return DateUtil.format(cell.getDateCellValue(), "yyyy-MM-dd");
+                }
                 // 强制转
                 cell.setCellType(CellType.STRING);
                 String cellValue = cell.getStringCellValue();

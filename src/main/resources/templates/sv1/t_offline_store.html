@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <title>${applicationName}-线下店铺</title>
+</head>
+<body>
+<div class="row">
+    <!-- 查询表单 -->
+    <div id="data-search">
+        <h5>线下店铺</h5>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form" class="form-search">
+            <label class="form-label">店铺名称</label>
+            <input type="text" name="name" placeholder="登陆名称/用户名称">&nbsp;&nbsp;
+            <label class="form-label">店铺编号</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" name="code" placeholder="店铺编号">&nbsp;&nbsp;
+            <label class="form-label">品牌</label>&nbsp;
+            <span _dom_type="select" _field_name="brand" _dict_type="t_offline_store_brand"></span>&nbsp;&nbsp;
+
+            <button _func="query" type="submit" class="btn btn-primary">查询</button>
+            &nbsp;&nbsp;
+            <button _func="add" class="btn btn-success">新增</button>
+            <button _func="delete_batch" class="btn btn-danger">删除</button>
+            &nbsp;
+            <button _func="export" class="btn btn-info">导出</button>
+            &nbsp;
+            <button _func="import" class="btn btn-success">导入</button>
+            <a href="${ctxPath}/static/xlsx/offline_store_template.xlsx" target="_blank">下载模板</a>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+    <!-- dialog -->
+    <div id="data-dialog"></div>
+</div>
+</body>
+<#include "../decorator/foot.html"/>
+<script type="text/cc-template" id="template-data-list">
+    <div style="overflow-x: scroll; white-space: nowrap;">
+    <table class="table table-bordered table-condensed table-hover">
+        <thead class="table-dark">
+        <tr>
+<!--            <th>主键</th>-->
+            <th>
+                <input type="checkbox" title="全选">
+            </th>
+            <th>开店时间</th>
+            <th>编号</th>
+            <th>名称</th>
+            <th>店铺简称/昵称</th>
+            <th>店铺地址</th>
+            <th>品牌</th>
+            <th>状态</th>
+            <th>备注</th>
+            <th>更新人</th>
+            <th>更新时间</th>
+            <th>创建人</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+<!--            <td>{{id}}</td>-->
+            <td>
+                <input type="checkbox" value="{{id}}" title="{{id}}">
+            </td>
+            <td>{{open_date}}</td>
+            <td>{{code}}</td>
+            <td>{{name}}</td>
+            <td>{{nick_name}}</td>
+            <td>{{addr}}</td>
+            <td title="品牌编号:{{brand}}">{{t_offline_store_brand brand}}</td>
+            <td>{{common_status status}}</td>
+            <td>{{description}}</td>
+            <td>{{update_by}}</td>
+            <td>{{update_time}}</td>
+            <td>{{create_by}}</td>
+            <td>{{create_time}}</td>
+            <td>
+                <a href="#" func="update">修改</a>
+                <a href="#" func="delete">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    </div>
+<#include "../decorator/page-form.html"/>
+</script>
+
+<script type="module">
+    import { init } from "${ctxPath}/public/sv1/t_offline_store.js"
+    init();
+</script>
+</html>

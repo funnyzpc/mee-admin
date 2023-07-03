@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head_new.html"/>
+    <link rel="stylesheet" href="${ctxPath}/static/css/bolt.css">
+    <title>${applicationName}-用户配置</title>
+</head>
+<body>
+<div style="padding:1% 8%;height:96%">
+    <!-- 查询表单 -->
+    <div id="data-search" style="display:none;">
+        <h3>用户中心</h3>
+        <!-- 查询表单 -->
+        <form class="form-search">
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+</div>
+</body>
+<#include "../decorator/foot_new.html"/>
+<script type="text/cc-template" id="template-data-list">
+    <div class="u_main">
+        <div><p style="font-size: 18pt;padding-left:8px;background-color: #ddd;">用户中心</p></div>
+        <div class="u_switch">
+            <ul>
+                <li><a href="#" onclick="to_content(0)" style="color:white;background-color:black;display:block;">基本信息</a></li>
+                <li><a href="#" onclick="to_content(1)">修改密码</a></li>
+            </ul>
+        </div>
+        <div class="u_content">
+            <div class="user_info">
+                <form>
+                    <!--                <p>部门ID:{{dept_id}}</p>-->
+                    <p><label>用户名称:</label> {{user_name}}</p>
+                    <p><label>用户昵称:</label> <input type="text" value="{{nick_name}}"/></p>
+                    <p><label>性别:</label>
+                        <select style="width:160px;">
+                            <option>--</option>
+                            <option value="M" {{#equal gender 'M'}}selected{{/equal}}>男</option>
+                            <option value="F" {{#equal gender 'F'}}selected{{/equal}}>女</option>
+                        </select>
+                    </p>
+                    <p><label>手机号码:</label> <input type="text" value="{{phone}}"/></p>
+                    <p><label>用户email:</label> <input type="text" value="{{email}}"/></p>
+                    <p><label>用户注册时间:</label>{{register_date}}</p>
+                    <p><label>最后登录时间:</label>{{last_login_date}}</p>
+                    <p title="密码最后重置时间"><label>密码重置时间:</label> {{pwd_reset_time}}</p>
+                    <p><label>启用状态:</label> {{sys_user_status status}}</p>
+                    <p><label>删除状态:</label> {{del_flag del_flag}}</p>
+                    <p><label>创建时间:</label> {{create_time}}</p>
+                    <p><label>创建人:</label>  {{create_by}}</p>
+                    <p><label>更新时间:</label> {{update_time}}</p>
+                    <p><label>更新人:</label> {{update_by}}</p>
+                    <p style="border-bottom:none;text-align:center;"><input type="button" value="更新" class="btn btn-sm btn-success"/> </p>
+                </form>
+            </div>
+            <div class="edit_pwd" style="display:none;">
+                <form>
+                    <p><label>原密码<span class="em-point">*</span></label></span><input type="password" name="old_pwd" value=""/></p>
+                    <p><label>新密码<span class="em-point">*</span></label><input type="password" name="pwd1" value=""/></p>
+                    <p><label>确认密码<span class="em-point">*</span></label><input type="password" name="pwd2" value=""/></p>
+                    <p style="border-bottom:none;text-align:center;"><input type="button" value="更新" class="btn btn-sm btn-success"/> </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<script type="module">
+    import * as UserCenterFunc from "${ctxPath}/public/common/user_center.js"
+    UserCenterFunc.init();
+</script>
+<style>
+#data-list{
+    width:100%;
+    height:96%;
+    background-color: #f9f9f9;
+    border-radius:4px;
+}
+#data-list ul>li {
+  list-style: none;
+  cursor: pointer;
+}
+.form-search{display:none;}
+.u_main{padding:16px 0px;font-size:14pt;}
+.u_switch{
+    float:left;
+    width:160px;
+    //font-weight:bold;
+    margin-right:2%;
+}
+.u_switch ul{
+    padding:0px 2px;
+}
+.u_switch ul li{
+    //padding:4px 0px;
+}
+.u_switch ul li a{ padding: 4px 8px;}
+.u_content{
+    font-size:12pt;
+    float:left;
+    height:100%;
+}
+.user_info p{
+    border-bottom: 1px dotted black;
+}
+.user_info p label,.edit_pwd p label{width:120px;max-width:180px;font-weight: 500;}
+.em-point{color:red;padding:0px 2px;}
+</style>
+</html>

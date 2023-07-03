@@ -1,74 +1,115 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    数据字典 SysDict2(sys_dict) Dao
+@author         shadow
+@date           2023-05-15 10:27:36
+-->
 <mapper namespace="com.mee.xml.SysDict">
+    <!-- 慎用二级缓存，尤其是在集群环境下!!! -->
+    <cache-ref namespace="com.mee.xml.SysDict"/>
+    <cache eviction="FIFO" flushInterval="6000" size="256" readOnly="true"/>
 
-    <select id="findList" resultType="com.mee.sys.entity.SysDict">
+    <!-- 字段 -->
+    <resultMap type="com.mee.sys.entity.SysDict" id="SysDictResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="create_by" column="create_by"/>
+        <result property="update_by" column="update_by"/>
+        <result property="create_time" column="create_time"/>
+        <result property="update_time" column="update_time"/>
+    </resultMap>
+
+    <!-- 查询 -->
+    <select id="findList" resultMap="SysDictResult">
         select * from sys_dict
         <where>
-            <if test="id != null and id != ''"> and id = #{id}::numeric  </if>
-            <if test="series != null and series != ''"> and series like #{series}  </if>
-            <if test="series_desc != null and series_desc != ''"> and series_desc like #{series_desc}  </if>
-            and del_flag = '${@com.mee.common.enums.DeletedEnum@NORMAL.code}'
+            <if test="id != null and id != ''"> and id = #{id}</if>
+            <if test="name != null and name != ''"> and name like #{name}</if>
+            <if test="description != null and description != ''"> and description like #{description}</if>
+<!--            <if test="create_by != null"> and create_by = #{create_by}</if>-->
+<!--            <if test="update_by != null"> and update_by = #{update_by}</if>-->
+<!--            <if test="create_time != null"> and create_time = #{create_time}</if>-->
+<!--            <if test="update_time != null"> and update_time = #{update_time}</if>-->
         </where>
+        order by id desc
     </select>
 
+    <!-- 按主键id查询 -->
+    <select id="findById" resultMap="SysDictResult">
+        select * from sys_dict
+        where id=#{id}
+    </select>
+
+    <!-- 插入 -->
     <insert id="insert">
         insert into sys_dict(
             id,
-            series,
-            series_desc,
-            key,
-            value,
-            "desc",
-            del_flag,
-            create_date,
-            create_by
+            name,
+            description,
+            create_by,
+            update_by,
+            create_time,
+            update_time
         ) values (
             #{id},
-            #{series},
-            #{series_desc},
-            #{key},
-            #{value},
-            #{desc},
-            #{del_flag},
-            #{create_date},
-            #{create_by}
+            #{name},
+            #{description},
+            #{create_by},
+            #{update_by},
+            #{create_time},
+            #{update_time}
         )
     </insert>
 
+    <!-- 批量插入 -->
+    <insert id="insertBatch">
+        insert into sys_dict(
+           id,
+           name,
+           description,
+           create_by,
+           update_by,
+           create_time,
+           update_time
+        ) values
+        <foreach collection ="list" item="i" separator =",">
+        (
+           #{i.id},
+           #{i.name},
+           #{i.description},
+           #{i.create_by},
+           #{i.update_by},
+           #{i.create_time},
+           #{i.update_time}
+        )
+        </foreach>
+    </insert>
 
-    <update id="update" parameterType="com.mee.sys.entity.SysDict">
+    <!-- 更新 -->
+    <update id="update">
         update sys_dict
         <set>
-            <if test="series != null and series !='' " >
-                series = #{series,jdbcType=VARCHAR},
-            </if>
-            <if test="series_desc != null and series_desc !='' " >
-                series_desc = #{series_desc,jdbcType=VARCHAR},
-            </if>
-            <if test="key != null and key !='' " >
-                key = #{key,jdbcType=VARCHAR},
-            </if>
-            <if test="value != null and value !='' " >
-                value = #{value,jdbcType=VARCHAR},
-            </if>
-            <if test="desc != null and desc !='' " >
-                "desc" = #{desc,jdbcType=VARCHAR},
-            </if>
-            <!--
-            <if test="del_flag != null" >
-                del_flag = #{del_flag,jdbcType=INTEGER},
-            </if>
-            -->
+            <if test="name != null and name != ''">name=#{name},</if>
+            <if test="description != null and description != ''">description=#{description},</if>
+            <if test="update_by != null">update_by=#{update_by},</if>
+            <if test="update_time != null">update_time=#{update_time},</if>
         </set>
-        where ID = #{id}
-        <!-- 已经删除的不可以再更新,创建人以及创建日期也不可更新-->
-        and del_flag = '${@com.mee.common.enums.DeletedEnum@NORMAL.code}'
+        where id=#{id}
     </update>
 
-    <delete id="delete" parameterType="java.lang.String">
-        update sys_dict set del_flag = '${@com.mee.common.enums.DeletedEnum@DELETED.code}'
-        where id = #{id}
+    <!-- 按主键id删除 -->
+    <delete id="deleteById">
+        delete from sys_dict where id=#{id}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="deleteBatch">
+        delete from sys_dict where id in
+        <foreach collection ="list" item="item" open="(" close=")" separator =",">
+            #{item}
+        </foreach>
     </delete>
 
 </mapper>

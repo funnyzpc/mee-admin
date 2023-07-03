@@ -1,137 +1,290 @@
 package com.mee.sys.entity;
 
+import java.lang.String;
+import java.lang.Integer;
+import java.io.Serializable;
+import java.lang.Long;
+import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.mee.common.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-
 /**
- * @author funnyzpc
- * @description 菜单表
+ * 系统::用户信息表对象 sys_user2
+ * 
+ * @author  shadow
+ * @version v1.3
+ * @date    2023-05-30 20:59:40
  */
-public class SysUser extends BaseEntity {
+public class SysUser implements Serializable{
 
-    // private String id;
-    // 用户编号
-    private String user_id;
-    // 昵称
-    private String nick_name;
-    // 登陆用户名 user_name
-    private String user_name;
-    private String username;
-    // email(可用于登陆用户名)
-    private String email;
-    // 登陆密码
-    private String password;
-    // 权限编号
-    private String role_id;
-    // 用户状态 0:无效 1:有效 2:未激活(绑定邮箱)
-    private Integer status;
-    // 注册日期时间
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime register_date;
-    // 最后登陆时间
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime last_login_date;
+  /**
+  * 序列化标识
+   */
+  private static final long serialVersionUID = 1L;
 
-    /** 扩展:一个用户具有多个角色 **/
-    private List<SysRole> role_list;
+  /**
+  * 表ID/用户ID
+  */
+  private String id;
 
-    public String getNick_name() {
-        return nick_name;
-    }
+  /**
+  * 部门ID(保留字段暂不使用)
+  */
+  private Long dept_id;
 
-    public void setNick_name(String nick_name) {
-        this.nick_name = nick_name;
-    }
+  /**
+  * 用户名称
+  */
+  private String user_name;
 
-    public String getPassword() {
-        return password;
-    }
+  /**
+  * 用户昵称
+  */
+  private String nick_name;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  /**
+  * M.男 F.女
+  */
+  private String gender;
 
-    public LocalDateTime getRegister_date() {
-        return register_date;
-    }
+  /**
+  * 手机号码
+  */
+  private String phone;
 
-    public void setRegister_date(LocalDateTime register_date) {
-        this.register_date = register_date;
-    }
+  /**
+  * 用户email(可用于登陆)
+  */
+  private String email;
 
-    public String getRole_id() {
-        return role_id;
-    }
+  /**
+  * 用户密码 序列化需要被忽略
+  */
+  @JsonIgnore
+  private transient String password;
 
-    public void setRole_id(String role_id) {
-        this.role_id = role_id;
-    }
+  /**
+  * 用户注册时间
+  */
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonFormat(shape=JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime register_date;
 
-    public Integer getStatus() {
-        return status;
-    }
+  /**
+  * 最后登录时间
+  */
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonFormat(shape=JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime last_login_date;
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+  /**
+  * 密码最后重置时间
+  */
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonFormat(shape=JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime pwd_reset_time;
 
-    public String getUser_id() {
-        return user_id;
-    }
+  /**
+  * 状态1.启用 0.禁用
+  */
+  private String status;
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
-    }
+  /**
+  * 删除标记1.正常 0.删除
+  */
+  private Integer del_flag;
 
-    public String getUser_name() {
-        return user_name;
-    }
+  /**
+  * 创建时间
+  */
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonFormat(shape=JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime create_time;
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
-    }
+  /**
+  * 创建人
+  */
+  private String create_by;
 
-    public String getUsername() {
-        return username;
-    }
+  /**
+  * 创建时间
+  */
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonFormat(shape=JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+  private LocalDateTime update_time;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  /**
+  * 创建人
+  */
+  private String update_by;
 
-    public List<SysRole> getRole_list() {
-        return role_list;
-    }
 
-    public void setRole_list(List<SysRole> role_list) {
-        this.role_list = role_list;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public SysUser setId(String id) {
+    this.id=id;
+    return this;
+  }
+  public Long getDept_id() {
+    return dept_id;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public SysUser setDept_id(Long dept_id) {
+    this.dept_id=dept_id;
+    return this;
+  }
+  public String getUser_name() {
 
-    public LocalDateTime getLast_login_date() {
-        return last_login_date;
-    }
+    return (null==this.user_name || "".equals(this.user_name.trim()))?null:this.user_name.trim();
+  }
 
-    public void setLast_login_date(LocalDateTime last_login_date) {
-        this.last_login_date = last_login_date;
-    }
+  public SysUser setUser_name(String user_name) {
+    this.user_name=user_name;
+    return this;
+  }
+  public String getNick_name() {
+    return nick_name;
+  }
+
+  public SysUser setNick_name(String nick_name) {
+    this.nick_name=nick_name;
+    return this;
+  }
+  public String getGender() {
+    return gender;
+  }
+
+  public SysUser setGender(String gender) {
+    this.gender=gender;
+    return this;
+  }
+  public String getPhone() {
+    return phone;
+  }
+
+  public SysUser setPhone(String phone) {
+    this.phone=phone;
+    return this;
+  }
+  public String getEmail() {
+    return email;
+  }
+
+  public SysUser setEmail(String email) {
+    this.email=email;
+    return this;
+  }
+  public String getPassword() {
+    return password;
+  }
+
+  public SysUser setPassword(String password) {
+    this.password=password;
+    return this;
+  }
+  public LocalDateTime getRegister_date() {
+    return register_date;
+  }
+
+  public SysUser setRegister_date(LocalDateTime register_date) {
+    this.register_date=register_date;
+    return this;
+  }
+  public LocalDateTime getLast_login_date() {
+    return last_login_date;
+  }
+
+  public SysUser setLast_login_date(LocalDateTime last_login_date) {
+    this.last_login_date=last_login_date;
+    return this;
+  }
+  public LocalDateTime getPwd_reset_time() {
+    return pwd_reset_time;
+  }
+
+  public SysUser setPwd_reset_time(LocalDateTime pwd_reset_time) {
+    this.pwd_reset_time=pwd_reset_time;
+    return this;
+  }
+  public String getStatus() {
+    return status;
+  }
+
+  public SysUser setStatus(String status) {
+    this.status=status;
+    return this;
+  }
+  public Integer getDel_flag() {
+    return del_flag;
+  }
+
+  public SysUser setDel_flag(Integer del_flag) {
+    this.del_flag=del_flag;
+    return this;
+  }
+  public LocalDateTime getCreate_time() {
+    return create_time;
+  }
+
+  public SysUser setCreate_time(LocalDateTime create_time) {
+    this.create_time=create_time;
+    return this;
+  }
+  public String getCreate_by() {
+    return create_by;
+  }
+
+  public SysUser setCreate_by(String create_by) {
+    this.create_by=create_by;
+    return this;
+  }
+  public LocalDateTime getUpdate_time() {
+    return update_time;
+  }
+
+  public SysUser setUpdate_time(LocalDateTime update_time) {
+    this.update_time=update_time;
+    return this;
+  }
+  public String getUpdate_by() {
+    return update_by;
+  }
+
+  public SysUser setUpdate_by(String update_by) {
+    this.update_by=update_by;
+    return this;
+  }
+
+  @Override
+  public String toString() {
+      return "SysUser2::{"+
+      "id:"+this.id+
+      ", dept_id:"+this.dept_id+
+      ", user_name:"+this.user_name+
+      ", nick_name:"+this.nick_name+
+      ", gender:"+this.gender+
+      ", phone:"+this.phone+
+      ", email:"+this.email+
+      ", password:"+this.password+
+      ", register_date:"+this.register_date+
+      ", last_login_date:"+this.last_login_date+
+      ", pwd_reset_time:"+this.pwd_reset_time+
+      ", status:"+this.status+
+      ", del_flag:"+this.del_flag+
+      ", create_time:"+this.create_time+
+      ", create_by:"+this.create_by+
+      ", update_time:"+this.update_time+
+      ", update_by:"+this.update_by+
+      "}";
+  }
 }

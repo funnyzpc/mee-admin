@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width,initial-scale=0.8,maximum-scale=1,minimum-scale=1,user-scalable=no">
     <link rel="shortcut icon" href="${ctxPath}/static/img/favicon.png">
     <style type="text/css">
-        body{margin:0px;background-color:#0f0224;}
+        html,body{margin:0px;background-color:black;}
         div.login {
             width: 320px;
-            margin: 150px auto;
+            margin: 320px auto;
             padding: 32px 40px;
             background-color: #f4f4ff;
         }
         input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], textarea {
             border-style: solid;
-            border-color:#563D7C;
+            border-color:black;
             border-top-width: 0px;
             border-left-width: 0px;
             border-right-width: 0px;
@@ -27,10 +27,11 @@
             height:32px;
             line-height: normal;
             width: 100%;
+            font-size: 16px;
         }
         input[type="submit"], input[type="reset"] {
-            border-color: #563D7C;
-            background-color: #563D7C;
+            //border-color: black;
+            background-color:black;
             color: #fff;
             display: inline-block;
             height: 32px;
@@ -58,39 +59,32 @@
         .form-title,.form-group,.form-submit{padding:2px 4px;margin-top:4px;}
         .form-submit{margin-top: 24px;padding:4px 2px;}
         .form-title h3{margin:8px 0px;}
-        .login-copyright{color:#c3b4d3;text-align:center;width:100%;position:absolute;bottom:0;font-size:14px;}
+        .login-copyright{color:gray;text-align:center;width:100%;position:absolute;bottom:0;font-size:10pt;}
     </style>
 </head>
 <body>
 <div class="container-fluid login">
-    <form action="${reqCtx.contextPath}/login" method="post" class="form-horizontal">
+    <form action="${reqCtx.contextPath}/login" method="post" class="form-horizontal" onsubmit="return chaos()">
         <!--[if IE]>
         <em style="color:red;">&nbsp;&nbsp;当前系统无法使用IE浏览器，
             请使用较新版本的 Chrome、Firefox、Safari ~</em>
         <![endif]-->
 
         <div class="form-title">
-            <div class="col-sm-10" style="color:#321166;">
+            <div class="col-sm-10">
                 <h3>登录</h3>
             </div>
         </div>
         <div class="form-group">
-            <!-- <label class="control-label col-sm-2">用户</label> -->
             <div class="col-sm-10">
                 <input type="text" class="form-control" name="username" required placeholder="请输入用户名">
             </div>
         </div>
         <div class="form-group">
-            <!-- <label class="form-label">密码</label> -->
             <div class="col-sm-10">
                 <input type="password" class="form-control" name="password" required placeholder="请输入密码">
             </div>
         </div>
-        <!--
-        <div class="form-group">
-            <div style="color:red;"><#if msg??>${msg}</#if></div>
-        </div>
-        -->
         <div class="form-submit">
             <div class=" col-sm-offset-2 col-sm-10">
                 <input type="submit" value="登录">
@@ -99,13 +93,34 @@
     </form>
 </div>
 <div class="login-copyright">
-    © 2022 MEE - Make By <a href="https://github.com/funnyzpc" target="_blank" style="color:#563D7C;font-style:italic;">funnyZpC V.0.5</a>
+    © 2022 MEE - Make By
+    <a href="https://github.com/funnyzpc" target="_blank" style="color:gray;font-style:italic;">funnyZpC V1.5</a>
 </div>
 <script type="text/javascript">
-        var msg = "<#if msg??>${msg}</#if>";
-        window.setTimeout(function(){
-            if(msg){alert(msg);}
-        },200);
+var _msg = "<#if msg??>${msg}</#if>";
+window.setTimeout(function(){
+    if(_msg){alert(_msg);}
+},200);
+
+window.onload=function(){
+    // 如果当前在iframe内则尝试刷新parent
+    if( window.location.href != window.parent.location.href ){
+        // window.parent.location.href="${ctxPath}"+"/login";
+        window.parent.location.href=window.location.href;
+    }
+}
+</script>
+<script type="module">
+import { enc }  from "${ctxPath}/static/js/chaos.js"
+window.chaos=function(){
+    let pwd = document.querySelector("input[name=password]").value;
+    let enc_pwd = enc(pwd);
+    if(!enc_pwd){
+        return false;
+    }
+    document.querySelector("input[name=password]").value=enc_pwd;
+    return true;
+}
 </script>
 </body>
 </html>

@@ -1,68 +1,132 @@
 package com.mee.sys.web;
 
-import com.mee.common.util.ResultBuild;
-import com.mee.common.util.excel.ExcelWriteUtil;
-import com.mee.core.dao.DBSQLDao;
+import com.mee.common.util.MeeResult;
+import com.mee.core.model.Page;
+import com.mee.sys.dto.SysRoleUser2DTO;
 import com.mee.sys.entity.SysRoleUser;
+import com.mee.sys.entity.SysUser;
+import com.mee.sys.service.impl.SysRoleUserServiceImpl;
+import com.mee.sys.vo.SysRoleUser2VO;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
- * 系统::角色用户 管理
+ * 系统::角色用户表web接口(SysRoleUser2Controller)
+ *
+ * @author  shadow
+ * @version v1.3
+ * @date    2023-05-28 16:45:32
  */
 @Controller
-@RequestMapping("/sys/role_user")
+@RequestMapping("/sys/sys_role_user")
 public class SysRoleUserController {
-    private static final Logger log = LoggerFactory.getLogger(SysRoleUserController.class);
 
+    /**
+    * 业务处理类
+    */
     @Autowired
-    private DBSQLDao dbSQLDao;
+    private SysRoleUserServiceImpl sysRoleUserService;
 
-    @RequiresPermissions("040104")
+    /**
+     * 页面
+     * @return 页面
+     */
+    @RequiresPermissions("sys:sys_role_user:list")
     @GetMapping
     public String index(){
-        return "sys/role_user";
+        return "sys/sys_role_user";
     }
 
-    @RequiresPermissions("040104")
-    @PostMapping
+    /**
+     * 查询 系统::角色用户表 列表
+     */
+    @RequiresPermissions("sys:sys_role_user:list")
+    @GetMapping("/list")
     @ResponseBody
-    public Map<String,Object> list(String nick_name, String role_desc,int pageIdx, int pageSize){
-        Map<String,Object> params = new HashMap<String,Object>(4,1);
-        if(null != nick_name && !"".equals(nick_name)){ params.put("nick_name","%"+nick_name.trim()+"%"); }
-        if(null != role_desc && !"".equals(role_desc)){ params.put("role_desc","%"+role_desc.trim()+"%"); }
-        return new HashMap<String,Object>(1,1){{
-            put("data", dbSQLDao.list("com.mee.xml.SysRoleUser.findList",params,pageIdx,pageSize));
-        }};
+    public MeeResult<Page<SysRoleUser2VO>> list(
+            @RequestParam(defaultValue="1")Integer page_no,
+            @RequestParam(defaultValue="10")Integer page_size,
+            String user_name,
+            String nick_name,
+            String user_id,
+            String role_id
+    ){
+        return sysRoleUserService.list(page_no,page_size,user_name,nick_name,user_id,role_id);
     }
 
-    /** 导出 **/
-    public static final String[] data_field = {"role_name","role_desc","status","nick_name","user_name","email","create_date"};
-    public static final String[] header_field= {"角色名称","角色描述","用户状态","用户名称","登录名称","用户email","用户创建时间"};
-    // public static final CellFmt[] field_format = {null,null,null,CellFmt.CUSTOM_02,CellFmt.CUSTOM_02,null,null,CellFmt.NUMERIC_02};
-
-    @RequiresPermissions("040104")
-    @GetMapping("/export")
-    public void export(HttpServletResponse response,String nick_name,String role_desc){
-        Map<String,Object> params = new HashMap<String,Object>(4,1);
-        if(null != nick_name && !"".equals(nick_name)){ params.put("nick_name","%"+nick_name.trim()+"%"); }
-        if(null != role_desc && !"".equals(role_desc)){ params.put("role_desc","%"+role_desc.trim()+"%"); }
-        List<SysRoleUser> dataList = dbSQLDao.query("com.mee.xml.SysRoleUser.findList",params);
-        File file = ExcelWriteUtil.toXlsxByObj(dataList,header_field,data_field);
-        ResultBuild.toResponse(response,file);
+    /**
+     * 根据角色查询角色用户
+     * @param page_no
+     * @param page_size
+     * @param user_name
+     * @param phone
+     * @param role_id
+     * @return
+     */
+    @RequiresPermissions("sys:sys_role_user:list")
+    @GetMapping("/list_user")
+    @ResponseBody
+    public MeeResult<Page<SysUser>> listUser(
+            @RequestParam(defaultValue="1")Integer page_no,
+            @RequestParam(defaultValue="10")Integer page_size,
+            String user_name,
+            String phone,
+            @RequestParam(required = true) String role_id
+    ){
+        return sysRoleUserService.listUser(page_no,page_size,user_name,phone,role_id);
     }
+
+    /**
+     * 系统::角色用户表::详细信息
+     */
+    @RequiresPermissions("sys:sys_role_user:list")
+    @GetMapping("/id")
+    @ResponseBody
+    public MeeResult<SysRoleUser> findById(String id){
+        return sysRoleUserService.findById( id );
+    }
+
+    /**
+     * 系统::角色用户表::新增
+     */
+    @RequiresPermissions("sys:sys_role_user:add")
+    @PostMapping("add")
+    @ResponseBody
+    public MeeResult add(@RequestBody(required = true) SysRoleUser2DTO sysRoleUser2DTO){
+        return sysRoleUserService.add( sysRoleUser2DTO );
+    }
+
+//    /**
+//     * 系统::角色用户表::修改
+//     */
+//    @RequiresPermissions("sys:sys_role_user:edit")
+//    @PutMapping
+//    @ResponseBody
+//    public Map edit(@RequestBody SysRoleUser2 sysRoleUser2 ){
+//        return sysRoleUser2Service.update( sysRoleUser2 );
+//    }
+
+    /**
+     * 系统::角色用户表::删除
+     */
+    @RequiresPermissions("sys:sys_role_user:delete")
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public MeeResult deleteById(String id){
+        return sysRoleUserService.deleteById(id);
+    }
+
+//    /**
+//     * 系统::角色用户表::批量删除
+//     */
+//    @RequiresPermissions("sys:sys_role_user:delete")
+//    @DeleteMapping("/deleteBatch")
+//    @ResponseBody
+//    public Map deleteBatch(String[] ids){
+//        return sysRoleUser2Service.deleteBatch(ids);
+//    }
 
 }

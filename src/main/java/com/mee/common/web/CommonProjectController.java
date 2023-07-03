@@ -17,8 +17,9 @@ import java.util.Map;
  * @author funnyzpc
  *
  */
-@RestController
-@RequestMapping("/common/project")
+@Deprecated
+//@RestController
+//@RequestMapping("/common/project")
 public class CommonProjectController {
 
 	@PostMapping("/list")

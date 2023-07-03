@@ -7,15 +7,31 @@ import java.util.List;
  * 数据分页显示中，当前页的信息,默认每页20条
  */
 public class Page<T> {
-	// 查询参数
+	/**
+	 * 查询参数
+	 *
+	 */
 	private Object params;
-	// 总的数据数
+	/**
+	 * 总的条数
+	 *
+	 */
 	private int total;
-	// 当前页
+	/**
+	 * 当前请求页
+	 *
+	 */
 	private int index;
-	// 每页的大小
+	/**
+	 * 每页条数
+	 *
+	 */
 	private int size = 10;
-	// 当前页数据
+
+    /**
+	 * 当前页数据
+	 *
+	 */
 	private List<T> data;
 
 	/**

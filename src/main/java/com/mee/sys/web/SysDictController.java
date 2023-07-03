@@ -1,91 +1,100 @@
 package com.mee.sys.web;
 
-import com.mee.common.util.ResultBuild;
-import com.mee.core.dao.DBSQLDao;
+import com.mee.common.util.MeeResult;
+import com.mee.core.model.Page;
 import com.mee.sys.entity.SysDict;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.mee.sys.service.impl.SysDictServiceImpl;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * @author funnyzpc
- * @description 字典管理
+ * 数据字典web接口(SysDictController)
+ *
+ * @author  shadow
+ * @version v1.0
+ * @date    2023-05-15 10:27:36
  */
 @Controller
-@RequestMapping("/sys/dict")
+@RequestMapping("/sys/sys_dict")
 public class SysDictController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SysDictController.class);
 
+    /**
+    * 业务处理类
+    */
     @Autowired
-    private DBSQLDao dbsqlDao;
+    private SysDictServiceImpl sysDict2Service;
 
+    /**
+     * 页面
+     * @return
+     */
+    @RequiresPermissions("sys:sys_dict:list")
     @GetMapping
     public String index(){
-        return "sys/dict";
+        return "sys/sys_dict";
     }
 
-    @PostMapping
+    /**
+     * 查询 数据字典 列表
+     */
+    @RequiresPermissions("sys:sys_dict:list")
+    @GetMapping("/list")
     @ResponseBody
-    public Map<String,Object> list(String series,String series_desc,int pageIdx, int pageSize){
-        Map<String,Object> query_param = new HashMap<String,Object>(2,1);
-        if(null != series && !"".equals(series)){ query_param.put("series",series.trim()+"%"); }
-        if(null != series_desc && !"".equals(series_desc)){ query_param.put("series_desc",series_desc.trim()+"%"); }
-        return new HashMap<String,Object>(1,1){{
-            put("data",dbsqlDao.list("com.mee.xml.SysDict.findList",query_param,pageIdx,pageSize));
-        }};
+    public MeeResult<Page<SysDict>> list(@RequestParam(defaultValue="1")Integer page_no, @RequestParam(defaultValue="10")Integer page_size, String name, String description){
+        return sysDict2Service.list(page_no,page_size,name,description);
     }
 
-    @RequestMapping("/save")
+    /**
+     * 数据字典::详细信息
+     */
+    @RequiresPermissions("sys:sys_dict:list")
+    @GetMapping("/id")
     @ResponseBody
-    public Map save(SysDict sysDict){
-       // 参数校验
-       if(null == sysDict || null==sysDict.getSeries() || null==sysDict.getSeries_desc() || null == sysDict.getKey() || null == sysDict.getValue()){
-            return ResultBuild.FAIL;
-       }
-       if(null == sysDict.getId() || "".equals(sysDict.getId().trim())){
-           // 插入数据
-           String recordId = dbsqlDao.create("com.mee.xml.SysDict.insert",sysDict);
-           LOGGER.info("创建sys_dict结果:{}",recordId);
-           return ResultBuild.SUCCESS;
-       }
-        // 更新数据
-       int updateCount = dbsqlDao.update("com.mee.xml.SysDict.update",sysDict);
-       LOGGER.info("更新sys_dict结果:{}",updateCount);
-       return ResultBuild.SUCCESS;
+    public MeeResult<SysDict> findById(String id){
+        return sysDict2Service.findById( id );
     }
 
-
-    @RequestMapping("/delete")
+    /**
+     * 数据字典::新增
+     */
+    @RequiresPermissions("sys:sys_dict:add")
+    @PostMapping("add")
     @ResponseBody
-    public Map delete(String id){
-        // 参数校验
-        if(null == id || "".equals(id.trim())){
-            return ResultBuild.FAIL;
-        }
-        Map<String,Object> params = new HashMap<String,Object>(1,1){{
-           put("id",id.trim());
-        }};
-        // 删除数据(标记为删除)
-        if(id.contains(",")){
-            Arrays.stream(id.split(",")).forEach(item->{
-                params.put("id",item);
-                int recordCount = dbsqlDao.delete("com.mee.xml.SysDict.delete",params);
-                LOGGER.info("删除sys_dict结果:{}",recordCount);
-            });
-            return ResultBuild.SUCCESS;
-        }
-        int recordCount = dbsqlDao.delete("com.mee.xml.SysDict.delete",params);
-        LOGGER.info("删除sys_dict结果:{}",recordCount);
-        return ResultBuild.SUCCESS;
+    public MeeResult<Integer> add(@RequestBody SysDict sysDict2){
+        return sysDict2Service.add( sysDict2 );
     }
+
+    /**
+     * 数据字典::修改
+     */
+    @RequiresPermissions("sys:sys_dict:update")
+    @PutMapping("update")
+    @ResponseBody
+    public MeeResult<Integer> edit(@RequestBody SysDict sysDict2 ){
+        return sysDict2Service.update( sysDict2 );
+    }
+
+    /**
+     * 数据字典::删除
+     */
+    @RequiresPermissions("sys:sys_dict:delete")
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public MeeResult<Integer> deleteById(String id){
+        return sysDict2Service.deleteById(id);
+    }
+
+//    /**
+//     * 数据字典::批量删除
+//     */
+//    @RequiresPermissions("sys:sys_dict:delete")
+//    @DeleteMapping("/deleteBatch")
+//    @ResponseBody
+//    public Map deleteBatch(String[] ids){
+//        return sysDict2Service.deleteBatch(ids);
+//    }
 
 }

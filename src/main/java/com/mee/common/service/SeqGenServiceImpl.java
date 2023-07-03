@@ -1,6 +1,5 @@
 package com.mee.common.service;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Service
 public class SeqGenServiceImpl {
-    private static final Logger log = LoggerFactory.getLogger(SeqGenServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SeqGenServiceImpl.class);
 
     private static final AtomicInteger it = new AtomicInteger(100000);
     private static final DateTimeFormatter DATE_SHORT_FORMAT = DateTimeFormatter.ofPattern("yyMMddHHmmss");
@@ -27,6 +26,9 @@ public class SeqGenServiceImpl {
 
     private static final ZoneOffset ZONE_OFF_SET = ZoneOffset.of("+8");
     private static final AtomicInteger SHOT_IT = new AtomicInteger(1000);
+
+    private static final AtomicInteger MEDIUM_IT = new AtomicInteger(1000);
+
 
 
     @Autowired
@@ -46,21 +48,45 @@ public class SeqGenServiceImpl {
         return dataTime.format(DATE_SHORT_FORMAT)+port+ it.getAndIncrement();
     }
 
-    /** 生成短主键:10位(时间戳)+4位(端口号)+4位(有序序列) **/
-    public synchronized String genShortPrimaryKey(){
+//    /** 生成短主键:10位(时间戳)+4位(端口号)+4位(有序序列) **/
+//    public synchronized String genShortPrimaryKey(){
+//        LocalDateTime dataTime = LocalDateTime.now(zoneId);
+//        String port =  environment.getProperty("local.server.port");
+//        if(SHOT_IT.intValue()>9000){
+//            log.info("序列重置 genShortPrimaryKey ");
+//            SHOT_IT.getAndSet(1000);
+//        }
+//        if(null == port || port.length()!=4){
+//            port = "0000"+(null==port?"":port);
+//            return ""+dataTime.toEpochSecond(ZONE_OFF_SET)+port.substring(port.length()-4)+SHOT_IT.getAndIncrement();
+//        }
+//        return ""+dataTime.toEpochSecond(ZONE_OFF_SET)+port+SHOT_IT.getAndIncrement();
+//    }
+
+    /** 16位： 12(日期时间yyMMddHHmmss)+4(有序序列) **/
+    public String genShortPrimaryKey(){
         LocalDateTime dataTime = LocalDateTime.now(zoneId);
-        String port =  environment.getProperty("local.server.port");
-        if(SHOT_IT.intValue()>9000){
-            log.info("序列重置 genShortPrimaryKey ");
+        if(SHOT_IT.intValue()>9990){
+            LOG.info("重置genSeq序列 1000");
             SHOT_IT.getAndSet(1000);
         }
-        if(null == port || port.length()!=4){
-            port = "0000"+(null==port?"":port);
-            return ""+dataTime.toEpochSecond(ZONE_OFF_SET)+port.substring(port.length()-4)+SHOT_IT.getAndIncrement();
-        }
-        return ""+dataTime.toEpochSecond(ZONE_OFF_SET)+port+SHOT_IT.getAndIncrement();
+        return dataTime.format(DATE_SHORT_FORMAT)+ SHOT_IT.getAndIncrement();
     }
 
+    /** 生成主键(18位)：12(日期时间YYMMDDHHMISS)+2(端口)+4(有序序列) **/
+    public String genMediumPrimaryKey(){
+        LocalDateTime dataTime = LocalDateTime.now(zoneId);
+        String port =  environment.getProperty("local.server.port");
+        if(MEDIUM_IT.intValue()>9990){
+            LOG.info("重置计数器:{}",MEDIUM_IT.intValue());
+            MEDIUM_IT.getAndSet(1000);
+        }
+        if(null == port || port.length()!=2){
+            port = "00"+(null==port?"":port);
+            return dataTime.format(DATE_SHORT_FORMAT)+port.substring(port.length()-2)+ MEDIUM_IT.getAndIncrement();
+        }
+        return dataTime.format(DATE_SHORT_FORMAT)+port+ MEDIUM_IT.getAndIncrement();
+    }
 
 
 }

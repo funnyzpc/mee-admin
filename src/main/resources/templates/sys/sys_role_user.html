@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <title>${applicationName}-角色&用户配置</title>
+</head>
+<body>
+<div class="row">
+<div class="col-md-6">
+    <!-- 查询表单 -->
+    <div id="data-search">
+        <h5>角色&用户配置</h5>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form" class="form-inline form-search">
+            <input type="hidden" name="status" value="1">
+            <label>角色名称</label>
+            <input type="text" name="name" placeholder="角色名称" style="max-width:200px;">&nbsp;
+            <label>角色描述</label>
+            <input type="text" name="description" placeholder="角色描述" style="max-width:200px;">&nbsp;
+            <button type="submit" _func="query" class="btn btn-sm btn-primary">查询</button>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+    <!-- dialog -->
+    <div id="data-dialog"> </div>
+</div>
+
+<!-- 角色&用户明细 -->
+<div class="col-md-6">
+    <!-- 查询表单 -->
+    <div id="data-search2">
+        <h5 style="background-image:linear-gradient(to right,#10ff10, #8fff8f,#fefffe);">
+            角色&用户明细(请点击左侧角色项)
+        </h5>
+        <!-- 业务内容 -->
+        <form method="GET" class="form-inline form-search">
+            <label>名称</label>
+            <input type="text" name="user_name" placeholder="用户名称" class="input-sm">
+            <label>昵称</label>
+            <input type="text" name="nick_name" placeholder="用户昵称" style="max-width:200px;">
+            <span class="seprator"></span>
+            <button type="submit" _func="query" class="btn btn-primary">查询</button>
+            <button type="button" _func="add_new" class="btn btn-success">+添加</button>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list2"></div>
+    <!-- dialog -->
+    <div id="data-dialog2"> </div>
+</div>
+
+<!-- 用户 -->
+<!--<dialog id="_user-main-dialog" class="main col-md-6">-->
+<dialog id="_user-main-dialog" >
+    <!-- 查询表单 -->
+    <div id="data-search3">
+        <h4>
+            <span>用户</span>
+            <span title="关闭" style="float:right;">
+                <a href="#" onclick="javascript:document.querySelector('#_user-main-dialog').close();">X</a>
+            </span>
+        </h4>
+        <!-- 业务内容 -->
+        <form method="post" class="form-inline form-search">
+            <label>用户名称</label>
+            <input type="text" name="user_name" placeholder="用户名称" class="input-sm">&nbsp;&nbsp;
+            <label>手机号码</label>
+            <input type="text" name="phone" placeholder="手机号码" class="input-sm">
+            <span class="seprator"></span>
+            <button type="submit" name="query" class="btn btn-sm btn-primary">查询</button>
+            <button type="button" name="add_user_batch" class="btn btn-sm btn-success">✔添加</button>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list3"></div>
+    <!-- dialog -->
+    <div id="data-dialog3"> </div>
+</dialog>
+
+</div>
+</body>
+<#include "../decorator/foot.html"/>
+<script type="text/cc-template" id="template-data-list">
+    <table class="table">
+        <thead>
+        <tr style="font-size:12pt;">
+            <th>角色名称</th>
+            <th>角色描述</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+            <td func="show_role_and_user_data" style="font-size:12pt;color:blue;" title="{{id}}">{{name}}</td>
+            <td func="show_role_and_user_data">{{description}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+<#include "../decorator/page-form_short.html"/>
+</script>
+
+<!-- 角色明细项 -->
+<script type="text/cc-template" id="template-data-list2">
+    <table class="table table-hover table-bordered"  style="white-space:nowrap;overflow:auto;" >
+        <thead>
+        <tr style="font-size:12pt;">
+<!--            <th>主键</th>-->
+            <th>角色ID</th>
+            <th>用户名称</th>
+            <th>用户昵称</th>
+            <th>启用状态</th>
+            <th>删除状态</th>
+<!--            <th>注册时间</th>-->
+            <th>操作</th>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+<!--            <td>{{id}}</td>-->
+            <td>{{role_id}}</td>
+            <td title="{{user_id}}">{{user_name}}</td>
+            <td>{{nick_name}}</td>
+            <td class="u-status-{{status}}">{{sys_user_status status}}</td>
+            <td class="u-del_flag-{{del_flag}}">{{del_flag del_flag}}</td>
+<!--            <td>{{register_date}}</td>-->
+            <td title="{{id}}">
+                <a href="#" func="delete">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <#include "../decorator/page-form_short.html"/>
+</script>
+
+<!-- 用户查询列表 -->
+<script type="text/cc-template" id="template-data-list3">
+    <table class="table table-hover table-bordered"  style="white-space:nowrap;overflow:auto;" >
+        <thead>
+        <tr style="font-size:12pt;">
+<!--            <th>用户ID</th>-->
+            <th style="text-align: left;"><input type="checkbox" title="全选"></th>
+            <th>用户名称</th>
+            <th>用户昵称</th>
+<!--            <th>性别</th>-->
+            <th>手机号</th>
+            <th>email</th>
+            <th>注册时间</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+<!--            <td>{{id}}</td>-->
+            <td title="{{id}}"><input type="checkbox" value="{{id}}"></td>
+            <td>{{user_name}}</td>
+            <td>{{nick_name}}</td>
+<!--            <td>{{gender}}</td>-->
+            <td>{{phone}}</td>
+            <td>{{email}}</td>
+            <td>{{register_date}}</td>
+            <td>
+                <a href="#" func="add_user">添加</a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <#include "../decorator/page-form_short.html"/>
+</script>
+
+<script type="module">
+    import {init} from "${ctxPath}/public/sys/sys_role_user.js"
+    init();
+</script>
+<style>
+.u-status-0,.u-del_flag-0{color:red;font-weight:bold;}
+</style>
+</html>
