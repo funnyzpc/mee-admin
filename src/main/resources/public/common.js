@@ -176,12 +176,13 @@ function load( params ){
     document.querySelector(`#${query_id}`).innerHTML="<div class=\"loading\"></div>";
     FetchUtils.fetchGet(global_module.api.page,params,function (d){
         // 登录超时
-        if(!d || !d.data){
+        if(!d || 1!==d.status){
            if( d instanceof TypeError ){
              // 一般这种错误是因为刷新过快导致的，这里不再alert
              console.log(d);
            }else{
-             alert("登入超时[new1]"+d);
+             //alert("登入超时[new1]"+d);
+             alert(d.msg);
            }
            //return window.location.href=app+"/login";
            return;

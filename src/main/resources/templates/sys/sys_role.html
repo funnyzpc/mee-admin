@@ -18,7 +18,9 @@
 
             &nbsp;
             <button type="submit" _func="query" class="btn btn-sm btn-primary">查询</button>
+            <@shiro.hasPermission name="sys:sys_role:add">
             <button type="button" _func="add" class="btn btn-sm btn-success">增加</button>
+            </@shiro.hasPermission>
         </form>
     </div>
     <!-- table -->
@@ -54,9 +56,13 @@
             <td>{{update_by}}</td>
             <td>{{update_time}}</td>
             <td>
+                <@shiro.hasPermission name="sys:sys_role:update">
                 <a href="#" func="update">修改</a>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="sys:sys_role:delete">
                 <a href="#" func="delete">删除</a>
-            </td>
+                </@shiro.hasPermission>
+        </td>
         </tr>
         {{/each}}
         </tbody>

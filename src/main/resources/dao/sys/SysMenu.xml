@@ -200,4 +200,27 @@
         where rm.role_id = #{role_id}
     </select>
 
+    <!-- 获取用户菜单 -->
+    <select id="findByUserId" resultMap="SysMenuResult" databaseId="postgresql">
+        select * from sys_menu as m
+        inner join(
+            select rm.menu_id from sys_role_menu as rm
+            inner join sys_role_user as ru on rm.role_id=ru.role_id
+            where ru.user_id=#{user_id}
+            group by rm.menu_id
+        ) as t1 on m.id=t1.menu_id
+        ORDER BY m.PID ASC NULLS FIRST ,m.SORT ASC
+    </select>
+
+    <select id="findByUserId" resultMap="SysMenuResult" databaseId="mysql">
+        select * from sys_menu as m
+        inner join(
+            select rm.menu_id from sys_role_menu as rm
+            inner join sys_role_user as ru on rm.role_id=ru.role_id
+            where ru.user_id=#{user_id}
+            group by rm.menu_id
+        ) as t1 on m.id=t1.menu_id
+        ORDER BY m.PID ASC, IF(ISNULL(m.PID),-1,1), m.SORT ASC
+    </select>
+
 </mapper>

@@ -35,7 +35,9 @@
         </h5>
         <!-- 业务内容 -->
         <form method="POST" class="form-inline form-search">
+            <@shiro.hasPermission name="sys:sys_role_menu:add">
             <button type="button" _func="add_new" class="btn btn-sm btn-primary">保存 ✓</button>
+            </@shiro.hasPermission>
         </form>
     </div>
     <!-- table -->

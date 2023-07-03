@@ -3,6 +3,7 @@ package com.mee.common.service.impl;
 import com.mee.common.util.JacksonUtil;
 import com.mee.common.util.MeeResult;
 import com.mee.common.util.ResultBuild;
+import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.sys.entity.SysMenu;
 import com.mee.sys.vo.SysMenu2VO;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author shadow
@@ -36,7 +39,8 @@ public class IndexServiceImpl {
 
     public MeeResult<List<SysMenu2VO>> buildMenu(){
         // 获取所有表数据
-        List<SysMenu> data_list = dbSQLDao.find("com.mee.xml.SysMenu.findList");
+//        List<SysMenu> data_list = dbSQLDao.find("com.mee.xml.SysMenu.findList");
+        List<SysMenu> data_list = this.getUserMenus();
         if( data_list.isEmpty() ){
             return ResultBuild.build(new ArrayList<>());
         }
@@ -124,7 +128,25 @@ public class IndexServiceImpl {
         sysMenu2VO.setUpdate_time(sysMenu2.getUpdate_time());
         sysMenu2VO.setUpdate_by(sysMenu2.getUpdate_by());
         return sysMenu2VO;
-
     }
+
+    /**
+     * 获取登录用户菜单
+     * @return
+     */
+    private List<SysMenu> getUserMenus(){
+        final String user_id = ShiroUtils.getUserId();
+        if( null==user_id || "".equals(user_id)){
+            throw new RuntimeException(("登录用户不可为空!"));
+        }
+        // 管理员拥有所有菜单权限
+        if("1".equals(user_id)){
+            return dbSQLDao.find("com.mee.xml.SysMenu.findList");
+        }
+        Map<String,String> param = new HashMap<String,String>(2);
+        param.put("user_id",user_id);
+        return dbSQLDao.find("com.mee.xml.SysMenu.findByUserId",param);
+    }
+
 
 }

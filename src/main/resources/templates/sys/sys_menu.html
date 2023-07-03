@@ -50,7 +50,9 @@
             <button _func="query" type="submit" class="btn btn-sm btn-primary">查询</button>
             <button type="reset"  class="btn btn-sm btn-default">重置</button>
             &nbsp;&nbsp;
+            <@shiro.hasPermission name="sys:sys_menu:add">
             <button _func="add" type="button" class="btn btn-sm btn-success">新增</button>
+            </@shiro.hasPermission>
         </form>
     </div>
     <!-- table -->
@@ -110,9 +112,15 @@
             <td title="创建时间:{{create_time}}">{{update_time}}</td>
             <td title="创建人:{{create_by}}">{{update_by}}</td>
             <td>
+                <@shiro.hasPermission name="sys:sys_menu:update">
                 <a href="#" func="update">修改</a>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="sys:sys_menu:delete">
                 <a href="#" func="delete">删除</a>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="sys:sys_menu:add">
                 <a href="#" func="add_line">添加子级</a>
+                </@shiro.hasPermission>
             </td>
         </tr>
         {{/each}}

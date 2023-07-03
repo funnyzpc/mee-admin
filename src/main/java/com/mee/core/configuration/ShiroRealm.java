@@ -7,7 +7,8 @@ import com.mee.common.util.ChaosUtil;
 import com.mee.common.util.DateUtil;
 import com.mee.common.util.HttpUtil;
 import com.mee.core.dao.DBSQLDao;
-import com.mee.sys.entity.*;
+import com.mee.sys.entity.SysMenu;
+import com.mee.sys.entity.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
@@ -113,12 +114,19 @@ public class ShiroRealm extends AuthorizingRealm {
             throw new AuthorizationException("principals should not be null");
         }
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        SysUser userinfo  = (SysUser)principals.getPrimaryPrincipal();
+        SysUser sys_user  = (SysUser)principals.getPrimaryPrincipal();
 
+        List<SysMenu> user_menus = getUserMenus(sys_user.getId());
+        for( SysMenu p:user_menus ){
+            String permission = p.getPermission();
+            if( null!=permission && !"".equals(permission)){
+                authorizationInfo.addStringPermission(p.getPermission());
+            }
+        }
+        /*
         // 通过中间表查询用户所属角色
         Map<String,Object> params = new HashMap<String,Object>(1,1);
         params.put("user_id",userinfo.getId());
-
         List<SysRole> sysRoles= dbSQLDao.find("com.mee.xml.SysRole.findByUserId",params);
         for(SysRole sys_role:sysRoles){
             String role_id=sys_role.getId();//角色id
@@ -132,8 +140,22 @@ public class ShiroRealm extends AuthorizingRealm {
                     authorizationInfo.addStringPermission(p.getPermission());
                 }
             }
-        }
+        }*/
         return authorizationInfo;
+    }
+
+    /**
+     * 获取登录用户菜单
+     * @return
+     */
+    private List<SysMenu> getUserMenus(String user_id){
+        // 管理员拥有所有菜单权限
+        if("1".equals(user_id)){
+            return dbSQLDao.find("com.mee.xml.SysMenu.findList");
+        }
+        Map<String,String> param = new HashMap<String,String>(2);
+        param.put("user_id",user_id);
+        return dbSQLDao.find("com.mee.xml.SysMenu.findByUserId",param);
     }
 
     /**
