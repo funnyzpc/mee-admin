@@ -1,0 +1,4 @@
+{
+  "outPath": "./target/docs",
+  "allInOne": true
+}

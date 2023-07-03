@@ -1,0 +1,40 @@
+html,body{margin:0px 0px;height:100%; font-size:12pt;}
+/* 左侧菜单样式 */
+#mee-menu{
+    display:inline-block;
+    background-color:black;
+    color: white;
+    height: 100%;
+    min-width:200px;
+    max-width:320px;
+    width:16%;
+    float:left;
+}
+#mee-menu-headline{
+    text-align: center;
+    font-size: 24px;
+    padding: 8px 8px;
+}
+#mee-content{
+    float:left;
+    background-color: #f9f9f9;
+    width:84%;
+    height:100%;
+    display: block;
+    float:left;
+}
+#mee-menu-content .mee-menu-item-dir,
+#mee-menu-content .mee-menu-item-text{
+    padding-top: 8px;
+    padding-right: 0px;
+    padding-bottom: 8px;
+}
+#mee-menu-content ul{margin:0px;padding:0px;}
+#mee-menu-content li{list-style:none;cursor: pointer;}
+#mee-menu-content .mee-menu-item-dir{ display:block; }
+#mee-menu-content .mee-menu-item-dir-tag{float:right; padding-right:4px;}
+#mee-menu-content .mee-menu-item-dir,.mee-menu-item-text{margin-left:8px;}
+#mee-menu-content a{color:white;text-decoration:none} //默认字体颜色
+#mee-menu-content a:visited{color:white;} //点击后的a标签的字体颜色
+#mee-menu-content a:hover{color:white} //鼠标停留在a标签的字体颜色
+#mee-menu-content a:active{color:white} //点击a标签是的字体颜色

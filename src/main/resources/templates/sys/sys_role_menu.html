@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <title>${applicationName}-角色&菜单配置</title>
+</head>
+<body>
+<div class="row">
+<div class="col-md-6">
+    <!-- 查询表单 -->
+    <div id="data-search">
+        <h5>角色&菜单配置</h5>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form" class="form-inline form-search">
+            <input type="hidden" name="status" value="1">
+            <label>角色名称</label>
+            <input type="text" name="name" placeholder="角色名称" style="max-width:200px;">&nbsp;
+            <label>角色描述</label>
+            <input type="text" name="description" placeholder="角色描述" style="max-width:200px;">
+            <button type="submit" _func="query" class="btn btn-primary">查询</button>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+    <!-- dialog -->
+    <div id="data-dialog"> </div>
+</div>
+
+<!-- 明细 -->
+<div class="main col-md-5">
+    <!-- 查询表单 -->
+    <div id="data-search2">
+        <h5 style="background-image:linear-gradient(to right,#10ff10, #8fff8f,#fefffe);">
+            角色明细(请点击左侧角色项)
+        </h5>
+        <!-- 业务内容 -->
+        <form method="POST" class="form-inline form-search">
+            <@shiro.hasPermission name="sys:sys_role_menu:add">
+            <button type="button" _func="add_new" class="btn btn-sm btn-primary">保存 ✓</button>
+            </@shiro.hasPermission>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list2"></div>
+    <!-- dialog -->
+    <div id="data-dialog2"> </div>
+</div>
+</div>
+</body>
+<#include "../decorator/foot.html"/>
+<script type="text/cc-template" id="template-data-list">
+    <table class="table">
+        <thead>
+        <tr style="font-size:12pt;">
+            <th>角色名称</th>
+            <th>角色描述</th>
+<!--            <th>状态</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+            <td func="show_role_and_menu_data" style="font-size:12pt;color:blue;" title="点击角色项{{name}}右侧展开角色明细">{{name}}</td>
+            <td func="show_role_and_menu_data">{{description}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+<#include "../decorator/page-form_short.html"/>
+</script>
+
+<!-- 角色明细项 -->
+<script type="text/cc-template" id="template-data-list2">
+        <table class="table table-bordered table-condensed"  style="white-space:nowrap;overflow:auto;" >
+            <thead>
+            <tr style="font-size:12pt;">
+                <th style="min-width:240px;">菜单名称</th>
+                <th>菜单类型</th>
+                <th>路径</th>
+                <th>是否显示</th>
+            </thead>
+            <tbody>
+            {{#each this}}
+            <tr data-id="{{id}}" data-pid="{{pid}}" data-level="{{level}}" class="menu-type-{{type}}" style="display:{{#equal level 0}}{{else}}none{{/equal}};" >
+                <td style="padding-left:{{level_locking}}px;">
+                    {{#cmp_gt sub_count 0}}
+                    <a href="#" func="switch_dom" field-open="0" data-id="{{id}}">▶</a>
+                    {{else}}&nbsp;&nbsp;&nbsp;
+                    {{/cmp_gt}}
+                    <input type="checkbox" value="{{id}}" >{{id}}-{{title}}
+                </td>
+                <td>
+                    {{sys_menu_type type}}
+                </td>
+                <td>{{path}}</td>
+                <td>{{sys_menu_show show}}</td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+</script>
+<script type="module">
+    import {init} from "${ctxPath}/public/sys/sys_role_menu.js"
+    init();
+</script>
+</html>

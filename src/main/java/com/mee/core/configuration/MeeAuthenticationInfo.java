@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+@Deprecated
 public class MeeAuthenticationInfo implements MergableAuthenticationInfo, SaltedAuthenticationInfo {
 
     private PrincipalCollection principals;

@@ -1,67 +1,118 @@
 package com.mee.sys.web;
 
-import com.mee.common.util.ResultBuild;
-import com.mee.common.util.excel.ExcelWriteUtil;
-import com.mee.core.dao.DBSQLDao;
+import com.mee.common.util.MeeResult;
+import com.mee.core.model.Page;
 import com.mee.sys.entity.SysRoleMenu;
+import com.mee.sys.service.impl.SysRoleMenuServiceImpl;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
- * 系统::角色菜单 管理
+ * 角色菜单关联web接口(SysRoleMenu2Controller)
+ *
+ * @author  shadow
+ * @version v1.3
+ * @date    2023-05-28 16:45:29
  */
 @Controller
-@RequestMapping("/sys/role_menu")
+@RequestMapping("/sys/sys_role_menu")
 public class SysRoleMenuController {
-    private static final Logger log = LoggerFactory.getLogger(SysRoleMenuController.class);
 
+    /**
+    * 业务处理类
+    */
     @Autowired
-    private DBSQLDao dbSQLDao;
+    private SysRoleMenuServiceImpl sysRoleMenuService;
 
-    @RequiresPermissions("040105")
+    /**
+     * 页面
+     * @return 页面
+     */
+    @RequiresPermissions("sys:sys_role_menu:list")
     @GetMapping
     public String index(){
-        return "sys/role_menu";
+        return "sys/sys_role_menu";
     }
 
-    @RequiresPermissions("040105")
-    @PostMapping
+    /**
+     * 查询 角色菜单关联 列表
+     */
+    @RequiresPermissions("sys:sys_role_menu:list")
+    @GetMapping("/list")
     @ResponseBody
-    public Map<String,Object> list(String role_desc, String name,int pageIdx, int pageSize){
-        Map<String,Object> params = new HashMap<String,Object>(4,1);
-        if(null != role_desc && !"".equals(role_desc)){ params.put("role_desc","%"+role_desc.trim()+"%"); }
-        if(null != name && !"".equals(name)){ params.put("name","%"+name.trim()+"%"); }
-        return new HashMap<String,Object>(1,1){{
-            put("data", dbSQLDao.list("com.mee.xml.SysRoleMenu.findList",params,pageIdx,pageSize));
-        }};
+    public MeeResult<Page<SysRoleMenu>> list(
+            @RequestParam(defaultValue="1",required = true)Integer page_no,
+            @RequestParam(defaultValue="10",required = true) Integer page_size,
+            String menu_id, String role_id
+    ){
+        return sysRoleMenuService.list(page_no,page_size,menu_id,role_id
+        );
     }
 
-    /** 导出 **/
-    public static final String[] data_field = {"role_name","role_desc","name","code"};
-    public static final String[] header_field= {"  角色  "," 角色描述 "," 菜单名称 ","菜单编号"};
+    /**
+     * 查询 角色菜单关联 列表
+     */
+    @RequiresPermissions("sys:sys_role_menu:list")
+    @GetMapping("/listByRoleId")
+    @ResponseBody
+    public MeeResult<List<SysRoleMenu>> listByRoleId(@RequestParam(required = true) String role_id  ){
+        return sysRoleMenuService.listByRoleId( role_id );
+    }
 
-    @RequiresPermissions("040105")
-    @GetMapping("/export")
-    public void export(HttpServletResponse response,String role_desc, String name){
-        Map<String,Object> params = new HashMap<String,Object>(4,1);
-        if(null != role_desc && !"".equals(role_desc)){ params.put("role_desc","%"+role_desc.trim()+"%"); }
-        if(null != name && !"".equals(name)){ params.put("name","%"+name.trim()+"%"); }
-        List<SysRoleMenu> dataList = dbSQLDao.query("com.mee.xml.SysRoleMenu.findList",params);
-        File file = ExcelWriteUtil.toXlsxByObj(dataList,header_field,data_field);
-        ResultBuild.toResponse(response,file);
+    /**
+     * 角色菜单关联::详细信息
+     */
+    @RequiresPermissions("sys:sys_role_menu:list")
+    @GetMapping("/id")
+    @ResponseBody
+    public MeeResult<SysRoleMenu> findById(@RequestParam(required = true) String id){
+        return sysRoleMenuService.findById( id );
+    }
+
+    /**
+     * 角色菜单关联::新增
+     */
+    @RequiresPermissions("sys:sys_role_menu:add")
+    @PostMapping("add")
+    @ResponseBody
+    public MeeResult add(@RequestBody(required = true) Map<String,Object> sysRoleMenu){
+        return sysRoleMenuService.add( sysRoleMenu );
+    }
+
+//    /**
+//     * 角色菜单关联::修改
+//     */
+//    @RequiresPermissions("sys:sys_role_menu:update")
+//    @PutMapping("update")
+//    @ResponseBody
+//    public Map update(@RequestBody SysRoleMenu2 sysRoleMenu2 ){
+//        return sysRoleMenu2Service.update( sysRoleMenu2 );
+//    }
+
+    /**
+     * 角色菜单关联::删除
+     */
+    @RequiresPermissions("sys:sys_role_menu:delete")
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public MeeResult deleteById(@RequestParam(required = true) String id){
+        return sysRoleMenuService.deleteById(id);
+    }
+
+    /**
+     * 角色菜单关联::批量删除
+     */
+    @RequiresPermissions("sys:sys_role_menu:delete")
+    @DeleteMapping("/deleteBatch")
+    @ResponseBody
+    public MeeResult deleteBatch(String[] ids){
+        return sysRoleMenuService.deleteBatch(ids);
     }
 
 }

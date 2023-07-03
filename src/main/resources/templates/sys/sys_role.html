@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <title>${applicationName}-角色配置</title>
+</head>
+<body>
+<div class="row">
+    <!-- 查询表单 -->
+    <div id="data-search">
+        <h5>角色配置</h5>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form" class="form-inline form-search">
+            <label>角色名称</label>
+            <input type="text" name="name" placeholder="角色名称" class="input-sm">&nbsp;&nbsp;
+            <label>角色描述</label>
+            <input type="text" name="description" placeholder="角色描述" class="input-sm">&nbsp;&nbsp;
+
+            &nbsp;
+            <button type="submit" _func="query" class="btn btn-sm btn-primary">查询</button>
+            <@shiro.hasPermission name="sys:sys_role:add">
+            <button type="button" _func="add" class="btn btn-sm btn-success">增加</button>
+            </@shiro.hasPermission>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+    <!-- dialog -->
+    <div id="data-dialog"> </div>
+</div>
+</body>
+<#include "../decorator/foot.html"/>
+<script type="text/cc-template" id="template-data-list">
+<!--    <table class="table table-striped table-bordered table-condensed">-->
+    <table class="table">
+        <thead>
+        <tr style="font-size:12pt;">
+            <th>角色名称</th>
+            <th>角色描述</th>
+            <th>状态</th>
+            <th>创建人</th>
+            <th>创建时间</th>
+            <th>更新人</th>
+            <th>更新时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+            <td func="line_highlight" style="font-size:12pt;color:blue;" title="{{id}}">{{name}}</td>
+            <td func="line_highlight">{{description}}</td>
+            <td func="line_highlight" title="请通过修改以调整状态" style="font-weight:bold;color:blue;">{{sys_role_status status}}</td>
+            <td>{{create_by}}</td>
+            <td>{{create_time}}</td>
+            <td>{{update_by}}</td>
+            <td>{{update_time}}</td>
+            <td>
+                <@shiro.hasPermission name="sys:sys_role:update">
+                <a href="#" func="update">修改</a>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="sys:sys_role:delete">
+                <a href="#" func="delete">删除</a>
+                </@shiro.hasPermission>
+        </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+<#include "../decorator/page-form.html"/>
+</script>
+
+<script type="module">
+    import {init} from "${ctxPath}/public/sys/sys_role.js"
+    // 执行初始化方法
+    init();
+</script>
+<!-- 模块化函数 -->
+</html>

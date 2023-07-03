@@ -2,17 +2,19 @@ package com.mee.common.util;
 
 import org.springframework.util.StringUtils;
 
+import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
- * @auther shadow
- * @description process date or dateTime
- */
+* 日期时间工具类
+* @className    DateUtil
+* @author       shadow
+* @date         2023/6/2 17:09
+* @version      1.0
+*/
 public class DateUtil {
 
     // 格式化样式
@@ -73,6 +75,26 @@ public class DateUtil {
             return null;
         }
         return DateTimeFormatter.ofPattern(fmtPattern).format(localDateTime);
+    }
+
+    public static String getServerStartDateStr() {
+        long timestamp = ManagementFactory.getRuntimeMXBean().getStartTime();
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),zoneId).format(FORMAT_DAY_TIME);
+    }
+
+    public static long betweenNanos(LocalDateTime start,LocalDateTime end){
+        if( null== start || null==end){
+            return 0L;
+        }
+        return Duration.between(start,end).toMillis()/1000;
+    }
+
+    /**
+     * 获取服务器启动时间
+     */
+    public static LocalDateTime getServerStartDate() {
+        long timestamp = ManagementFactory.getRuntimeMXBean().getStartTime();
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),zoneId);
     }
 
 }

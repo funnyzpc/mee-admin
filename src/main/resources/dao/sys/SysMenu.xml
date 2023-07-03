@@ -1,72 +1,226 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    系统::新菜单表 SysMenu2(sys_menu) Dao
+@author         shadow
+@date           2023-05-05 21:27:15
+-->
 <mapper namespace="com.mee.xml.SysMenu">
 
-    <!-- 查询所有菜单 -->
-    <select id="findMenus" resultType="java.util.Map" useCache="true">
-        select code as id,parent_code  as parent,"name"||'['||code||']' as "text" from sys_menu where show_flag=1 order by code asc
-    </select>
+    <!-- 字段 -->
+    <resultMap type="com.mee.sys.entity.SysMenu" id="SysMenuResult">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="type" column="type"/>
+        <result property="title" column="title"/>
+        <result property="icon" column="icon"/>
+        <result property="path" column="path"/>
+        <result property="target" column="target"/>
+        <result property="permission" column="permission"/>
+        <result property="sub_count" column="sub_count"/>
+        <result property="show" column="show"/>
+        <result property="sort" column="sort"/>
+        <result property="create_time" column="create_time"/>
+        <result property="create_by" column="create_by"/>
+        <result property="update_time" column="update_time"/>
+        <result property="update_by" column="update_by"/>
+    </resultMap>
 
-    <select id="findList" resultType="com.mee.sys.entity.SysMenu" useCache="true">
+    <!-- 查询 -->
+    <select id="findList" resultMap="SysMenuResult">
         select * from sys_menu
         <where>
-            <if test="id != null and id != ''">
-                and id = cast(#{id} as numeric)
-            </if>
-            <if test="code != null and code!=''">
-                and code = #{code}
-            </if>
-            <if test="name != null and name != ''">
-                and name like #{name}
-            </if>
+            <if test="id != null and id != ''"> and id = #{id}</if>
+            <if test="pid != null"> and pid = #{pid}</if>
+            <if test="type != null"> and type = #{type}</if>
+            <if test="title != null and title != ''"> and title = #{title}</if>
+            <if test="icon != null and icon != ''"> and icon = #{icon}</if>
+            <if test="path != null and path != ''"> and path = #{path}</if>
+            <if test="target != null and target != ''"> and target = #{target}</if>
+            <if test="permission != null and permission != ''"> and permission = #{permission}</if>
+            <if test="sub_count != null"> and sub_count = #{sub_count}</if>
+            <if test="show != null"> and show = #{show}</if>
+            <if test="sort != null"> and sort = #{sort}</if>
+            <if test="create_time != null"> and create_time = #{create_time}</if>
+            <if test="create_by != null and create_by != ''"> and create_by = #{create_by}</if>
+            <if test="update_time != null"> and update_time = #{update_time}</if>
+            <if test="update_by != null and update_by != ''"> and update_by = #{update_by}</if>
         </where>
-        order by id asc
+        <!-- order by id desc -->
+        ORDER BY PID ASC NULLS FIRST ,SORT ASC
     </select>
 
+    <select id="findList" resultMap="SysMenuResult" databaseId="mysql">
+        select * from sys_menu
+        <where>
+            <if test="id != null and id != ''"> and id = #{id}</if>
+            <if test="pid != null"> and pid = #{pid}</if>
+            <if test="type != null"> and type = #{type}</if>
+            <if test="title != null and title != ''"> and title = #{title}</if>
+            <if test="icon != null and icon != ''"> and icon = #{icon}</if>
+            <if test="path != null and path != ''"> and path = #{path}</if>
+            <if test="target != null and target != ''"> and target = #{target}</if>
+            <if test="permission != null and permission != ''"> and permission = #{permission}</if>
+            <if test="sub_count != null"> and sub_count = #{sub_count}</if>
+            <if test="show != null"> and show = #{show}</if>
+            <if test="sort != null"> and sort = #{sort}</if>
+            <if test="create_time != null"> and create_time = #{create_time}</if>
+            <if test="create_by != null and create_by != ''"> and create_by = #{create_by}</if>
+            <if test="update_time != null"> and update_time = #{update_time}</if>
+            <if test="update_by != null and update_by != ''"> and update_by = #{update_by}</if>
+        </where>
+        <!-- order by id desc -->
+<!--        ORDER BY PID ASC NULLS FIRST ,SORT ASC-->
+        ORDER BY PID ASC, IF(ISNULL(PID),-1,1), SORT ASC
+    </select>
 
+    <!-- 按主键id查询 -->
+    <select id="findById" resultMap="SysMenuResult">
+        select * from sys_menu
+        where id=#{id}
+    </select>
+
+    <!-- 插入 -->
     <insert id="insert">
         insert into sys_menu(
             id,
-            "name",
-            show_flag,
-            create_date,
+            pid,
+            type,
+            title,
+            icon,
+            path,
+            target,
+            permission,
+            sub_count,
+            show,
+            sort,
+            create_time,
             create_by,
-            code,
-            parent_code
+            update_time,
+            update_by
         ) values (
-            cast(#{id} as numeric),
-            #{name},
-            #{show_flag},
-            now(),
+            #{id},
+            #{pid},
+            #{type},
+            #{title},
+            #{icon},
+            #{path},
+            #{target},
+            #{permission},
+            #{sub_count},
+            #{show},
+            #{sort},
+            #{create_time},
             #{create_by},
-            #{code},
-            #{parent_code}
+            #{update_time},
+            #{update_by}
         )
     </insert>
 
+    <!-- 批量插入 -->
+    <insert id="insertBatch">
+        insert into sys_menu(
+           id,
+           pid,
+           type,
+           title,
+           icon,
+           path,
+           target,
+           permission,
+           sub_count,
+           show,
+           sort,
+           create_time,
+           create_by,
+           update_time,
+           update_by
+        ) values
+        <foreach collection ="list" item="i" separator =",">
+        (
+           #{i.id},
+           #{i.pid},
+           #{i.type},
+           #{i.title},
+           #{i.icon},
+           #{i.path},
+           #{i.target},
+           #{i.permission},
+           #{i.sub_count},
+           #{i.show},
+           #{i.sort},
+           #{i.create_time},
+           #{i.create_by},
+           #{i.update_time},
+           #{i.update_by}
+        )
+        </foreach>
+    </insert>
 
-    <update id="update" parameterType="com.mee.sys.entity.SysDict">
+    <!-- 更新 -->
+    <update id="update">
         update sys_menu
         <set>
-            <if test="name != null and name !='' " >  "name" = #{name,jdbcType=VARCHAR},</if>
-            <if test="code != null and code !='' " >code = #{code,jdbcType=VARCHAR},</if>
-            <if test="parent_code != null and parent_code !='' " >parent_code=#{parent_code,jdbcType=VARCHAR},</if>
-            <if test="show_flag != null" >"show_flag" = #{show_flag},</if>
+            <if test="pid != null">pid=#{pid},</if>
+            <if test="type != null">type=#{type},</if>
+            <if test="title != null and title != ''">title=#{title},</if>
+            <if test="icon != null and icon != ''">icon=#{icon},</if>
+            <if test="path != null and path != ''">path=#{path},</if>
+            <if test="target != null and target != ''">target=#{target},</if>
+            <if test="permission != null and permission != ''">permission=#{permission},</if>
+            <if test="sub_count != null">sub_count=#{sub_count},</if>
+            <if test="show != null">show=#{show},</if>
+            <if test="sort != null">sort=#{sort},</if>
+            <if test="update_time != null">update_time=#{update_time},</if>
+            <if test="update_by != null and update_by != ''">update_by=#{update_by},</if>
         </set>
-        where ID = cast(#{id} as numeric)
+        where id=#{id}
     </update>
 
-    <delete id="delete" parameterType="java.lang.String">
-        delete from sys_menu where id = cast(#{id} as numeric)
+    <!-- 更新子级数 -->
+    <update id="updateSubCount" >
+        update sys_menu set sub_count = (select count(1) from sys_menu where pid=#{pid} ),update_time=#{update_time},update_by=#{update_by} where id=#{pid}
+    </update>
+
+    <!-- 按主键id删除 -->
+    <delete id="deleteById">
+        delete from sys_menu where id=#{id}
     </delete>
 
-    <select id="findByRoleID" resultType="com.mee.sys.entity.SysMenu">
-        select m.* from sys_menu as m inner join  sys_role_menu as mr on m.code = mr.menu_code
-        where mr.role_id = cast(#{role_id} as numeric)
+    <!-- 批量删除 -->
+    <delete id="deleteBatch">
+        delete from sys_menu where id in
+        <foreach collection ="list" item="item" open="(" close=")" separator =",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="findByRoleId" resultMap="SysMenuResult">
+        select m.*,rm.role_id from sys_menu as m inner join  sys_role_menu as rm on m.id = rm.menu_id
+        where rm.role_id = #{role_id}
     </select>
 
-    <!-- 查找是否有子节点 -->
-    <select id="findChildNodeCount" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select count(1) from sys_menu where parent_code = #{code}
+    <!-- 获取用户菜单 -->
+    <select id="findByUserId" resultMap="SysMenuResult" databaseId="postgresql">
+        select * from sys_menu as m
+        inner join(
+            select rm.menu_id from sys_role_menu as rm
+            inner join sys_role_user as ru on rm.role_id=ru.role_id
+            where ru.user_id=#{user_id}
+            group by rm.menu_id
+        ) as t1 on m.id=t1.menu_id
+        ORDER BY m.PID ASC NULLS FIRST ,m.SORT ASC
     </select>
+
+    <select id="findByUserId" resultMap="SysMenuResult" databaseId="mysql">
+        select * from sys_menu as m
+        inner join(
+            select rm.menu_id from sys_role_menu as rm
+            inner join sys_role_user as ru on rm.role_id=ru.role_id
+            where ru.user_id=#{user_id}
+            group by rm.menu_id
+        ) as t1 on m.id=t1.menu_id
+        ORDER BY m.PID ASC, IF(ISNULL(m.PID),-1,1), m.SORT ASC
+    </select>
+
 </mapper>

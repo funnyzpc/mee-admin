@@ -1,7 +1,7 @@
 /** define your style **/
-body{font:13px "Microsoft YaHei",微软雅黑,simhei,SimSun,宋体,arial;margin-bottom: 51px;}
+html,body{font:12pt "Microsoft YaHei",微软雅黑,simhei,SimSun,宋体,arial;margin:0px 0px;height:100%;}
 
-.navbar{margin-bottom: 0;border-radius:0;background-color:#2a1b41;padding: 0;min-height:0;height:44px;overflow-y:hidden;}
+.navbar{margin-bottom: 0;border-radius:0;background-color:black;padding: 0;min-height:0;height:44px;overflow-y:hidden;}
 .navbar-header img{float: left;height:45px;}
 .navbar-brand{padding: 10px 15px;}
 .navbar *{color: #fff;}
@@ -66,15 +66,9 @@ i.menu-rights:before{content:"\f007";color:white;}
 i.menu-system:before{content:"\f013";color:white;}
 i.menu-other:before{content:"\f01c";color:white;}
 
-.main{margin: 6px 6px 6px 2px;}
+.main{margin:12pt 8px 8px 12pt;}
 
-.table{margin-bottom: 0;}
-.form-paging, .form-search{background-color: #f5f5f5; padding: 10px;}
-.form-search .btn, .form-paging .btn{margin-top: -5px;}
-
-.table>thead>tr>th{background-color:#d4cce1;color:black;}
-.table th{text-align: center;}
-.table tbody tr{cursor: pointer;}
+.form-paging, .form-search{background-color: #f5f5f5; padding:8px;}
 
 /*
 .loading{height: 100px;width:100%;background: #fff url(../img/loading.gif) no-repeat center center;}
@@ -89,18 +83,36 @@ div.table-group{margin-bottom: 0;}
 
 .seprator{margin: auto 10px;}
 
-.status-1{background-color: blue;color: #fefefe;}
-.status-2{background-color: yellow;}
-.status-3{background-color: blue;color: #fefefe;}
-.status-4{background-color: yellow;}
-.status-5{background-color: blue;color: #fefefe;}
-.status-6{background-color: yellow;}
-.status-7{background-color: blue;color: #fefefe;}
-.status-8{background-color: red;}
 /*
 .status-3{background-color: green;color: #fefefe;}
 .status-4{background-color: red;color: #fefefe;}
 */
 .checkstatus-0{background-color: red;color: #fefefe;}
 
-#data-list{color:block;outline:none;}
+#data-search{width:100%;}
+#data-list{color:black;outline:none;width:100%;}
+.hidden-item{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/****** dialog *******/
+dialog {
+    top: -10%;
+    /* width: 400px; */
+    border-radius:4px;
+    border: none;
+    padding:16px 16px;
+    animation: close_com 0.7s linear 1;
+    -webkit-animation: close_com 0.7s linear 1;
+    box-shadow: -1px 2px 4px rgba(232,232,232,0.6);
+    transition:1s;
+}
+dialog::backdrop {
+    background-color: rgba(240,240,240,0.6);
+    backdrop-filter:blur(0.4px);
+}
+.dialog-header>h4{font-weight:bold;font-size:16pt;}
+.dialog-footer{
+    text-align:right;
+    padding:16px 16px;
+    display: inline-block;
+    width:100%;
+}

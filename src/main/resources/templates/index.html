@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta name="description" content="${applicationName}">
+  <meta name="author" content="${applicationName}">
+  <script type="text/javascript">
+    /** js全局变量 **/
+    var ctxPath = "${reqCtx.contextPath}";
+  </script>
+  <link rel="shortcut icon" href="${ctxPath}/static/img/favicon.png">
+  <link rel="stylesheet" href="${ctxPath}/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="${ctxPath}/static/css/font-awesome.min.css">
+  <link rel="stylesheet" href="${ctxPath}/static/css/mee.css">
+<!--  <link rel="stylesheet" href="${ctxPath}/static/css/jquery-dtp.css">-->
+  <!-- 当前页面样式 -->
+  <link rel="stylesheet" href="${ctxPath}/static/css/index.css">
+  <title>MEE</title>
+</head>
+<body>
+<!-- 顶部菜单 -->
+<#include "./decorator/banner.html"/>
+
+<!-- 左侧菜单 -->
+<div id="mee-menu" style="height:calc(100% - 44px)">
+  <nav id="mee-menu-content">
+   <!-- <ul>
+      <li>菜单1</li>
+      <li>菜单2</li>
+      <li>菜单3</li>
+    </ul>-->
+  </nav>
+</div>
+<!-- 业务页面 -->
+<div id="mee-content" style="height:calc(100% - 44px);padding-left:8px;">
+  <iframe name="_content"
+          id="_content"
+          width="100%"
+          height="96%"
+          frameborder="0"
+          scrolling="yes"
+          data-iframe="F001">
+    欢迎回来，我的朋友...
+  </iframe>
+</div>
+
+</body>
+<script type="module">
+    // import * as MeeIndexFunc from "${ctxPath}/public/common/index.js"
+    // window.MeeIndexFunc=MeeIndexFunc;
+    // MeeIndexFunc.init();
+    import { init,toUserCenter } from "${ctxPath}/public/common/index.js"
+    window.toUserCenter=toUserCenter;
+    init();
+</script>
+<style>
+#mee-menu {
+  background-color: #202020;
+  color: white;
+  height: 100%;
+  min-width: 200px;
+  max-width: 320px;
+  width: 16%;
+  float: left;
+}
+#mee-content {
+  float: left;
+  background-color: #f9f9f9;
+  width: 84%;
+  height: 100%;
+  display: block;
+}
+</style>
+</html>

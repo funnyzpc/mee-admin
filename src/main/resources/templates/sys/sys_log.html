@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <title>${applicationName}-日志管理</title>
+</head>
+<body>
+<div class="row">
+    <h5>日志管理</h5>
+    <div id="data-search">
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form" class="form-inline form-search">
+            <label class="form-label">日志类型</label>&nbsp;
+            <input type="text" name="log_type" >&nbsp;&nbsp;
+            <label class="form-label">日志标题</label>&nbsp;
+            <input type="text" name="log_title" >&nbsp;&nbsp;
+            <label class="form-label">日志时间</label>&nbsp;
+            <input type="date" name="log_date" title=">=这个日期的">
+
+            <span class="seprator"></span>
+            <button _func="query" type="submit" class="btn btn-sm btn-primary">查询</button>&nbsp;&nbsp;
+            <button _func="export" class="btn btn-sm btn-default">导出</button>
+        </form>
+    </div>
+    <div id="data-list"> </div>
+</div>
+<script type="text/cc-template" id="template-data-list">
+    <div style="overflow-x: scroll; white-space: nowrap;overflow: auto;">
+    <table class="table table-bordered table-hover table-condensed">
+        <thead>
+        <tr>
+            <th>日志表ID</th>
+            <th>日志类型</th>
+            <th>日志标题</th>
+            <th>日志时间</th>
+            <th>登录信息</th>
+            <th>日志内容</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{id}}</td>
+            <td>{{#equal log_type 1}} 登录 {{/equal}} </td>
+            <td>{{log_title}}</td>
+            <td>{{log_date}}</td>
+            <td>{{remote_address}}</td>
+            <td>{{log_content}}</td>
+            <td>
+                <a href="#" func="delete">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    </div>
+    <#include "../decorator/page-form.html"/>
+</script>
+</body>
+<!-- 底部静态 -->
+<#include "../decorator/foot.html"/>
+<script type="module">
+    import {init} from "${ctxPath}/public/sys/sys_log.js"
+    init();
+</script>
+</html>

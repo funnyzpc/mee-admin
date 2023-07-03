@@ -1,75 +1,128 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    系统::角色表 SysRole(sys_role) Dao
+@author         shadow
+@date           2023-05-28 16:45:31
+-->
 <mapper namespace="com.mee.xml.SysRole">
 
-    <select id="findList" resultType="com.mee.sys.entity.SysRole">
+    <!-- 字段 -->
+    <resultMap type="com.mee.sys.entity.SysRole" id="SysRoleResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="status" column="status"/>
+        <result property="create_by" column="create_by"/>
+        <result property="create_time" column="create_time"/>
+        <result property="update_by" column="update_by"/>
+        <result property="update_time" column="update_time"/>
+    </resultMap>
+
+    <!-- 查询 -->
+    <select id="findList" resultMap="SysRoleResult">
         select * from sys_role
         <where>
-            <if test="id != null and id != ''">  and id = #{id}  </if>
-            <if test="role_name != null and role_name != ''">
-                and role_name like #{role_name}
-            </if>
-            <if test="role_desc != null and role_desc != ''">
-                and role_desc like #{role_desc}
-            </if>
-            <if test="status != null and status != ''">
-                and status = #{status}
-            </if>
-            <if test="useable != null and useable != ''">
-                and useable = #{useable}
-            </if>
-
+            <if test="id != null and id != ''"> and id = #{id}</if>
+            <if test="name != null and name != ''"> and name like #{name}</if>
+            <if test="description != null and description != ''"> and description like #{description}</if>
+            <if test="status != null"> and status = #{status}</if>
+            <if test="create_by != null"> and create_by = #{create_by}</if>
+            <if test="create_time != null"> and create_time = #{create_time}</if>
+            <if test="update_by != null"> and update_by = #{update_by}</if>
+            <if test="update_time != null"> and update_time = #{update_time}</if>
         </where>
-    </select>
-    
-    <select id="findByUserId" resultType="com.mee.sys.entity.SysRole">
-        select r.* from sys_role as r inner join (
-            select r.role_id,u.user_name from sys_user as u inner join sys_role_user  as r on u.user_id = r.user_id
-            where u.user_id = #{user_id}
-        )as t1 on r.id=t1.role_id
+        order by id desc
     </select>
 
-    <!-- 写入角色 -->
+    <!-- 按主键id查询 -->
+    <select id="findById" resultMap="SysRoleResult">
+        select * from sys_role
+        where id=#{id}
+    </select>
+
+    <!-- 插入 -->
     <insert id="insert">
         insert into sys_role(
             id,
-            role_name,
-            role_desc,
+            name,
+            description,
             status,
-            create_date,
-            update_date
+            create_by,
+            create_time,
+            update_by,
+            update_time
         ) values (
-            cast(#{id} as numeric),
-            #{role_name},
-            #{role_desc},
+            #{id},
+            #{name},
+            #{description},
             #{status},
-            now(),
-            now()
+            #{create_by},
+            #{create_time},
+            #{update_by},
+            #{update_time}
         )
     </insert>
 
-    <!-- 更新角色 -->
-    <update id="update" parameterType="com.mee.sys.entity.SysRole">
+    <!-- 批量插入 -->
+    <insert id="insertBatch">
+        insert into sys_role(
+           id,
+           name,
+           description,
+           status,
+           create_by,
+           create_time,
+           update_by,
+           update_time
+        ) values
+        <foreach collection ="list" item="i" separator =",">
+        (
+           #{i.id},
+           #{i.name},
+           #{i.description},
+           #{i.status},
+           #{i.create_by},
+           #{i.create_time},
+           #{i.update_by},
+           #{i.update_time}
+        )
+        </foreach>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update">
         update sys_role
         <set>
-            <if test="role_name != null and role_name != ''">role_name= #{role_name},</if>
-            <if test="role_desc != null and role_desc != ''">role_desc= #{role_desc},</if>
-            <if test="status != null">status = #{status},</if>
-            update_date = now(),
+            <if test="name != null and name != ''">name=#{name},</if>
+            <if test="description != null and description != ''">description=#{description},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="create_by != null">create_by=#{create_by},</if>
+            <if test="create_time != null">create_time=#{create_time},</if>
+            <if test="update_by != null">update_by=#{update_by},</if>
+            <if test="update_time != null">update_time=#{update_time},</if>
         </set>
-        <where>
-            id = cast(#{id} as numeric)
-        </where>
+        where id=#{id}
     </update>
 
-    <!-- 查找是否有关联(分配)信息 -->
-    <select id="findRelation"  resultType="java.lang.String" parameterType="java.lang.Object">
-        select  distinct coalesce(r.role_name) item from sys_role as r right join sys_role_menu as m on r.id = m.role_id
-        where menu_code = #{code}
+    <!-- 按主键id删除 -->
+    <delete id="deleteById">
+        delete from sys_role where id=#{id}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="deleteBatch">
+        delete from sys_role where id in
+        <foreach collection ="list" item="item" open="(" close=")" separator =",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="findByUserId" resultMap="SysRoleResult">
+        select r.* from sys_role as r inner join (
+        select r.role_id,u.user_name from sys_user as u inner join sys_role_user  as r on u.id = r.user_id
+        where u.id = #{user_id}
+        )as t1 on r.id=t1.role_id
     </select>
 
-    <!-- 删除角色 -->
-    <delete id="delete">
-        delete from sys_role where id = cast(#{role_id} as numeric)
-    </delete>
 </mapper>

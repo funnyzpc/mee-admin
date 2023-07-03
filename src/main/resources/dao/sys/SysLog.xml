@@ -22,7 +22,7 @@
             remote_address,
             log_content
         ) values (
-            cast(#{id} as numeric),
+            #{id},
             #{log_type},
             #{log_title},
             #{log_date},

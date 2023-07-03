@@ -1,166 +1,194 @@
 package com.mee.sys.web;
 
-import com.mee.common.service.SeqGenServiceImpl;
-import com.mee.common.service.ShiroAccountLockedServiceImpl;
-import com.mee.common.util.MD5Util;
+
+import com.mee.common.service.impl.ShiroAccountLockedServiceImpl;
+import com.mee.common.util.MeeResult;
 import com.mee.common.util.ResultBuild;
-import com.mee.core.dao.DBSQLDao;
+import com.mee.core.model.Page;
+import com.mee.sys.dto.SysUserDTO;
+import com.mee.sys.entity.SysRole;
 import com.mee.sys.entity.SysUser;
+import com.mee.sys.service.impl.SysUserServiceImpl;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
+
+/**
+ * 系统::用户信息表web接口(SysUser2Controller)
+ *
+ * @author  shadow
+ * @version v1.3
+ * @date    2023-05-30 20:59:40
+ */
 @Controller
-@RequestMapping("/sys/user")
+@RequestMapping("/sys/sys_user")
 public class SysUserController {
-    private static final Logger log = LoggerFactory.getLogger(SysUserController.class);
 
+    /**
+    * 业务处理类
+    */
     @Autowired
-    private DBSQLDao dbSQLDao;
+    private SysUserServiceImpl sysUserService;
+    /**
+     * 登录用户锁定业务
+     */
     @Autowired
-    private SeqGenServiceImpl seqGenService;
-    @Resource
     private ShiroAccountLockedServiceImpl shiroAccountLockedService;
 
-    @RequiresPermissions("040101")
+    /**
+     * 页面
+     * @return 页面
+     */
+    @RequiresPermissions("sys:sys_user:list")
     @GetMapping
     public String index(){
-        return "sys/user";
+        return "sys/sys_user";
     }
 
-    @RequiresPermissions("040101")
-    @PostMapping
+    /**
+     * 查询 系统::用户信息表 列表
+     */
+    @RequiresPermissions("sys:sys_user:list")
+    @GetMapping("/list")
     @ResponseBody
-    public Map<String,Object> list(String nick_name, String user_name,String email,Integer status, int pageIdx, int pageSize){
-        Map<String,Object> params = new HashMap<String,Object>(4,1);
-        if(null != nick_name && !"".equals(nick_name)){ params.put("nick_name","%"+nick_name.trim()+"%"); }
-        if(null != user_name && !"".equals(user_name)){ params.put("user_name",user_name.trim()+"%"); }
-        if(null != email && !"".equals(email)){ params.put("email",email.trim()+"%"); }
-        if(null != status){ params.put("status",status); }
-        return new HashMap<String,Object>(1,1){{
-            put("data", dbSQLDao.list("com.mee.xml.SysUser.findList",params,pageIdx,pageSize));
-        }};
+    public MeeResult<Page<SysUser>> list(
+            @RequestParam(required = true)Integer page_no,
+            @RequestParam(required = true)Integer page_size,
+            String user_name,String nick_name,String phone,
+            String email,String status,String del_flag
+    ){
+        return sysUserService.list(page_no,page_size,user_name,nick_name,phone,email,status,del_flag);
     }
 
-    @RequiresPermissions("040101")
-    @RequestMapping("/save")
+    /**
+     * 系统::用户信息表::详细信息
+     */
+    @RequiresPermissions("sys:sys_user:list")
+    @GetMapping("/id")
     @ResponseBody
-    public Map save(SysUser sysUser){
-        // 参数校验
-        if(null == sysUser
-                || null==sysUser.getUser_name()
-                || null==sysUser.getEmail()
-                || null == sysUser.getStatus()){
-            return ResultBuild.FAIL;
-        }
-        if(null == sysUser.getId() || "".equals(sysUser.getId().trim())){
-            sysUser.setUser_id(seqGenService.genShortPrimaryKey());
-            sysUser.setRegister_date(LocalDateTime.now());
-            sysUser.setPassword(MD5Util.encode(sysUser.getPassword()));
-            String recordId = dbSQLDao.create("com.mee.xml.SysUser.insert",sysUser);
-            log.info("创建sys_dict结果:{}",recordId);
-            return ResultBuild.SUCCESS;
-        }
-        Map<String,Object> queryParam = new HashMap<String,Object>(1,1){{
-            put("id",sysUser.getId());
-        }};
-        if(!StringUtils.isEmpty(sysUser.getPassword())) {
-            SysUser oldUser = dbSQLDao.queryOne("com.mee.xml.SysUser.findList", queryParam);
-            if (null == oldUser) {
-                return ResultBuild.fail("用户不存在:" + sysUser.getUser_name());
-            }
-            if (!sysUser.getPassword().equals(oldUser.getPassword())) {
-                sysUser.setPassword(MD5Util.encode(sysUser.getPassword()));
-            }
-        }
-        // 更新数据
-        int updateCount = dbSQLDao.update("com.mee.xml.SysUser.update",sysUser);
-        log.info("更新sys_dict结果:{}",updateCount);
-        return ResultBuild.SUCCESS;
+    public MeeResult<SysUser> findById(@RequestParam(required = true) String id){
+        return sysUserService.findById( id );
     }
 
-    @RequiresPermissions("040101")
-    @RequestMapping("/disabled")
+    /**
+     * 系统::用户信息表::新增
+     */
+    @RequiresPermissions("sys:sys_user:add")
+    @PostMapping("add")
     @ResponseBody
-    public Map delete(String id,Integer status){
-        // 参数校验
-        if(null == id || "".equals(id.trim()) || null == status){
-            return ResultBuild.FAIL;
-        }
-        if("1".equals(id) || "2".equals(id)){
-            return ResultBuild.fail("指定用户不可操作 [1.超级管理员、2.测试用户]");
-        }
-
-        // 更新数据
-        SysUser sysUser = new SysUser();
-        sysUser.setId(id);
-        sysUser.setStatus(status);
-        int updateCount = dbSQLDao.update("com.mee.xml.SysUser.update",sysUser);
-
-
-        log.info("更新sys_dict结果:{},删除用户角色关系:{}",updateCount);
-        return ResultBuild.SUCCESS;
+    public MeeResult add(@RequestBody(required = true) SysUserDTO sysUser2DTO){
+        return sysUserService.add( sysUser2DTO );
     }
 
-    /** 删除用户 **/
-    @RequiresPermissions("040101")
-    @RequestMapping("/delete")
+    /**
+     * 系统::用户信息表::修改
+     */
+    @RequiresPermissions("sys:sys_user:update")
+    @PutMapping("update")
     @ResponseBody
-    public Map delete(String id){
-        // 参数校验
-        if(null == id || "".equals(id.trim())){
-            return ResultBuild.FAIL;
-        }
-        if("1".equals(id) || "2".equals(id)){
-            return ResultBuild.fail("指定用户不可删除 [1.超级管理员、2.测试用户]");
-        }
+    public MeeResult update(@RequestBody(required = true) SysUser sysUser ){
+        return sysUserService.update( sysUser );
+    }
 
-        // query user info
-        Map<String,Object> queryParam = new HashMap<String,Object>(1,1){{
-            put("id",id);
-        }};
-        SysUser user = dbSQLDao.queryOne("com.mee.xml.SysUser.findList",queryParam);
-        if(null == user){
-            return ResultBuild.fail("用户信息不存在!");
-        }
-        // 删除用户角色关系
-        Map<String,Object> params = new HashMap<String,Object>(1,1){{
-            put("user_id",user.getUser_id());
-        }};
-        int deleteRoleUserCount = dbSQLDao.delete("com.mee.xml.SysRoleUser.delete",params);
+    /**
+     * 系统::用户信息表::删除
+     */
+    @RequiresPermissions("sys:sys_user:delete")
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public MeeResult deleteById(@RequestParam(required = true) String id){
+        return sysUserService.deleteById(id);
+    }
 
-        Map<String,Object> delParams = new HashMap<String,Object>(1,1){{
-            put("id",id);
-        }};
-        // 更新数据
-        int updateCount = dbSQLDao.update("com.mee.xml.SysUser.delete",delParams);
-        log.info("删除sys_dict结果:{},id:{},deleteRoleUserCount:{}",updateCount,id,deleteRoleUserCount);
-        return ResultBuild.SUCCESS;
+//    /**
+//     * 系统::用户信息表::批量删除
+//     */
+//    //@RequiresPermissions("sys:sys_user:delete")
+//    @DeleteMapping("/deleteBatch")
+//    @ResponseBody
+//    public Map deleteBatch(String[] ids){
+//        return sysUser2Service.deleteBatch(ids);
+//    }
+
+
+    /** 状态切换 **/
+    @RequiresPermissions("sys:sys_user:change_status")
+    @PutMapping("/change_status")
+    @ResponseBody
+    public MeeResult changeStatus(@RequestBody(required = true) SysUser user){
+        return sysUserService.changeStatus(user);
     }
 
     /** 解除锁定 **/
-    @RequiresPermissions("040101")
-    @RequestMapping("/unlock")
+    @RequiresPermissions("sys:sys_user:unlock")
+    @PutMapping("/unlock")
     @ResponseBody
-    public Map unlock(String user_name){
-        // 参数校验
-        if(!StringUtils.hasText(user_name)){
-            return ResultBuild.FAIL;
-        }
+    public MeeResult unlock(@RequestParam(value = "user_name",required = true) String user_name){
         shiroAccountLockedService.clearCounter(user_name);
-        return ResultBuild.SUCCESS;
+        return ResultBuild.SUCCESS();
     }
+
+    /** 重置密码 **/
+    @RequiresPermissions("sys:sys_user:reset_pwd")
+    @PutMapping("reset_pwd")
+    @ResponseBody
+    public MeeResult<Integer> resetPwd(@RequestParam(value = "id",required = true) String id,
+                                       @RequestParam(value = "pwd",required = true) String pwd){
+        return sysUserService.resetPwd(id,pwd);
+    }
+
+    /**
+     * 获取角色
+     * @return 用户角色信息
+     */
+    @RequiresPermissions("sys:sys_user:get_roles")
+    @GetMapping("getRoles")
+    @ResponseBody
+    public MeeResult<List<SysRole>> getRoles(@RequestParam(value = "id",required = true) String user_id ){
+        return sysUserService.getRoles(user_id);
+    }
+
+    /**
+     * 导入用户信息
+     * @param file 文件
+     * @param name 名称
+     * @return
+     */
+    @RequiresPermissions("dev")
+    @PostMapping("import")
+    @ResponseBody
+    public MeeResult<Integer> doImport(@RequestParam(value = "file",required = true) MultipartFile file,
+                        @RequestParam(value = "name",required = false) String name){
+        return sysUserService.doImport(file,name);
+    }
+
+    /**
+     * 导出文件信息
+     * @param response  response
+     * @param page_no   page_no
+     * @param page_size page_size
+     * @param user_name user_name
+     * @param nick_name nick_name
+     * @param phone phone
+     * @param email email
+     * @param status    status
+     * @param del_flag  del_flag
+     */
+    @RequiresPermissions("sys:sys_user:export")
+    @GetMapping("export")
+    public void doExport(HttpServletResponse response,
+                         @RequestParam(required = true)Integer page_no,
+                         @RequestParam(required = true)Integer page_size,
+                         String user_name,String nick_name,String phone,
+                         String email,String status,String del_flag){
+        sysUserService.doExport( response,page_no,page_size,user_name,nick_name,phone,email,status,del_flag );
+    }
+
 
 }

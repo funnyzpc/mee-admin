@@ -6,10 +6,10 @@
         select * from sys_file
         <where>
             <if test="id != null and id != ''">  and id = #{id} </if>
-            <if test="original_name != null and original_name != ''">  original_name id like #{original_name} </if>
+            <if test="original_name != null and original_name != ''">  original_name like #{original_name} </if>
             <if test="name != null and name != ''">  and name like #{name} </if>
-            <if test="dts != null ">  and create_date &gt;= #{dts} </if>
-            <if test="dte != null ">  and create_date &lt;= #{dte} </if>
+            <if test="dts != null ">  and create_time &gt;= #{dts} </if>
+            <if test="dte != null ">  and create_time &lt;= #{dte} </if>
         </where>
         order by id desc
     </select>
@@ -22,7 +22,7 @@
             file_path,
             file_type,
             category,
-            create_date,
+            create_time,
             create_by
         ) values (
             #{id},
@@ -31,13 +31,13 @@
             #{file_path},
             #{file_type},
             #{category},
-            #{create_date},
+            #{create_time},
             #{create_by}
         )
     </insert>
 
     <delete id="delete" parameterType="java.lang.String">
-        delete from sys_dic where id = #{id}
+        delete from sys_file where id = #{id}
     </delete>
 
 </mapper>

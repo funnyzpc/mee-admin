@@ -23,6 +23,10 @@ public class LogServiceImpl {
     @Autowired
     private DBSQLDao dbSQLDao;
 
+    @Autowired
+    private SeqGenServiceImpl seqGenService;
+
+
     /*
     日志类型 1.登录 2.异常 3.其它 4.C店 5.基础配置
     */
@@ -31,7 +35,7 @@ public class LogServiceImpl {
         SysUser sysUser = ShiroUtils.getUser();
         String user_id = null;
         if(null!=sysUser){
-            user_id=sysUser.getUser_id();
+            user_id=sysUser.getId();
             log_content="操作人:"+user_id+" "+log_content;
         }
         this.log( user_id,log_type, log_title, remote_address, log_content);
@@ -49,15 +53,15 @@ public class LogServiceImpl {
         log_content
          */
         SysLog sysLog = new SysLog();
+        sysLog.setId(seqGenService.genPrimaryKey());
         sysLog.setLog_type(log_type);
         sysLog.setLog_title(log_title);
         sysLog.setLog_date(DateUtil.now());
         sysLog.setRemote_address(remote_address);
         sysLog.setLog_content(log_content);
-        sysLog.setCreate_by(user_id);
-
-        String id = dbSQLDao.create("com.mee.xml.SysLog.insert",sysLog);
-        log.info("已记录 title:{},id:{}",log_title,id);
+//        sysLog.setCreate_by(user_id);
+        int insert_count = dbSQLDao.insert("com.mee.xml.SysLog.insert",sysLog);
+        log.info("已记录 title:{},{}条",log_title,insert_count);
     }
 
 

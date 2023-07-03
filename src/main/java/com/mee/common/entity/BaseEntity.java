@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  * @author funnyzpc
  * @description 基础实体类(用于继承)
  * **/
+@Deprecated
 public class BaseEntity {
 
     private String id;

@@ -10,12 +10,12 @@ import java.util.Map;
 public class MapOrclBean<K, V> extends HashMap<K, V> {
 
 	/**
-	 * 
+	 * 序列化标识
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
+	 * 初始化
 	 */
 	public MapOrclBean() {
 		super();
@@ -53,7 +53,8 @@ public class MapOrclBean<K, V> extends HashMap<K, V> {
 
 	/* (non-Javadoc)
 	 * @see java.util.HashMap#get(java.lang.Object)
-	 */ 
+	 */
+	@Override
 	public V get(Object key) {
 		Object key1 = key; 
 		if (key instanceof String){
@@ -64,7 +65,8 @@ public class MapOrclBean<K, V> extends HashMap<K, V> {
 
 	/* (non-Javadoc)
 	 * @see java.util.HashMap#containsKey(java.lang.Object)
-	 */ 
+	 */
+	@Override
 	public boolean containsKey(Object key) {
 		Object key1 = key; 
 		if (key instanceof String){
@@ -75,8 +77,8 @@ public class MapOrclBean<K, V> extends HashMap<K, V> {
 
 	/* (non-Javadoc)
 	 * @see java.util.HashMap#put(java.lang.Object, java.lang.Object)
-	 */ 
-	@SuppressWarnings("unchecked")
+	 */
+	@Override
 	public V put(K key, V value) {
 		K key1 = key; 
 		if (key instanceof String){
@@ -87,7 +89,8 @@ public class MapOrclBean<K, V> extends HashMap<K, V> {
 
 	/* (non-Javadoc)
 	 * @see java.util.HashMap#remove(java.lang.Object)
-	 */ 
+	 */
+	@Override
 	public V remove(Object key) {
 		Object key1 = key; 
 		if (key instanceof String){

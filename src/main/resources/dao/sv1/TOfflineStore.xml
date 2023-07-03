@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    测试::线下店铺 TOfflineStore(t_offline_store) Dao
+@author         shadow
+@date           2023-06-16 11:25:46
+-->
+<mapper namespace="com.mee.xml.sv1.TOfflineStore">
+
+    <!-- 字段 -->
+    <resultMap type="com.mee.module.sv1.entity.TOfflineStore" id="TOfflineStoreResult">
+        <result property="id" column="id"/>
+        <result property="open_date" column="open_date"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="nick_name" column="nick_name"/>
+        <result property="addr" column="addr"/>
+        <result property="brand" column="brand"/>
+        <result property="status" column="status"/>
+        <result property="description" column="description"/>
+        <result property="create_by" column="create_by"/>
+        <result property="create_time" column="create_time"/>
+        <result property="update_by" column="update_by"/>
+        <result property="update_time" column="update_time"/>
+    </resultMap>
+
+    <!-- 查询 -->
+    <select id="findList" resultMap="TOfflineStoreResult">
+        select * from t_offline_store
+        <where>
+            <if test="id != null and id != ''"> and id = #{id}</if>
+            <if test="open_date != null"> and open_date = #{open_date}</if>
+            <if test="code != null and code != ''"> and code = #{code}</if>
+            <if test="name != null and name != ''"> and name = #{name}</if>
+            <if test="nick_name != null and nick_name != ''"> and nick_name = #{nick_name}</if>
+            <if test="addr != null and addr != ''"> and addr = #{addr}</if>
+            <if test="brand != null"> and brand = #{brand}</if>
+            <if test="status != null"> and status = #{status}</if>
+            <if test="description != null and description != ''"> and description = #{description}</if>
+            <if test="create_by != null"> and create_by = #{create_by}</if>
+            <if test="create_time != null"> and create_time = #{create_time}</if>
+            <if test="update_by != null"> and update_by = #{update_by}</if>
+            <if test="update_time != null"> and update_time = #{update_time}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <!-- 按主键id查询 -->
+    <select id="findById" resultMap="TOfflineStoreResult">
+        select * from t_offline_store where id=#{id}
+    </select>
+
+    <!-- 插入 -->
+    <insert id="insert">
+        insert into t_offline_store(
+            id,
+            open_date,
+            code,
+            name,
+            nick_name,
+            addr,
+            brand,
+            status,
+            description,
+            create_by,
+            create_time,
+            update_by,
+            update_time
+        ) values (
+            #{id},
+            #{open_date},
+            #{code},
+            #{name},
+            #{nick_name},
+            #{addr},
+            #{brand},
+            #{status},
+            #{description},
+            #{create_by},
+            #{create_time},
+            #{update_by},
+            #{update_time}
+        )
+    </insert>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch">
+        insert into t_offline_store(
+           id,
+           open_date,
+           code,
+           name,
+           nick_name,
+           addr,
+           brand,
+           status,
+           description,
+           create_by,
+           create_time,
+           update_by,
+           update_time
+        ) values
+        <foreach collection ="list" item="i" separator =",">
+        (
+           #{i.id},
+           #{i.open_date},
+           #{i.code},
+           #{i.name},
+           #{i.nick_name},
+           #{i.addr},
+           #{i.brand},
+           #{i.status},
+           #{i.description},
+           #{i.create_by},
+           #{i.create_time},
+           #{i.update_by},
+           #{i.update_time}
+        )
+        </foreach>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update">
+        update t_offline_store
+        <set>
+            <if test="open_date != null">open_date=#{open_date},</if>
+            <if test="code != null and code != ''">code=#{code},</if>
+            <if test="name != null and name != ''">name=#{name},</if>
+            <if test="nick_name != null and nick_name != ''">nick_name=#{nick_name},</if>
+            <if test="addr != null and addr != ''">addr=#{addr},</if>
+            <if test="brand != null">brand=#{brand},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="description != null and description != ''">description=#{description},</if>
+            <if test="create_by != null">create_by=#{create_by},</if>
+            <if test="create_time != null">create_time=#{create_time},</if>
+            <if test="update_by != null">update_by=#{update_by},</if>
+            <if test="update_time != null">update_time=#{update_time},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!-- 按主键id删除 -->
+    <delete id="deleteById">
+        delete from t_offline_store where id=#{id}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="deleteBatch">
+        delete from t_offline_store where id in
+        <foreach collection ="list" item="item" open="(" close=")" separator =",">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

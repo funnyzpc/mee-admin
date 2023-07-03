@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <link rel="stylesheet" href="${ctxPath}/static/css/fix-table.css">
+    <title>${applicationName}-用户配置</title>
+</head>
+<body>
+<div class="row">
+    <!-- 查询表单 -->
+    <div id="data-search">
+        <h5>用户配置</h5>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form" class="form-search">
+            <input type="hidden" name="del_flag" value="1" placeholder="删除标记1.正常 0.删除">
+            <label class="form-label">登陆名称</label>
+            <input type="text" name="user_name" placeholder="登陆名称/用户名称">&nbsp;&nbsp;
+            <label class="form-label">用户昵称</label>
+            <input type="text" name="nick_name" placeholder="用户昵称">&nbsp;&nbsp;
+            <label class="form-label">用户狀態</label>&nbsp;
+            <span _dom_type="select" _field_name="status" _dict_type="sys_user_status"></span>&nbsp;&nbsp;
+            <br/>
+            <label class="form-label">&nbsp;Email</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" name="email" placeholder="Email">&nbsp;&nbsp;
+
+            <label class="form-label">手机号</label>&nbsp;&nbsp;&nbsp;
+            <input type="text" name="phone" placeholder="手机号" >&nbsp;&nbsp;
+
+            <button _func="query" type="submit" class="btn btn-primary">查询</button>
+            <span class="seprator"></span>
+            <button _func="add" type="button" class="btn btn-success">新增</button>
+            <@shiro.hasPermission name="dev">
+            <button _func="import" type="button" class="btn btn-success">导入</button>
+            </@shiro.hasPermission>
+            <@shiro.hasPermission name="sys:sys_user:export">
+            <button _func="export" type="button" class="btn btn-info">导出</button>
+            </@shiro.hasPermission>
+
+<!--       <button name="mod" class="btn btn-sm btn-info">编辑</button>-->
+<!--       <button name="del" class="btn btn-sm btn-danger">删除</button>-->
+<!--       <button name="unlock" class="btn btn-sm btn-danger">解除锁定</button>-->
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+    <!-- dialog -->
+    <div id="data-dialog"> </div>
+</div>
+</body>
+<#include "../decorator/foot.html"/>
+<script type="text/cc-template" id="template-data-list">
+    <div style="overflow-x: scroll; white-space: nowrap;">
+    <table class="table table-bordered table-condensed table-hover">
+<!--    <table class="table">-->
+<!--        <thead class="table-dark">-->
+        <thead>
+        <tr>
+            <th>用户名称</th>
+            <th>表ID/用户ID</th>
+            <th>用户昵称</th>
+            <th>性别</th>
+            <th>手机</th>
+            <th>email</th>
+            <th>部门ID</th>
+            <th>用户注册时间</th>
+            <th>最后登录时间</th>
+            <th>密码最后重置时间</th>
+            <th>状态</th>
+            <th>删除标记</th>
+            <th>创建时间</th>
+            <th>创建人</th>
+            <th>创建时间</th>
+            <th>创建人</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{user_name}}</td>
+            <td>{{id}}</td>
+            <td>{{nick_name}}</td>
+            <td>{{sys_user_gender gender}}</td>
+            <td>{{phone}}</td>
+            <td>{{email}}</td>
+            <td>{{dept_id}}</td>
+            <td>{{register_date}}</td>
+            <td>{{last_login_date}}</td>
+            <td>{{pwd_reset_time}}</td>
+            <td><a href="#" title="启用/禁用操作" func="change_status">{{sys_user_status status}}</a></td>
+            <td>{{del_flag del_flag}}</td>
+            <td>{{create_time}}</td>
+            <td>{{create_by}}</td>
+            <td>{{update_time}}</td>
+            <td>{{update_by}}</td>
+            <td>
+                <a href="#" func="update">修改</a>
+                <a href="#" func="delete">删除</a>
+                <a href="#" func="unlock">解锁</a>
+                <a href="#" func="reset_pwd">重置密码</a>
+                <a href="#" func="role_info">角色信息</a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    </div>
+<#include "../decorator/page-form.html"/>
+</script>
+
+<script type="module">
+    import {init} from "${ctxPath}/public/sys/sys_user.js"
+    init();
+</script>
+</html>

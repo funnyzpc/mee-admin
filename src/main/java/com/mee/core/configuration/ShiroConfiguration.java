@@ -49,7 +49,6 @@ public class ShiroConfiguration {
         // shiroFilterFactoryBean.setSuccessUrl("/mee/main");
         shiroFilterFactoryBean.setSuccessUrl("/mee/login");
         //错误页面，认证不通过跳转
-        //TODO shiroFilterFactoryBean.setUnauthorizedUrl("/error/403");
         shiroFilterFactoryBean.setUnauthorizedUrl("/error/404");
         //页面权限控制
         shiroFilterFactoryBean.setFilterChainDefinitionMap(ShiroFilterMapFactory.shiroFilterMap());
@@ -106,8 +105,8 @@ public class ShiroConfiguration {
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-        hashedCredentialsMatcher.setHashAlgorithmName("MD5");//采用MD5 进行加密
-        hashedCredentialsMatcher.setHashIterations(1);//加密次数
+        hashedCredentialsMatcher.setHashAlgorithmName("SHA-512");//采用MD5 进行加密
+        hashedCredentialsMatcher.setHashIterations(3);//加密次数
         return hashedCredentialsMatcher;
     }
 

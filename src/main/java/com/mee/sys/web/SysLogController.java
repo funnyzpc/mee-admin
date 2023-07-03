@@ -1,88 +1,80 @@
 package com.mee.sys.web;
 
-import com.mee.common.util.ResultBuild;
-import com.mee.common.util.excel.ExcelWriteUtil;
-import com.mee.core.dao.DBSQLDao;
+import com.mee.common.util.MeeResult;
+import com.mee.core.model.Page;
 import com.mee.sys.entity.SysLog;
+import com.mee.sys.service.impl.SysLogServiceImpl;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 /**
- * @author funnyzpc
- * @description 日志管理
- */
+*   日志管理
+*   @className  SysLogController
+*   @author     shadow
+*   @date       2023/6/18 10:38 PM
+*   @version    v1.0
+*/
 @Controller
-@RequestMapping("/sys/log")
+@RequestMapping("/sys/sys_log")
 public class SysLogController {
-    private static final Logger log = LoggerFactory.getLogger(SysLogController.class);
 
     @Autowired
-    private DBSQLDao dbSQLDao;
+    private SysLogServiceImpl sysLogService;
 
-    @RequiresPermissions("040202")
+    /**
+     * 页面
+     * @return 页面
+     */
+    @RequiresPermissions("sys:sys_log:list")
     @GetMapping
     public String index(){
-        return "sys/log";
+        return "sys/sys_log";
     }
 
-    @RequiresPermissions("040202")
-    @PostMapping
+    /**
+     * 分页查询
+     * @param log_type
+     * @param log_title
+     * @param log_date
+     * @param page_no
+     * @param page_size
+     * @return .
+     */
+    @RequiresPermissions("sys:sys_log:list")
+    @GetMapping("list")
     @ResponseBody
-    public Map<String,Object> list(String log_type,String log_title,String log_date,int pageIdx, int pageSize){
-        log.info("开始查询数据 pageIdx:{}, pageSize:{}",pageIdx,pageSize);
-        Map<String,Object> queryParam = new HashMap<String,Object>(2,1);
-        if(!StringUtils.isEmpty(log_type)){queryParam.put("log_type",log_type);}
-        if(!StringUtils.isEmpty(log_date)){queryParam.put("log_date",log_date);}
-        if(!StringUtils.isEmpty(log_title)){queryParam.put("log_title",log_title+"%");}
-        return new HashMap<String,Object>(1,1){{
-            put("data",dbSQLDao.list("com.mee.xml.SysLog.findList",queryParam,pageIdx,pageSize));
-        }};
+    public MeeResult<Page<SysLog>> list(String log_type, String log_title, String log_date, int page_no, int page_size){
+        return sysLogService.list(log_type,log_title,log_date,page_no,page_size);
     }
 
-    @RequiresPermissions("040202")
-    @PostMapping("/delete")
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
+    @RequiresPermissions("sys:sys_log:delete")
+    @DeleteMapping("delete")
     @ResponseBody
-    public Map<String,Object> delete(String id){
-        Map<String,Object> params = new HashMap<String,Object>(1,1){{
-            put("id",id);
-        }};
-        int deleteCount = dbSQLDao.delete("com.mee.xml.SysLog.delete",params);
-        if(deleteCount>0){
-            return ResultBuild.SUCCESS;
-        }
-        log.error("文件删除失败 id:{}",id);
-        return ResultBuild.fail("删除失败");
+    public MeeResult delete(@RequestParam(required = true) String id){
+        return sysLogService.delete(id);
     }
 
-    /** 导出 **/
-    public static final String[] data_field = {"log_type_desc","log_title","log_date","remote_address","log_content"};
-    public static final String[] header_field= {"日志类型","日志标题","日志时间","远程地址","日志内容"};
-    // public static final CellFmt[] field_format = {null,null,null,CellFmt.CUSTOM_02,CellFmt.CUSTOM_02,null,null,CellFmt.NUMERIC_02};
-
-    @RequiresPermissions("040202")
+    /**
+     * 导出
+     * @param response 响应对象
+     * @param page_no   页
+     * @param page_size 分页大小
+     */
+    @RequiresPermissions("sys:sys_log:export")
     @GetMapping("/export")
-    public void export(HttpServletResponse response,int pageIdx, int pageSize){
-        log.info("开始查询数据 pageIdx:{}, pageSize:{}",pageIdx,pageSize);
-        List<SysLog> dataList = dbSQLDao.list("com.mee.xml.SysLog.findList",new HashMap<String,Object>(),pageIdx,pageSize).getData();
-        dataList.parallelStream().forEach(item->{
-            item.setLog_type_desc(1==item.getLog_type()?"登录":"其它");
-        });
-        File file = ExcelWriteUtil.toXlsxByObj(dataList,header_field,data_field);
-        ResultBuild.toResponse(response,file);
+    public void export(HttpServletResponse response,
+                       @RequestParam(required = true) Integer page_no,
+                       @RequestParam(required = true) Integer page_size){
+        sysLogService.export(response,page_no,page_size);
     }
 }

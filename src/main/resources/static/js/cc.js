@@ -23,6 +23,19 @@ seajs.config({ "base": app + "/public/module/"/*, 'map': [['.js', '.js?v=1.0']]*
             }
             return options.inverse(this);
         });
+        Handlebars.registerHelper("cmp_gt",function(x1,x2,options){
+          //debugger;
+          if( !x1 ){
+            return options.inverse(this);
+          }
+    　　　　if(x1>x2){
+    　　　　　　//知足条件执行
+    　　　　　　return options.fn(this);
+    　　　　}else{
+    　　　　　　//不知足执行{{else}}部分
+    　　　　　　return options.inverse(this);
+    　　　　}
+        });
 
         Handlebars.registerHelper("helperMissing", function (name, d) {
             if (cctemplate[name])

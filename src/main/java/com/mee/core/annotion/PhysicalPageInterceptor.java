@@ -24,10 +24,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author funnyzpc
+ * @author shadow
  * @description 物理分页插件
  */
 @Intercepts({
@@ -57,10 +59,10 @@ public class PhysicalPageInterceptor implements Interceptor {
             // 获取BoundSql对象，其中记录了包含"?"占位符的SQL语句
             final BoundSql boundSql = mappedStatement.getBoundSql(parameter);
             // 获取BoundSql中记录的SQL语句
-            String sql = boundSql.getSql().replaceAll("\n","");
+            String sql = boundSql.getSql().replaceAll("\n"," ").replaceAll("  "," ");
             procPage(mappedStatement, page);
             sql = getPagingSql(sql,offset,limit);
-            log.info("sql ==> " + sql);
+            log.info("page sql=>{}", sql);
             // 重置RowBounds对象
             // args[2] = new RowBounds(RowBounds.NO_ROW_OFFSET, RowBounds.NO_ROW_LIMIT);
             // args[2] = new RowBounds(offset,limit);
@@ -70,9 +72,17 @@ public class PhysicalPageInterceptor implements Interceptor {
         return invocation.proceed();
     }
 
-
+    // 分页缓存策略(分页大于10000的只获取一次 并且去掉后续的order by字段)
+    private static ConcurrentHashMap<String,Integer> PAGE_CACHE = new ConcurrentHashMap(80,1);
     public static final String COUNT_TEMPLATE= "SELECT COUNT(1) FROM (%s) as tmp_table";
     protected void procPage(MappedStatement stmt, Page p){
+        // 获取缓存
+        if(null == p.getParams() || (p.getParams() instanceof Map && ((Map)p.getParams()).isEmpty() ) ){
+            if(null != PAGE_CACHE.get(stmt.getId())){
+                p.setTotal(PAGE_CACHE.get(stmt.getId()));
+                return;
+            }
+        }
         BoundSql bsql = stmt.getBoundSql(p.getParams());
         String countSql = String.format(COUNT_TEMPLATE,bsql.getSql());
         Object params = bsql.getParameterObject();
@@ -84,6 +94,12 @@ public class PhysicalPageInterceptor implements Interceptor {
             ResultSet rs = pstmt.executeQuery();
             rs.next();
             p.setTotal(rs.getInt(1));
+            // 设置缓存
+            if(null == p.getParams() || (p.getParams() instanceof Map && ((Map)p.getParams()).isEmpty() ) ) {
+                if(rs.getInt(1)>10000){
+                    PAGE_CACHE.put(stmt.getId(),rs.getInt(1));
+                }
+            }
         }catch (Exception e){
             log.error("获取分页异常了 page:{}",p,e);
         }

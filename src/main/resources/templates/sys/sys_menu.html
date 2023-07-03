@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <title>${applicationName}-菜单管理</title>
+    <style>
+        /* table x轴滑动 */
+        .table {
+          overflow-x: scroll;
+        }
+        /* 最后一列固定 */
+        td:last-child, th:last-child {
+          position:sticky;
+          right:0; /* 首行在右 */
+          // z-index:1;
+          //background-color:#f1f1f1;
+          background-color:inherit;
+        }
+        /* 表头颜色置为黑色 */
+        .table thead tr th{
+            background-color:black;
+            color:white;
+        }
+        /* 鼠标驻留行变换行样式 */
+        table tbody tr:hover,table tbody tr:nth-child(even):hover{
+          background-color:rgb(207, 255, 207);
+        }
+    </style>
+</head>
+<body>
+<div class="row">
+    <!-- 查询表单 -->
+    <div id="data-search">
+        <h5>菜单配置</h5>
+        <form method="GET" id="search-form" class="form-inline form-search">
+            <label class="form-label">名称</label>&nbsp;&nbsp;
+            <input type="text" name="title" placeholder="菜单或目录标题">&nbsp;&nbsp;
+
+            <!--
+            <label class="form-label">菜单类型</label>
+            <span _dom_type="radio" _field_name="type" _dict_type="sys_menu_type"></span>&nbsp;&nbsp;
+
+            <label class="form-label">是否显示</label>
+            <span _dom_type="checkbox" _field_name="show" _dict_type="sys_menu_show"></span>&nbsp;&nbsp;
+
+            <label class="form-label">打开目标</label>
+            <span _dom_type="select" _field_name="target" _dict_type="sys_menu_target"></span>&nbsp;&nbsp;
+            -->
+
+            <button _func="query" type="submit" class="btn btn-sm btn-primary">查询</button>
+            <button type="reset"  class="btn btn-sm btn-default">重置</button>
+            &nbsp;&nbsp;
+            <@shiro.hasPermission name="sys:sys_menu:add">
+            <button _func="add" type="button" class="btn btn-sm btn-success">新增</button>
+            </@shiro.hasPermission>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+    <!-- dialog -->
+    <div id="data-dialog"></div>
+</div>
+</body>
+<!-- 底部静态 -->
+<#include "../decorator/foot.html"/>
+<script type="text/cc-template" id="template-data-list">
+    <div style="overflow-x: scroll; white-space: nowrap;">
+    <table class="table table-bordered table-condensed" >
+        <thead class="table-dark">
+<!--        <tr style="color:white !important;background-color:black;">-->
+        <tr>
+            <th>菜单名称</th>
+            <th>菜单类型</th>
+<!--            <th>菜单图标</th>-->
+            <th title="路径不含context-path">路径</th>
+            <th>目标</th>
+            <th>权限标识</th>
+            <th>子级个数</th>
+            <th>是否显示</th>
+            <th>排序</th>
+            <th>更新时间</th>
+            <th>更新人</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+        {{#each this}}
+        <tr data-id="{{id}}" data-pid="{{pid}}" data-level="{{level}}" class="menu-type-{{type}}" style="display:{{#equal level 0}}{{else}}none{{/equal}};" >
+            <td style="padding-left:{{level_locking}}px;">
+                {{#cmp_gt sub_count 0}}
+<!--                <input type="checkbox" name="data_id" selected-value="{{id}}" value="{{id}}" />&nbsp;&nbsp;-->
+                <a href="#" func="switch_dom" field-open="0" data-id="{{id}}">▶</a>
+                {{else}}&nbsp;&nbsp;&nbsp;
+                {{/cmp_gt}}
+                {{id}}-{{title}}
+            </td>
+            <td>
+                <!--
+                {{#equal type 1}}<span style="color:blue;">目录</span>{{/equal}}
+                {{#equal type 2}}<span style="color:green;">菜单</span>{{/equal}}
+                {{#equal type 3}}<span style="color:;">按钮</span>{{/equal}}
+                -->
+                {{sys_menu_type type}}
+            </td>
+<!--            <td>{{icon}}</td>-->
+            <td>{{path}}</td>
+            <td title="{{target}}"> {{sys_menu_target target}} </td>
+            <td>{{permission}}</td>
+            <td>{{sub_count}}</td>
+            <td>{{sys_menu_show show}}</td>
+            <td>{{sort}}</td>
+
+            <td title="创建时间:{{create_time}}">{{update_time}}</td>
+            <td title="创建人:{{create_by}}">{{update_by}}</td>
+            <td>
+                <@shiro.hasPermission name="sys:sys_menu:update">
+                <a href="#" func="update">修改</a>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="sys:sys_menu:delete">
+                <a href="#" func="delete">删除</a>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="sys:sys_menu:add">
+                <a href="#" func="add_line">添加子级</a>
+                </@shiro.hasPermission>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    </div>
+</script>
+<!-- 模块化函数 -->
+<script type="module">
+    import {init} from "${ctxPath}/public/sys/sys_menu.js"
+    // 执行初始化方法
+    init();
+</script>
+
+<style>
+    .menu-type-1{background-color:#cacaca;font-weight:bold;}
+    .menu-type-2{background-color:#eaeaea;font-weight:bold;}
+    .menu-type-3{background-color:white;}
+</style>
+</html>

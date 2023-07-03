@@ -79,6 +79,7 @@ public class ShiroUtils {
      * @author shadow
      * @Date 2019年11月21日 上午9:59:52
      */
+    @Deprecated
     public static void setUser(SysUser user){
         Subject subject = getSubjct();
         PrincipalCollection principalCollection = subject.getPrincipals();

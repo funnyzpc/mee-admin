@@ -1,5 +1,0 @@
-
-
-<script>
-alert("success");
-</script>

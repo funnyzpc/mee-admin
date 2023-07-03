@@ -1,0 +1,97 @@
+\<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+<!--  <link rel="stylesheet" href="${ctxPath}/static/css/bolt.v0.5.0.css">-->
+  <link rel="stylesheet" href="/mee/static/css/bootstrap.v5.3.0.css">
+  <title>${applicationName}-字典管理</title>
+</head>
+<body>
+<div class="row">
+  <div class="col-md-6">
+    <!-- 查询表单 -->
+    <div id="data-search">
+      <h3>字典项</h3>
+      <!-- 业务内容 -->
+      <form method="post" id="search-form" class="form-inline form-search">
+        <label class="col-sm-3">字典名称</label>
+        <input type="text" name="name" placeholder="字典名称" class="col-sm-8" readonly="readonly">
+        <input type="text" name="name" placeholder="字典名称" class="col-sm-8" disabled="disabled">
+        <label class="col-sm-3">字典描述</label>
+        <input type="text" name="description" placeholder="字典描述" class="col-sm-8">
+
+        <button type="submit" name="query" class="btn btn-sm btn-primary">btn-primary</button>
+        <button type="button" name="add" class="btn btn-sm btn-success">btn-success</button>
+        <button type="button" name="add" class="btn btn-sm btn-info">btn-info</button>
+        <button type="button" name="add" class="btn btn-sm btn-secondary">btn-secondary</button>
+        <button type="button" name="add" class="btn btn-sm btn-warning">btn-warning</button>
+        <button type="button" name="add" class="btn btn-sm btn-danger">btn-danger</button>
+        <button type="button" name="add" class="btn btn-sm btn-light">btn-light</button>
+        <button type="button" name="add" class="btn btn-sm btn-dark">btn-dark</button>
+      </form>
+    </div>
+    <!-- table -->
+    <div id="data-list">
+      <table class="table table-striped table-bordered table-condensed">
+        <thead class="table-dark">
+        <tr>
+          <!--            <th>标签ID</th>-->
+          <th>标签</th>
+          <th>值</th>
+          <th>排序</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+
+          <td title="id:{{id}}&#10;创建人:{{create_by}}&#10;更新人:{{update_by}}&#10;创建时间:{{create_time}}&#10;更新时间:{{update_time}} {{label}}">
+          </td>
+          <td>{{value}}</td>
+          <td>{{dict_sort}}</td>
+          <td>
+            <a href="#" func="update">修改</a>
+            <a href="#" func="delete">删除</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- dialog -->
+    <div id="data-dialog"> </div>
+  </div>
+
+  <!-- 明细 -->
+  <div class="col-md-5">
+    <!-- 查询表单 -->
+    <div id="data-search2">
+      <h3 style="background-image:linear-gradient(to right,#10ff10, #8fff8f,#fefffe);">
+        字典明细(请点击左侧列表字典项)
+      </h3>
+      <!-- 业务内容 -->
+      <form method="post" class="form-inline form-search row">
+        <div class="col-sm-8">
+          <label>字典标签</label>
+          <input type="text" name="label" placeholder="标签名称" class="col-sm-8">&nbsp;&nbsp;
+        </div>
+
+        <div class="col-sm-3">
+          <button type="submit" name="query" class="btn btn-sm btn-primary">查询</button>
+          <button type="button" name="add" class="btn btn-sm btn-success">增加</button>
+        </div>
+      </form>
+    </div>
+    <!-- table -->
+    <div id="data-list2"></div>
+    <!-- dialog -->
+    <div id="data-dialog2"> </div>
+  </div>
+</div>
+</body>
+
+
+<!-- 模块化函数 -->
+</html>
