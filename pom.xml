@@ -12,7 +12,7 @@
     <groupId>com.mee.admin</groupId>
     <artifactId>mee-admin</artifactId>
     <version>1.0.1</version>
-    <name>mee_admin</name>
+    <name>mee-admin</name>
     <packaging>jar</packaging>
     <description>分離工程後端</description>
 
