@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <#include "../decorator/head_new.html"/>
+    <#include "../decorator/head.html"/>
     <link rel="stylesheet" href="${ctxPath}/static/css/bolt.css">
     <title>${applicationName}-用户配置</title>
 </head>
@@ -18,9 +18,9 @@
     <div id="data-list"></div>
 </div>
 </body>
-<#include "../decorator/foot_new.html"/>
+<#include "../decorator/foot.html"/>
 <script type="text/cc-template" id="template-data-list">
-        <div><p style="font-size: 18pt;padding-left:8px;background-color: #ddd;">用户中心</p></div>
+        <div><p style="font-size: 18pt;padding-left:8px;background-color: #ddd;margin-bottom:0px;">用户中心</p></div>
         <div class="u_switch">
             <ul>
                 <li><a href="#" onclick="to_content(0)" style="color:white;background-color:black;display:block;">基本信息</a></li>
@@ -97,6 +97,7 @@
 }
 .u_switch ul{
     padding:0px 2px;
+    margin:0px auto;
 }
 .u_switch ul li a{ padding: 4px 8px;}
 .u_content{
