@@ -1,31 +1,34 @@
 
 ## 开源后台管理系统(MEE-ADMIN)
- 这是一套由本人构建的后台系统，从0开始都是我自己写的，其中v1.5是从2022年12月份开始一直开发现在(2023年7月3日)，这个项目耗费了我太多心血❤,如果您看到了觉得还行请点赞
-如果能[FORK🎈](https://github.com//funnyzpc/mee/fork)那可太感谢了~😉
+ 这是一套由本人写到的后台系统，从0开始，其中v1.5是从2022年12月份开始一直开发现在(2023年7月3日)，这个项目耗费了我太多心血❤,如果您看到了觉得还行请[点赞](https://github.com/funnyzpc/mee-admin)
+如果能[FORK🎈](https://github.com/funnyzpc/mee-admin/fork)那可太感谢了~😉
 
-### 相较于1.0
-+ 几乎重构了所有前端页面
-+ 前端合理化布局及添加了复杂交互
-+ 后端接口拆分及细致化权限管理
-+ 移除了jQuery以及所有与jQuery相关的扩展插件
-+ 添加了个人中心
-+ 优化了字典配置及前端字段配置相关
-+ 简化了表单验证
-+ 添加了代码生成，简化开发难度（后续会提供）
-+ 修复了分页bug
-+ 等等...
+### v1.5相较于v1.0
++ 🍊几乎重构了所有前端页面
++ 🍎前端合理化布局及添加了复杂交互
++ 💃后端接口拆分及细致化权限管理
++ 🧍‍移除了jQuery以及所有与jQuery相关的扩展插件
++ 🎈添加了个人中心
++ 🍌优化了字典配置及前端字段配置相关
++ 😼简化了表单验证
++ 😁添加了代码生成，简化开发难度（后续会提供）
++ 🔪修复了分页bug
++ 🌷等等...
 
 ### 代码生成
 本项目配合`mee_generator`可大幅提高开发效率，从前端到后端可全部使用`mee_generator`生成，你可能需要做的只是测试（菜单也需要手动配置）而已~
 _`mee_generator`_会在后续几天推出~
 
 
-#### UI
->![...](./overview/1.png)
->![...](./overview/2.png)
->![...](./overview/3.png)
->![...](./overview/4.png)
->![...](./overview/5.png)
+### UI预览
+>![...](./view/1.jpg)
+>![...](./view/2.jpg)
+>![...](./view/3.jpg)
+>![...](./view/4.jpg)
+>![...](./view/5.jpg)
+>![...](./view/6.jpg)
+>![...](./view/7.jpg)
+>![...](./view/8.jpg)
 
 #### 主要技术栈
 + SpringBoot 2.6
@@ -36,14 +39,19 @@ _`mee_generator`_会在后续几天推出~
 + ShedLock
 + 等等...
 
-#### quick start
-+ Fork [MEE](https://github.com//funnyzpc/mee/fork) to your repository
-+ git clone  `your fork project address `
-+ add this to your idea _Program arguments_ `--spring.profiles.active=dev`
-+ add this to your idea _VM options_ `-Djasypt.encryptor.password="0989GoEncc}{||>.<||}0101"`
-+ startup in `MeeApplication`
-
-#### packaging
+### 快速开始（quick start）
++ 准备IDE(推荐IDEA community)、jdk17、mysql或postgresql
++ 导入sql文件：
+  - [mysql_init.sql](docs%2Fmysql_init.sql)为mysql数据表，schema为mee_admin
+  - [pg_init.sql](docs%2Fpg_init.sql)为postgresql数据表,schema为mee_admin,先建库再建schema(不要使用public schema)
++ Fork 项目[MEE-ADMIN](https://github.com/funnyzpc/mee-admin/fork) 到自己的账号下
++ clone项目到本地
++ IDE文件调整为UTF-8 : setting->File encoding(文件编码)
++ 启动 [MeeAdminApplication.java](src%2Fmain%2Fjava%2Fcom%2Fmee%2FMeeAdminApplication.java)
+  - IDE指定配置环境 `--spring.profiles.active=dev`
+  - 添加加密参数(非必须) `-Djasypt.encryptor.password="0989Gn8hcc}{||>.<||}0101"`
++
+### 打包（packaging）
 + development environment
     - `mvn clean -Dmaven.test.skip=true package -Pdev`
     
@@ -53,16 +61,20 @@ _`mee_generator`_会在后续几天推出~
 + product environment
     - `mvn clean -Dmaven.test.skip=true package -Pprod`
 
-#### deploy script
->>> local(windows) deploy
-+ ` java -jar mee.jar --server.port=8001 `
+### 部署脚本（deploy script）
++ 本地命令行启动jar
+  ```
+  java -jar mee-admin.jar --server.port=8001 
+  ```
 
->>> test deploy
-+ `echo 正在启动mee模块.....`
-+ `ps -ef|grep mee.jar|grep java|awk '{print $2}'|xargs kill -9`
-+ `cd /mnt/app/8001-mee && nohup /usr/local/java/jdk1.8.0_261/bin/java -jar /mnt/app/8001-mee/mee.jar --server.port=8001 --spring.profiles.active=test  1>/mnt/app/8001-mee/logs/mee_ALL.log 2>/mnt/app/8001-mee/logs/mee_ALL.log &`
++ 测试部署test deploy
+  ```echo 正在启动mee-admin.....
+  ps -ef|grep mee.jar|grep java|awk '{print $2}'|xargs kill -9
+  cd /mnt/app/8001-mee-admin && nohup /usr/local/java/jdk1.8.0_261/bin/java -jar /mnt/app/8001-mee/mee-admin.jar --server.port=8001 --spring.profiles.active=test  1>/mnt/app/8001-mee-admin/logs/mee-admin_ALL.log 2>/mnt/app/8001-mee-admin/logs/mee_ALL.log &
+  ```
 
->>> prod deploy
-+ `echo 正在启动mee模块.....`
-+ `ps -ef|grep mee.jar|grep java|awk '{print $2}'|xargs kill -9`
-+ `cd /mnt/app/8001-mee && nohup /usr/local/java/jdk1.8.0_261/bin/java -jar /mnt/app/8001-mee/mee.jar --server.port=8001 --spring.profiles.active=test  1>/mnt/app/8001-mee/logs/mee_ALL.log 2>/mnt/app/8001-mee/logs/mee_ALL.log &`
++ 生产部署prod deploy
+  ```echo 正在启动mee-admin.....
+  ps -ef|grep mee-admin.jar|grep java|awk '{print $2}'|xargs kill -9
+  cd /mnt/app/8001-mee-admin && nohup /usr/local/java/jdk1.8.0_261/bin/java -jar /mnt/app/8001-mee-admin/mee-admin.jar --server.port=8001 --spring.profiles.active=prod  1>/mnt/app/8001-mee-admin/logs/mee-admin_ALL.log 2>/mnt/app/8001-mee-admin/logs/mee-admin_ALL.log &
+  ```
