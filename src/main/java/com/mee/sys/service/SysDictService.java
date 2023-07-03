@@ -1,10 +1,7 @@
 package com.mee.sys.service;
 
-import java.util.Map;
+import com.mee.common.util.MeeResult;
 import com.mee.sys.entity.SysDict;
-
-import java.lang.String;
-import java.lang.Integer;
 
 
 /**
@@ -14,14 +11,14 @@ import java.lang.Integer;
  * @version v1.0
  * @date    2023-05-15 10:27:36
  */
-public interface SysDict2Service{
+public interface SysDictService {
     /**
      * 查询数据字典列表
      *
      * @param SysDict2(or Map) 数据字典
      * @return 数据字典分页集合
      */
-    Map list(Integer page_no,Integer page_size ,String name,String description);
+    MeeResult list(Integer page_no,Integer page_size ,String name,String description);
 
     /**
      * 按主键查询数据字典
@@ -29,7 +26,7 @@ public interface SysDict2Service{
      * @param 数据字典主键
      * @return 数据字典
      */
-    Map findById(String id);
+    MeeResult findById(String id);
 
     /**
      * 新增数据字典
@@ -37,14 +34,14 @@ public interface SysDict2Service{
      * @param SysDict2(or Map) 数据字典
      * @return 插入条数
      */
-    Map add(SysDict sysDict2);
+    MeeResult add(SysDict sysDict2);
     /**
      * 修改数据字典
      *
      * @param SysDict2(or Map) 数据字典
      * @return 更新条数
      */
-    Map edit(SysDict sysDict2);
+    MeeResult edit(SysDict sysDict2);
 
     /**
      * 删除数据字典
@@ -52,7 +49,7 @@ public interface SysDict2Service{
      * @id 数据字典 主键
      * @return 删除条数
      */
-    Map deleteById(String id);
+    MeeResult deleteById(String id);
 
     /**
      * 批量删除数据字典
@@ -60,6 +57,6 @@ public interface SysDict2Service{
      * @ids 数据字典 主键集合
      * @return 删除条数
      */
-    Map deleteBatch(String[] ids);
+    MeeResult deleteBatch(String[] ids);
 
 }

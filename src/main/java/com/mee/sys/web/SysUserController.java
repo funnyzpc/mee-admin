@@ -5,7 +5,7 @@ import com.mee.common.service.impl.ShiroAccountLockedServiceImpl;
 import com.mee.common.util.MeeResult;
 import com.mee.common.util.ResultBuild;
 import com.mee.core.model.Page;
-import com.mee.sys.dto.SysUser2DTO;
+import com.mee.sys.dto.SysUserDTO;
 import com.mee.sys.entity.SysRole;
 import com.mee.sys.entity.SysUser;
 import com.mee.sys.service.impl.SysUserServiceImpl;
@@ -72,7 +72,7 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:list")
     @GetMapping("/id")
     @ResponseBody
-    public MeeResult<SysUser> findById(String id){
+    public MeeResult<SysUser> findById(@RequestParam(required = true) String id){
         return sysUserService.findById( id );
     }
 
@@ -82,7 +82,7 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult add(@RequestBody SysUser2DTO sysUser2DTO){
+    public MeeResult add(@RequestBody(required = true) SysUserDTO sysUser2DTO){
         return sysUserService.add( sysUser2DTO );
     }
 
@@ -92,8 +92,8 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult update(@RequestBody SysUser sysUser2 ){
-        return sysUserService.update( sysUser2 );
+    public MeeResult update(@RequestBody(required = true) SysUser sysUser ){
+        return sysUserService.update( sysUser );
     }
 
     /**
@@ -102,7 +102,7 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(String id){
+    public MeeResult deleteById(@RequestParam(required = true) String id){
         return sysUserService.deleteById(id);
     }
 
@@ -121,7 +121,7 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:change_status")
     @PutMapping("/change_status")
     @ResponseBody
-    public MeeResult changeStatus(@RequestBody SysUser user){
+    public MeeResult changeStatus(@RequestBody(required = true) SysUser user){
         return sysUserService.changeStatus(user);
     }
 
@@ -129,7 +129,7 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:unlock")
     @PutMapping("/unlock")
     @ResponseBody
-    public MeeResult unlock(@RequestParam("user_name") String user_name){
+    public MeeResult unlock(@RequestParam(value = "user_name",required = true) String user_name){
         shiroAccountLockedService.clearCounter(user_name);
         return ResultBuild.SUCCESS();
     }
@@ -138,7 +138,8 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:reset_pwd")
     @PutMapping("reset_pwd")
     @ResponseBody
-    public MeeResult<Integer> resetPwd(@RequestParam("id") String id,@RequestParam("pwd") String pwd){
+    public MeeResult<Integer> resetPwd(@RequestParam(value = "id",required = true) String id,
+                                       @RequestParam(value = "pwd",required = true) String pwd){
         return sysUserService.resetPwd(id,pwd);
     }
 

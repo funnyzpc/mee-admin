@@ -39,14 +39,14 @@ public class SysFileServiceImpl {
     @Autowired
     private DBSQLDao dbSQLDao;
 
-    public MeeResult list(String original_name, String name, String dts, String dte, int pageIdx, int pageSize){
+    public MeeResult<Page<SysFile>> list(String original_name, String name, String dts, String dte, int pageIdx, int pageSize){
         LOG.info("开始查询数据 pageIdx:{}, pageSize:{}",pageIdx,pageSize);
         Map<String,Object> queryParams = new HashMap<String,Object>(3,1);
         if(!StringUtils.isEmpty(original_name)){queryParams.put("original_name",original_name+"%");}
         if(!StringUtils.isEmpty(name)){queryParams.put("name",name+"%");}
         if(!StringUtils.isEmpty(dts)){queryParams.put("dts", LocalDateTime.parse(dts, DateUtil.FORMAT_DAY_TIME));}
         if(!StringUtils.isEmpty(dte)){queryParams.put("dte",LocalDateTime.parse(dte, DateUtil.FORMAT_DAY_TIME));}
-        Page list = dbSQLDao.list("com.mee.xml.SysFile.findList", queryParams, pageIdx, pageSize);
+        Page<SysFile> list = dbSQLDao.list("com.mee.xml.SysFile.findList", queryParams, pageIdx, pageSize);
         return ResultBuild.build(list);
     }
 

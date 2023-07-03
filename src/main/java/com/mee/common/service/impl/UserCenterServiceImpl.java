@@ -7,7 +7,7 @@ import com.mee.common.util.MeeResult;
 import com.mee.common.util.ResultBuild;
 import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
-import com.mee.sys.dto.SysUser2DTO;
+import com.mee.sys.dto.SysUserDTO;
 import com.mee.sys.entity.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Sha512Hash;
@@ -80,7 +80,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         return ResultBuild.build(update_count);
     }
 
-    public MeeResult updateUserPwd(SysUser2DTO sysUser2DTO) {
+    public MeeResult updateUserPwd(SysUserDTO sysUser2DTO) {
         // 验证并解密
         if( null==sysUser2DTO.getOld_pwd() || null==sysUser2DTO.getPwd1() || null==sysUser2DTO.getPwd2() ){
             return ResultBuild.fail("必要参数为空[原密码，新密码，确认密码]");

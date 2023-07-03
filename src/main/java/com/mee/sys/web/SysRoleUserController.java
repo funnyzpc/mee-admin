@@ -2,7 +2,7 @@ package com.mee.sys.web;
 
 import com.mee.common.util.MeeResult;
 import com.mee.core.model.Page;
-import com.mee.sys.dto.SysRoleUser2DTO;
+import com.mee.sys.dto.SysRoleUserDTO;
 import com.mee.sys.entity.SysRoleUser;
 import com.mee.sys.entity.SysUser;
 import com.mee.sys.service.impl.SysRoleUserServiceImpl;
@@ -85,7 +85,7 @@ public class SysRoleUserController {
     @RequiresPermissions("sys:sys_role_user:list")
     @GetMapping("/id")
     @ResponseBody
-    public MeeResult<SysRoleUser> findById(String id){
+    public MeeResult<SysRoleUser> findById(@RequestParam(required = true) String id){
         return sysRoleUserService.findById( id );
     }
 
@@ -95,7 +95,7 @@ public class SysRoleUserController {
     @RequiresPermissions("sys:sys_role_user:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult add(@RequestBody(required = true) SysRoleUser2DTO sysRoleUser2DTO){
+    public MeeResult add(@RequestBody(required = true) SysRoleUserDTO sysRoleUser2DTO){
         return sysRoleUserService.add( sysRoleUser2DTO );
     }
 
@@ -115,7 +115,7 @@ public class SysRoleUserController {
     @RequiresPermissions("sys:sys_role_user:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(String id){
+    public MeeResult deleteById(@RequestParam(required = true) String id){
         return sysRoleUserService.deleteById(id);
     }
 

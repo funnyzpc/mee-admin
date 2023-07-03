@@ -24,7 +24,7 @@ public class SysDictDetailController {
     * 业务处理类
     */
     @Autowired
-    private SysDictDetailServiceImpl sysDictDetail2Service;
+    private SysDictDetailServiceImpl sysDictDetailService;
 
     /**
      * 查询 数据字典详情 列表
@@ -37,7 +37,7 @@ public class SysDictDetailController {
             @RequestParam(defaultValue="10")Integer page_size,
             String dict_id, String label, String value
     ){
-        return sysDictDetail2Service.list(page_no,page_size,dict_id,label,value);
+        return sysDictDetailService.list(page_no,page_size,dict_id,label,value);
     }
 
     /**
@@ -46,8 +46,8 @@ public class SysDictDetailController {
     @RequiresPermissions("sys:sys_dict:list")
     @GetMapping("/id")
     @ResponseBody
-    public MeeResult<SysDictDetail> findById(String id){
-        return sysDictDetail2Service.findById( id );
+    public MeeResult<SysDictDetail> findById(@RequestParam(required = true) String id){
+        return sysDictDetailService.findById( id );
     }
 
     /**
@@ -56,8 +56,8 @@ public class SysDictDetailController {
     @RequiresPermissions("sys:sys_dict:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult add(@RequestBody SysDictDetail sysDictDetail2){
-        return sysDictDetail2Service.add( sysDictDetail2 );
+    public MeeResult add(@RequestBody(required = true) SysDictDetail sysDictDetail){
+        return sysDictDetailService.add( sysDictDetail );
     }
 
     /**
@@ -66,8 +66,8 @@ public class SysDictDetailController {
     @RequiresPermissions("sys:sys_dict:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult update(@RequestBody SysDictDetail sysDictDetail2 ){
-        return sysDictDetail2Service.update( sysDictDetail2 );
+    public MeeResult update(@RequestBody(required = true) SysDictDetail sysDictDetail ){
+        return sysDictDetailService.update( sysDictDetail );
     }
 
     /**
@@ -76,8 +76,8 @@ public class SysDictDetailController {
     @RequiresPermissions("sys:sys_dict:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(String id){
-        return sysDictDetail2Service.deleteById(id);
+    public MeeResult deleteById(@RequestParam(required = true) String id){
+        return sysDictDetailService.deleteById(id);
     }
 
     /**
@@ -87,7 +87,7 @@ public class SysDictDetailController {
     @DeleteMapping("/deleteBatch")
     @ResponseBody
     public MeeResult<Integer> deleteBatch(String[] ids){
-        return sysDictDetail2Service.deleteBatch(ids);
+        return sysDictDetailService.deleteBatch(ids);
     }
 
 }

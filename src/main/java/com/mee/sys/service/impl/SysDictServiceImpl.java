@@ -1,10 +1,9 @@
 package com.mee.sys.service.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.mee.common.service.SeqGenServiceImpl;
 import com.mee.common.util.DateUtil;
 import com.mee.common.util.MeeResult;
+import com.mee.common.util.ResultBuild;
 import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.core.model.Page;
@@ -13,12 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.mee.common.service.SeqGenServiceImpl;
-import com.mee.common.util.ResultBuild;
 
-import java.lang.String;
-import java.lang.Integer;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 数据字典(SysDict2) 业务接口
@@ -55,13 +52,13 @@ public class SysDictServiceImpl {
      * @param description .
      * @return .
      */
-    public MeeResult list(Integer page_no, Integer page_size , String name, String description){
+    public MeeResult<Page<SysDict>> list(Integer page_no, Integer page_size , String name, String description){
       LOG.info("接收到参数 {},{}, {},{},",page_no,page_size,name,description);
       Map<String,Object> param = new HashMap<String,Object>(9,1);
       param.put("name",null==name||"".equals(name)?null:"%"+name+"%" );
       param.put("description",(null==description||"".equals(description))?null:"%"+description+"%" );
       //Page list = dbSQLDao.list("com.mee.module.sys.mapper.sys_dict2.findList",param,page_no,page_size);
-      Page list = dbSQLDao.list("com.mee.xml.SysDict.findList",param,page_no,page_size);
+      Page<SysDict> list = dbSQLDao.list("com.mee.xml.SysDict.findList",param,page_no,page_size);
       return ResultBuild.build(list);
     }
 
@@ -70,7 +67,7 @@ public class SysDictServiceImpl {
      * @param id .
      * @return .
      */
-    public MeeResult findById(String id){
+    public MeeResult<SysDict> findById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
         LOG.error("必要参数为空:{}",id);
@@ -78,31 +75,31 @@ public class SysDictServiceImpl {
       }
       Map<String,Object> param = new HashMap<String,Object>(2,1);
       param.put("id",id);
-      SysDict sysDict2 = dbSQLDao.findOne("com.mee.xml.SysDict.findById", param);
-      return ResultBuild.build(sysDict2);
+      SysDict sysDict = dbSQLDao.findOne("com.mee.xml.SysDict.findById", param);
+      return ResultBuild.build(sysDict);
     }
 
     /**
      * 数据字典::新增
      *
-     * @param SysDict2(or Map) 数据字典
+     * @param sysDict 数据字典
      * @return 插入条数
     */
-    public MeeResult add(SysDict sysDict2){
-      LOG.info("接收到参数 {}", sysDict2);
-      if(null == sysDict2 || null==sysDict2.getName() || null==sysDict2.getDescription() ){
+    public MeeResult<Integer> add(SysDict sysDict){
+      LOG.info("接收到参数 {}", sysDict);
+      if(null == sysDict || null==sysDict.getName() || null==sysDict.getDescription() ){
           return ResultBuild.fail("参数缺失请检查~");
       }
       final LocalDateTime now = DateUtil.now();
       final String user_id = ShiroUtils.getUserId();
       // 主键
-      sysDict2.setId(seqGenService.genShortPrimaryKey());
+      sysDict.setId(seqGenService.genShortPrimaryKey());
       // 通用字段
-      sysDict2.setCreate_by(Long.parseLong(user_id));
-      sysDict2.setUpdate_by(Long.parseLong(user_id));
-      sysDict2.setCreate_time(now);
-      sysDict2.setUpdate_time(now);
-      int insert_count = dbSQLDao.insert("com.mee.xml.SysDict.insert",sysDict2);
+      sysDict.setCreate_by(Long.parseLong(user_id));
+      sysDict.setUpdate_by(Long.parseLong(user_id));
+      sysDict.setCreate_time(now);
+      sysDict.setUpdate_time(now);
+      int insert_count = dbSQLDao.insert("com.mee.xml.SysDict.insert",sysDict);
       return ResultBuild.build(insert_count);
     }
 

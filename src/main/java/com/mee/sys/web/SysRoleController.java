@@ -56,7 +56,7 @@ public class SysRoleController {
     @RequiresPermissions("sys:sys_role:list")
     @GetMapping("/id")
     @ResponseBody
-    public MeeResult<SysRole> findById(String id){
+    public MeeResult<SysRole> findById(@RequestParam(required = true) String id){
         return sysRoleService.findById( id );
     }
 
@@ -66,8 +66,8 @@ public class SysRoleController {
     @RequiresPermissions("sys:sys_role:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult add(@RequestBody SysRole sysRole2){
-        return sysRoleService.add( sysRole2 );
+    public MeeResult add(@RequestBody(required = true) SysRole sysRole){
+        return sysRoleService.add( sysRole );
     }
 
     /**
@@ -76,8 +76,8 @@ public class SysRoleController {
     @RequiresPermissions("sys:sys_role:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult update(@RequestBody SysRole sysRole2 ){
-        return sysRoleService.update( sysRole2 );
+    public MeeResult update(@RequestBody(required = true) SysRole sysRole ){
+        return sysRoleService.update( sysRole );
     }
 
     /**
@@ -86,7 +86,7 @@ public class SysRoleController {
     @RequiresPermissions("sys:sys_role:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(String id){
+    public MeeResult deleteById(@RequestParam(required = true) String id){
         return sysRoleService.deleteById(id);
     }
 

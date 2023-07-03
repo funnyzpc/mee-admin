@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @className SysUser2DTO
  * @date 2023/5/31 10:04 PM
  */
-public class SysUser2DTO extends SysUser implements Serializable {
+public class SysUserDTO extends SysUser implements Serializable {
 
 
     /**

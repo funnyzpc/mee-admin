@@ -60,7 +60,7 @@ public class SysLogController {
     @RequiresPermissions("sys:sys_log:delete")
     @DeleteMapping("delete")
     @ResponseBody
-    public MeeResult delete(String id){
+    public MeeResult delete(@RequestParam(required = true) String id){
         return sysLogService.delete(id);
     }
 

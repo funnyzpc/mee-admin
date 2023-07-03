@@ -34,13 +34,13 @@ public class SysLogServiceImpl {
     @Autowired
     private DBSQLDao dbSQLDao;
 
-    public MeeResult list(String log_type, String log_title, String log_date, int pageIdx, int pageSize){
+    public MeeResult<Page<SysLog>> list(String log_type, String log_title, String log_date, int pageIdx, int pageSize){
         LOG.info("开始查询数据 pageIdx:{}, pageSize:{}",pageIdx,pageSize);
         Map<String,Object> queryParam = new HashMap<String,Object>(2,1);
         if(!StringUtils.isEmpty(log_type)){queryParam.put("log_type",log_type);}
         if(!StringUtils.isEmpty(log_date)){queryParam.put("log_date",log_date);}
         if(!StringUtils.isEmpty(log_title)){queryParam.put("log_title",log_title+"%");}
-        Page list = dbSQLDao.list("com.mee.xml.SysLog.findList", queryParam, pageIdx, pageSize);
+        Page<SysLog> list = dbSQLDao.list("com.mee.xml.SysLog.findList", queryParam, pageIdx, pageSize);
         return ResultBuild.build(list);
     }
 

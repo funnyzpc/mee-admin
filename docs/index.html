@@ -576,7 +576,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_导入店铺信息">7.9. 导入店铺信息</a></li>
 </ul>
 </li>
-<li><a href="#_数据字典web接口sysdictcontroller">8. 数据字典web接口(SysDictController)</a>
+<li><a href="#_数据字典web接口sysdict2controller">8. 数据字典web接口(SysDict2Controller)</a>
 <ul class="sectlevel3">
 <li><a href="#_页面_4">8.1. 页面</a></li>
 <li><a href="#_查询_数据字典_列表">8.2. 查询 数据字典 列表</a></li>
@@ -618,7 +618,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_系统新菜单表详细信息">12.3. 系统::新菜单表::详细信息</a></li>
 <li><a href="#_系统新菜单表新增">12.4. 系统::新菜单表::新增</a></li>
 <li><a href="#_系统新菜单表修改">12.5. 系统::新菜单表::修改</a></li>
-<li><a href="#_系统新菜单表删除_todo">12.6. 系统::新菜单表::删除 TODO &#8230;&#8203;</a></li>
+<li><a href="#_系统新菜单表删除">12.6. 系统::新菜单表::删除</a></li>
 </ul>
 </li>
 <li><a href="#_系统角色表web接口sysrole2controller">13. 系统::角色表web接口(SysRole2Controller)</a>
@@ -707,8 +707,8 @@ table.CodeRay td.code>pre{padding:0}
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">v2023-07-03 14:46:30</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2023-07-03 14:46:30</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">v2023-07-03 15:43:14</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2023-07-03 15:43:14</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">auto</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">@zoupengcheng</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Created by smart-doc</p></td>
@@ -768,7 +768,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /common/dict?names=buwdz9&amp;names=buwdz9</pre>
+<pre>curl -X GET -i /common/dict?names=1vs04a&amp;names=1vs04a</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2163,7 +2163,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /sv1/t_offline_store/list?page_no=1&amp;page_size=10&amp;open_date=yyyy-MM-dd&amp;brand=0&amp;status=0&amp;name=&amp;code=&amp;nick_name=&amp;addr=</pre>
+<pre>curl -X GET -i /sv1/t_offline_store/list?page_no=1&amp;page_size=10&amp;open_date=yyyy-MM-dd&amp;brand=0&amp;status=0&amp;name=&amp;addr=&amp;nick_name=&amp;code=</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3307,7 +3307,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /sv1/t_offline_store/export?page_no=1&amp;page_size=10&amp;open_date=yyyy-MM-dd&amp;brand=0&amp;status=0&amp;addr=&amp;code=&amp;name=&amp;nick_name=</pre>
+<pre>curl -X GET -i /sv1/t_offline_store/export?page_no=1&amp;page_size=10&amp;open_date=yyyy-MM-dd&amp;brand=0&amp;status=0&amp;nick_name=&amp;addr=&amp;name=&amp;code=</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3432,7 +3432,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect2">
-<h3 id="_数据字典web接口sysdictcontroller">8. 数据字典web接口(SysDictController)</h3>
+<h3 id="_数据字典web接口sysdict2controller">8. 数据字典web接口(SysDict2Controller)</h3>
 <div class="sect3">
 <h4 id="_页面_4">8.1. 页面</h4>
 <div class="paragraph">
@@ -3534,7 +3534,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /sys/sys_dict/list?page_no=1&amp;page_size=10&amp;name=&amp;description=</pre>
+<pre>curl -X GET -i /sys/sys_dict/list?page_no=1&amp;page_size=10&amp;description=&amp;name=</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3724,7 +3724,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -4207,7 +4207,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -4360,7 +4360,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /sys/sys_dict_detail/list?page_no=1&amp;page_size=10&amp;dict_id=&amp;label=&amp;value=</pre>
+<pre>curl -X GET -i /sys/sys_dict_detail/list?page_no=1&amp;page_size=10&amp;label=&amp;dict_id=&amp;value=</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4564,7 +4564,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -5093,7 +5093,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -5215,7 +5215,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X DELETE -i /sys/sys_dict_detail/deleteBatch?ids=920woq&amp;ids=920woq</pre>
+<pre>curl -X DELETE -i /sys/sys_dict_detail/deleteBatch?ids=fv9q8h&amp;ids=fv9q8h</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5395,7 +5395,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /sys/sys_file/list?page_no=0&amp;page_size=0&amp;dts=&amp;dte=&amp;original_name=&amp;name=</pre>
+<pre>curl -X GET -i /sys/sys_file/list?page_no=0&amp;page_size=0&amp;dts=&amp;name=&amp;dte=&amp;original_name=</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5592,7 +5592,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -5776,7 +5776,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /sys/sys_log/list?page_no=0&amp;page_size=0&amp;log_title=&amp;log_type=&amp;log_date=</pre>
+<pre>curl -X GET -i /sys/sys_log/list?page_no=0&amp;page_size=0&amp;log_type=&amp;log_title=&amp;log_date=</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5966,7 +5966,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -6412,7 +6412,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -7042,7 +7042,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect3">
-<h4 id="_系统新菜单表删除_todo">12.6. 系统::新菜单表::删除 TODO &#8230;&#8203;</h4>
+<h4 id="_系统新菜单表删除">12.6. 系统::新菜单表::删除</h4>
 <div class="paragraph">
 <p><strong>URL:</strong> <code>/sys/sys_menu/delete</code></p>
 </div>
@@ -7079,7 +7079,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -7263,7 +7263,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /sys/sys_role/list?page_no=1&amp;page_size=10&amp;status=0&amp;name=&amp;description=</pre>
+<pre>curl -X GET -i /sys/sys_role/list?page_no=1&amp;page_size=10&amp;status=0&amp;description=&amp;name=</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7460,7 +7460,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -7966,7 +7966,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -8143,7 +8143,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /sys/sys_role_menu/list?page_no=1&amp;page_size=10&amp;role_id=&amp;menu_id=</pre>
+<pre>curl -X GET -i /sys/sys_role_menu/list?page_no=1&amp;page_size=10&amp;menu_id=&amp;role_id=</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -8468,7 +8468,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -8730,7 +8730,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -8852,7 +8852,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X DELETE -i /sys/sys_role_menu/deleteBatch?ids=shmvt3&amp;ids=shmvt3</pre>
+<pre>curl -X DELETE -i /sys/sys_role_menu/deleteBatch?ids=gh445r&amp;ids=gh445r</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9032,7 +9032,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /sys/sys_role_user/list?page_no=1&amp;page_size=10&amp;role_id=&amp;user_name=&amp;nick_name=&amp;user_id=</pre>
+<pre>curl -X GET -i /sys/sys_role_user/list?page_no=1&amp;page_size=10&amp;user_name=&amp;role_id=&amp;user_id=&amp;nick_name=</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -9535,7 +9535,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -9805,7 +9805,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -10672,7 +10672,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -10877,7 +10877,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /sys/sys_user/list?page_no=0&amp;page_size=0&amp;user_name=&amp;email=&amp;nick_name=&amp;status=&amp;phone=&amp;del_flag=</pre>
+<pre>curl -X GET -i /sys/sys_user/list?page_no=0&amp;page_size=0&amp;del_flag=&amp;phone=&amp;status=&amp;nick_name=&amp;email=&amp;user_name=</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -11130,7 +11130,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -11844,7 +11844,7 @@ table.CodeRay td.code>pre{padding:0}
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 </tr>
@@ -12765,7 +12765,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>curl -X GET -i /sys/sys_user/export?page_no=0&amp;page_size=0&amp;del_flag=&amp;nick_name=&amp;status=&amp;user_name=&amp;phone=&amp;email=</pre>
+<pre>curl -X GET -i /sys/sys_user/export?page_no=0&amp;page_size=0&amp;email=&amp;status=&amp;phone=&amp;del_flag=&amp;nick_name=&amp;user_name=</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -12781,7 +12781,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-07-03 14:46:48 +0800
+Last updated 2023-07-03 15:43:31 +0800
 </div>
 </div>
 </body>

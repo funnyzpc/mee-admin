@@ -1,10 +1,7 @@
 package com.mee.sys.service;
 
-import java.util.Map;
+import com.mee.common.util.MeeResult;
 import com.mee.sys.entity.SysRoleUser;
-
-import java.lang.String;
-import java.lang.Integer;
 
 /**
  * 系统::角色用户表(SysRoleUser2) 业务接口
@@ -13,14 +10,14 @@ import java.lang.Integer;
  * @version v1.3
  * @date    2023-05-28 16:45:32
  */
-public interface SysRoleUser2Service{
+public interface SysRoleUserService {
     /**
      * 查询系统::角色用户表列表
      *
      * @param SysRoleUser(or Map) 系统::角色用户表
      * @return 系统::角色用户表分页集合
      */
-    Map list(Integer page_no,Integer page_size ,String user_id,String role_id);
+    MeeResult list(Integer page_no,Integer page_size ,String user_id,String role_id);
 
     /**
      * 按主键查询系统::角色用户表
@@ -28,7 +25,7 @@ public interface SysRoleUser2Service{
      * @param 系统::角色用户表主键
      * @return 系统::角色用户表
      */
-    Map findById(String id);
+    MeeResult findById(String id);
 
     /**
      * 新增系统::角色用户表
@@ -36,14 +33,14 @@ public interface SysRoleUser2Service{
      * @param SysRoleUser(or Map) 系统::角色用户表
      * @return 插入条数
      */
-    Map add(SysRoleUser sysRoleUser2);
+    MeeResult add(SysRoleUser sysRoleUser2);
     /**
      * 修改系统::角色用户表
      *
      * @param SysRoleUser(or Map) 系统::角色用户表
      * @return 更新条数
      */
-    Map update(SysRoleUser sysRoleUser2);
+    MeeResult update(SysRoleUser sysRoleUser2);
 
     /**
      * 删除系统::角色用户表
@@ -51,7 +48,7 @@ public interface SysRoleUser2Service{
      * @id 系统::角色用户表 主键
      * @return 删除条数
      */
-    Map deleteById(String id);
+    MeeResult deleteById(String id);
 
     /**
      * 批量删除系统::角色用户表
@@ -59,6 +56,6 @@ public interface SysRoleUser2Service{
      * @ids 系统::角色用户表 主键集合
      * @return 删除条数
      */
-    Map deleteBatch(String[] ids);
+    MeeResult deleteBatch(String[] ids);
 
 }

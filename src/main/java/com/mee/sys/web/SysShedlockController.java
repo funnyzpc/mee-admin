@@ -65,7 +65,7 @@ public class SysShedlockController {
     @RequiresPermissions("sys:sys_shedlock:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult update(@RequestBody SysShedlock sysShedlock){
+    public MeeResult update(@RequestBody(required = true) SysShedlock sysShedlock){
        return sysShedlockService.update(sysShedlock);
     }
 
@@ -77,7 +77,7 @@ public class SysShedlockController {
     @RequiresPermissions("sys:sys_shedlock:delete")
     @DeleteMapping("delete")
     @ResponseBody
-    public MeeResult delete(String name){
+    public MeeResult delete(@RequestParam(required = true) String name){
         return sysShedlockService.delete(name);
     }
 }

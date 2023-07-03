@@ -2,7 +2,7 @@ package com.mee.common.web;
 
 import com.mee.common.service.impl.UserCenterServiceImpl;
 import com.mee.common.util.MeeResult;
-import com.mee.sys.dto.SysUser2DTO;
+import com.mee.sys.dto.SysUserDTO;
 import com.mee.sys.entity.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,7 +56,7 @@ public class UserCenterController {
      */
     @PutMapping("update_user_pwd")
     @ResponseBody
-    public MeeResult updateUserPwd(@RequestBody(required = true) SysUser2DTO sysUser2DTO){
+    public MeeResult updateUserPwd(@RequestBody(required = true) SysUserDTO sysUser2DTO){
         return userCenterService.updateUserPwd(sysUser2DTO);
     }
 

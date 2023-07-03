@@ -71,7 +71,7 @@ public class SysRoleMenuController {
     @RequiresPermissions("sys:sys_role_menu:list")
     @GetMapping("/id")
     @ResponseBody
-    public MeeResult<SysRoleMenu> findById(String id){
+    public MeeResult<SysRoleMenu> findById(@RequestParam(required = true) String id){
         return sysRoleMenuService.findById( id );
     }
 
@@ -81,8 +81,8 @@ public class SysRoleMenuController {
     @RequiresPermissions("sys:sys_role_menu:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult add(@RequestBody Map<String,Object> sysRoleMenu2){
-        return sysRoleMenuService.add( sysRoleMenu2 );
+    public MeeResult add(@RequestBody(required = true) Map<String,Object> sysRoleMenu){
+        return sysRoleMenuService.add( sysRoleMenu );
     }
 
 //    /**
@@ -101,7 +101,7 @@ public class SysRoleMenuController {
     @RequiresPermissions("sys:sys_role_menu:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(String id){
+    public MeeResult deleteById(@RequestParam(required = true) String id){
         return sysRoleMenuService.deleteById(id);
     }
 

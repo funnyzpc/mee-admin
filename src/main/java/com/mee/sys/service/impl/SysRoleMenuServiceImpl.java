@@ -1,12 +1,9 @@
 package com.mee.sys.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-
+import com.mee.common.service.SeqGenServiceImpl;
 import com.mee.common.util.DateUtil;
 import com.mee.common.util.MeeResult;
+import com.mee.common.util.ResultBuild;
 import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.core.model.Page;
@@ -15,14 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.mee.common.service.SeqGenServiceImpl;
-import com.mee.common.util.ResultBuild;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.String;
-import java.lang.Integer;
-import java.lang.Long;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 角色菜单关联(SysRoleMenu2) 业务接口
@@ -74,7 +70,7 @@ public class SysRoleMenuServiceImpl {
      * @return 角色菜单关联
     */
     //@Override
-    public MeeResult findById(String id){
+    public MeeResult<SysRoleMenu> findById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
         LOG.error("必要参数为空:{}",id);
@@ -82,8 +78,8 @@ public class SysRoleMenuServiceImpl {
       }
       Map<String,Object> param = new HashMap<String,Object>(2,1);
       param.put("id",id);
-      SysRoleMenu sysRoleMenu2 = dbSQLDao.findOne("com.mee.xml.SysRoleMenu.findById", param);
-      return ResultBuild.build(sysRoleMenu2);
+      SysRoleMenu sysRoleMenu = dbSQLDao.findOne("com.mee.xml.SysRoleMenu.findById", param);
+      return ResultBuild.build(sysRoleMenu);
     }
 
     /**
@@ -187,7 +183,7 @@ public class SysRoleMenuServiceImpl {
       return ResultBuild.build(delete_count);
     }
 
-    public MeeResult listByRoleId(String role_id) {
+    public MeeResult<List<SysRoleMenu>> listByRoleId(String role_id) {
         LOG.info("接收到参数 {}",role_id);
         Map<String,Object> param = new HashMap<String,Object>(2,1);
         param.put("role_id",role_id);

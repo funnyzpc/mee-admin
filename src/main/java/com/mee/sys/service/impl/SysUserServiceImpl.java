@@ -1,21 +1,19 @@
 package com.mee.sys.service.impl;
 
-import java.io.File;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-
 import com.mee.common.enums.DeleteFlagEnum;
 import com.mee.common.enums.StatusEnum;
+import com.mee.common.service.SeqGenServiceImpl;
 import com.mee.common.service.impl.ShiroAccountLockedServiceImpl;
 import com.mee.common.util.ChaosUtil;
 import com.mee.common.util.DateUtil;
 import com.mee.common.util.MeeResult;
+import com.mee.common.util.ResultBuild;
 import com.mee.common.util.excel.ExcelWriteUtil;
 import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.core.model.Page;
-import com.mee.sys.dto.SysUser2DTO;
+import com.mee.sys.dto.SysUserDTO;
+import com.mee.sys.entity.SysRole;
 import com.mee.sys.entity.SysUser;
 import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.slf4j.Logger;
@@ -23,17 +21,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.mee.common.service.SeqGenServiceImpl;
-import com.mee.common.util.ResultBuild;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.lang.String;
-import java.lang.Integer;
+import java.io.File;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 系统::用户信息表(SysUser2) 业务接口
@@ -81,7 +78,7 @@ public class SysUserServiceImpl {
      * @return 系统::用户信息表分页集合
     */
     //@Override
-    public MeeResult list(Integer page_no, Integer page_size , String user_name, String nick_name, String phone, String email, String status, String del_flag){
+    public MeeResult<Page<SysUser>> list(Integer page_no, Integer page_size , String user_name, String nick_name, String phone, String email, String status, String del_flag){
       LOG.info("接收到参数 {},{}, {},{},{},{},",page_no,page_size ,user_name,phone,email,status);
       Map<String,Object> param = new HashMap<String,Object>(19,1);
       //param.put("dept_id",null==dept_id||"".equals(dept_id)?null:dept_id );
@@ -94,7 +91,7 @@ public class SysUserServiceImpl {
       //param.put("del_flag",null==del_flag||"".equals(del_flag)?null:del_flag );
       param.put("del_flag",DeleteFlagEnum.NORMAL.code );
       //Page list = dbSQLDao.list("com.mee.module.sys.mapper.sys_user2.findList",param,page_no,page_size);
-      Page list = dbSQLDao.list("com.mee.xml.SysUser.findList",param,page_no,page_size);
+      Page<SysUser> list = dbSQLDao.list("com.mee.xml.SysUser.findList",param,page_no,page_size);
       return ResultBuild.build(list);
     }
 
@@ -105,7 +102,7 @@ public class SysUserServiceImpl {
      * @return 系统::用户信息表
     */
     //@Override
-    public MeeResult findById(String id){
+    public MeeResult<SysUser> findById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
         LOG.error("必要参数为空:{}",id);
@@ -113,57 +110,57 @@ public class SysUserServiceImpl {
       }
       Map<String,Object> param = new HashMap<String,Object>(2,1);
       param.put("id",id);
-      SysUser sysUser2 = dbSQLDao.findOne("com.mee.xml.SysUser.findById", param);
-      return ResultBuild.build(sysUser2);
+      SysUser sysUser = dbSQLDao.findOne("com.mee.xml.SysUser.findById", param);
+      return ResultBuild.build(sysUser);
     }
 
     /**
      * 系统::用户信息表::新增
      *
-     * @param sysUser2DTO SysUser2(or Map) 系统::用户信息表
+     * @param sysUserDTO SysUser2(or Map) 系统::用户信息表
      * @return 插入条数
     */
     //@Override
-    public MeeResult add(SysUser2DTO sysUser2DTO){
-        LOG.info("接收到参数 {}", sysUser2DTO);
-        if(null == sysUser2DTO || null==sysUser2DTO.getUser_name() ||  "".equals(sysUser2DTO.getUser_name()) || null==sysUser2DTO.getStatus() ){
+    public MeeResult add(SysUserDTO sysUserDTO){
+        LOG.info("接收到参数 {}", sysUserDTO);
+        if( null==sysUserDTO.getUser_name() ||  "".equals(sysUserDTO.getUser_name()) || null==sysUserDTO.getStatus() ){
             return ResultBuild.fail("参数缺失请检查~");
         }
-        final String user_name = sysUser2DTO.getUser_name();
-        final String pwd1 = sysUser2DTO.getPwd1();
-        final String pwd2 = sysUser2DTO.getPwd2();
+        final String user_name = sysUserDTO.getUser_name();
+        final String pwd1 = sysUserDTO.getPwd1();
+        final String pwd2 = sysUserDTO.getPwd2();
         final LocalDateTime now = DateUtil.now();
         final String user_id = ShiroUtils.getUserId();
         // 是否重复
         Map<String,Object> param = new HashMap<>(2,1);
         param.put("user_name",user_name.trim());
         if( !dbSQLDao.find("com.mee.xml.SysUser.findList",param).isEmpty() ){
-            LOG.error("用户重复，请检查用户名:{}",sysUser2DTO);
+            LOG.error("用户重复，请检查用户名:{}",sysUserDTO);
             return ResultBuild.fail("用户重复，请检查用户名~");
         }
         // 密码是否一致
         String decPwd1 = ChaosUtil.dec(pwd1);
         String decPwd2 = ChaosUtil.dec(pwd2);
         if( null==decPwd1 || null==decPwd2 || "".equals(decPwd1) || "".equals(decPwd2) || !decPwd1.equals(decPwd2) ){
-            LOG.error("密码不一致，请检查两次密码:{}",sysUser2DTO);
+            LOG.error("密码不一致，请检查两次密码:{}",sysUserDTO);
             return ResultBuild.fail("密码不一致，请检查~");
         }
-        String enc_pwd = new Sha512Hash(decPwd1,sysUser2DTO.getId(),3).toString();
+        String enc_pwd = new Sha512Hash(decPwd1,sysUserDTO.getId(),3).toString();
         // 主键 及 通用字段
-        sysUser2DTO.setId(seqGenService.genShortPrimaryKey());
-        sysUser2DTO.setDel_flag(DeleteFlagEnum.NORMAL.code);
-        sysUser2DTO.setPwd_reset_time(now);
-        sysUser2DTO.setCreate_time(now);
-        sysUser2DTO.setCreate_by(user_id);
-        sysUser2DTO.setUpdate_time(now);
-        sysUser2DTO.setUpdate_by(user_id);
-        sysUser2DTO.setRegister_date(now);
-        sysUser2DTO.setPassword(enc_pwd);
+        sysUserDTO.setId(seqGenService.genShortPrimaryKey());
+        sysUserDTO.setDel_flag(DeleteFlagEnum.NORMAL.code);
+        sysUserDTO.setPwd_reset_time(now);
+        sysUserDTO.setCreate_time(now);
+        sysUserDTO.setCreate_by(user_id);
+        sysUserDTO.setUpdate_time(now);
+        sysUserDTO.setUpdate_by(user_id);
+        sysUserDTO.setRegister_date(now);
+        sysUserDTO.setPassword(enc_pwd);
         try {
-            int insert_count = dbSQLDao.insert("com.mee.xml.SysUser.insert",sysUser2DTO);
+            int insert_count = dbSQLDao.insert("com.mee.xml.SysUser.insert",sysUserDTO);
             LOG.info("创建sys_user结果:{}",insert_count);
         }catch (Exception e){
-            LOG.error("新增用户出现错误：{}",sysUser2DTO,e);
+            LOG.error("新增用户出现错误：{}",sysUserDTO,e);
             return ResultBuild.fail("用户重复，请检查用户名~");
         }
         return ResultBuild.SUCCESS();
@@ -262,7 +259,7 @@ public class SysUserServiceImpl {
      * @param pwd 密码
      * @return
      */
-    public MeeResult resetPwd(String id, String pwd) {
+    public MeeResult<Integer> resetPwd(String id, String pwd) {
         if( null==id || null==pwd || "".equals(pwd) ||"".equals(pwd)  ){
             return ResultBuild.fail("必要参数为空[id,pwd]");
         }
@@ -298,10 +295,10 @@ public class SysUserServiceImpl {
      * @param userId 用户ID
      * @return 角色信息
      */
-    public MeeResult getRoles(String user_id) {
+    public MeeResult<List<SysRole>> getRoles(String user_id) {
         Map<String,String> param = new HashMap<>(2,1);
         param.put("user_id",user_id);
-        List<Object> result = dbSQLDao.find("com.mee.xml.SysRole.findByUserId", param);
+        List<SysRole> result = dbSQLDao.find("com.mee.xml.SysRole.findByUserId", param);
         return ResultBuild.build(result);
     }
 

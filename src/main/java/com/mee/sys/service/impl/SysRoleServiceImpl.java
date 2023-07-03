@@ -1,10 +1,9 @@
 package com.mee.sys.service.impl;
 
-import java.util.Map;
-import java.util.HashMap;
-
+import com.mee.common.service.SeqGenServiceImpl;
 import com.mee.common.util.DateUtil;
 import com.mee.common.util.MeeResult;
+import com.mee.common.util.ResultBuild;
 import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.core.model.Page;
@@ -13,13 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.mee.common.service.SeqGenServiceImpl;
-import com.mee.common.util.ResultBuild;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.String;
-import java.lang.Integer;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 系统::角色表(SysRole2) 业务接口
@@ -56,13 +53,13 @@ public class SysRoleServiceImpl /* implements SysRole2Service */ {
      * @return 系统::角色表分页集合
     */
     //@Override
-    public MeeResult list(Integer page_no, Integer page_size, String name, String description, Integer status){
+    public MeeResult<Page<SysRole>> list(Integer page_no, Integer page_size, String name, String description, Integer status){
       LOG.info("接收到参数 {},{}, {},{},{},",page_no,page_size ,name,description,status);
       Map<String,Object> param = new HashMap<String,Object>(8,1);
       param.put("name",null==name||"".equals(name)?null:"%"+name+"%" );
       param.put("description",null==description||"".equals(description)?null:"%"+description+"%" );
       param.put("status",status );
-      Page list = dbSQLDao.list("com.mee.xml.SysRole.findList",param,page_no,page_size);
+      Page<SysRole> list = dbSQLDao.list("com.mee.xml.SysRole.findList",param,page_no,page_size);
       return ResultBuild.build(list);
     }
 
@@ -73,7 +70,7 @@ public class SysRoleServiceImpl /* implements SysRole2Service */ {
      * @return 系统::角色表
     */
     //@Override
-    public MeeResult findById(String id){
+    public MeeResult<SysRole> findById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
         LOG.error("必要参数为空:{}",id);
@@ -82,8 +79,8 @@ public class SysRoleServiceImpl /* implements SysRole2Service */ {
       Map<String,Object> param = new HashMap<String,Object>(2,1);
       param.put("id",id);
       //SysRole2 sysRole2 = dbSQLDao.queryOne("com.mee.module.sys.mapper.sys_role2.findById", param);
-      SysRole sysRole2 = dbSQLDao.findOne("com.mee.xml.SysRole.findById", param);
-      return ResultBuild.build(sysRole2);
+      SysRole sysRole = dbSQLDao.findOne("com.mee.xml.SysRole.findById", param);
+      return ResultBuild.build(sysRole);
     }
 
     /**

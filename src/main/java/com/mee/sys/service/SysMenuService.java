@@ -1,10 +1,9 @@
 package com.mee.sys.service;
 
+import com.mee.common.util.MeeResult;
 import com.mee.sys.entity.SysMenu;
 
 import java.util.Map;
-import java.lang.String;
-import java.lang.Integer;
 
 
 /**
@@ -14,14 +13,14 @@ import java.lang.Integer;
  * @version v1.3
  * @date    2023-05-05 21:48:15
  */
-public interface SysMenu2Service{
+public interface SysMenuService {
     /**
      * 查询系统::新菜单表列表
      *
      * @param ... 系统::新菜单表
      * @return 系统::新菜单表分页集合
      */
-    Map list(Integer page_no,Integer page_size ,Integer type,String title,String path,String target,String permission,Integer show);
+    MeeResult list(Integer page_no,Integer page_size ,Integer type,String title,String path,String target,String permission,Integer show);
 
     /**
      * 按主键查询系统::新菜单表
@@ -29,7 +28,7 @@ public interface SysMenu2Service{
      * @param id 系统::新菜单表主键
      * @return 系统::新菜单表
      */
-    Map findById(String id);
+    MeeResult findById(String id);
 
     /**
      * 新增系统::新菜单表
@@ -37,14 +36,14 @@ public interface SysMenu2Service{
      * @param sysMenu2(or Map) 系统::新菜单表
      * @return 插入条数
      */
-    Map add(SysMenu sysMenu2);
+    MeeResult add(SysMenu sysMenu2);
     /**
      * 修改系统::新菜单表
      *
      * @param sysMenu2(or Map) 系统::新菜单表
      * @return 更新条数
      */
-    Map edit(SysMenu sysMenu2);
+    MeeResult edit(SysMenu sysMenu2);
 
     /**
      * 删除系统::新菜单表
@@ -52,7 +51,7 @@ public interface SysMenu2Service{
      * @id 系统::新菜单表 主键
      * @return 删除条数
      */
-    Map deleteById(String id);
+    MeeResult deleteById(String id);
 
     /**
      * 批量删除系统::新菜单表
@@ -60,7 +59,7 @@ public interface SysMenu2Service{
      * @ids 系统::新菜单表 主键集合
      * @return 删除条数
      */
-    Map deleteBatch(String[] ids);
+    MeeResult deleteBatch(String[] ids);
 
     Map<String, Object> menuAll(String title);
 }

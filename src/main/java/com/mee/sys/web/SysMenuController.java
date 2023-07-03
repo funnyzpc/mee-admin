@@ -26,7 +26,7 @@ public class SysMenuController {
     * 业务处理类
     */
     @Autowired
-    private SysMenuServiceImpl sysMenu2Service;
+    private SysMenuServiceImpl sysMenuService;
 
     /**
      * 页面
@@ -43,7 +43,7 @@ public class SysMenuController {
     @GetMapping("/list")
     @ResponseBody
     public MeeResult<List<SysMenu2TreeVO>> list(String title){
-        return sysMenu2Service.menuAll(title);
+        return sysMenuService.menuAll(title);
     }
 
     /**
@@ -52,8 +52,8 @@ public class SysMenuController {
     @RequiresPermissions("sys:sys_menu:list")
     @GetMapping("/id")
     @ResponseBody
-    public MeeResult<SysMenu> findById(String id){
-        return sysMenu2Service.findById( id );
+    public MeeResult<SysMenu> findById(@RequestParam(required = true) String id){
+        return sysMenuService.findById( id );
     }
 
     /**
@@ -62,8 +62,8 @@ public class SysMenuController {
     @RequiresPermissions("sys:sys_menu:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult add(@RequestBody SysMenu sysMenu2){
-        return sysMenu2Service.add( sysMenu2 );
+    public MeeResult add(@RequestBody(required = true) SysMenu sysMenu){
+        return sysMenuService.add( sysMenu );
     }
 
     /**
@@ -72,18 +72,18 @@ public class SysMenuController {
     @RequiresPermissions("sys:sys_menu:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult update(@RequestBody SysMenu sysMenu2 ){
-        return sysMenu2Service.update( sysMenu2 );
+    public MeeResult update(@RequestBody(required = true) SysMenu sysMenu ){
+        return sysMenuService.update( sysMenu );
     }
 
     /**
-     * 系统::新菜单表::删除 TODO ...
+     * 系统::新菜单表::删除
      */
     @RequiresPermissions("sys:sys_menu:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(String id){
-        return sysMenu2Service.deleteById(id);
+    public MeeResult deleteById(@RequestParam(required = true) String id){
+        return sysMenuService.deleteById(id);
     }
 
 //    /**

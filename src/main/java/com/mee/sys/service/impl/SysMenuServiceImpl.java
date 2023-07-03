@@ -74,7 +74,7 @@ public class SysMenuServiceImpl {
      * @param  id 系统::新菜单表主键
      * @return 系统::新菜单表
     */
-    public MeeResult findById(String id){
+    public MeeResult<SysMenu> findById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
         LOG.error("必要参数为空:{}",id);
@@ -82,8 +82,8 @@ public class SysMenuServiceImpl {
       }
       Map<String,Object> param = new HashMap<String,Object>(2,1);
       param.put("id",id);
-      SysMenu sysMenu2 = dbSQLDao.findOne("com.mee.xml.SysMenu.findById", param);
-      return ResultBuild.build(sysMenu2);
+      SysMenu sysMenu = dbSQLDao.findOne("com.mee.xml.SysMenu.findById", param);
+      return ResultBuild.build(sysMenu);
     }
 
 //    /**

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 /**
- * 数据字典web接口(SysDictController)
+ * 数据字典web接口(SysDict2Controller)
  *
  * @author  shadow
  * @version v1.0
@@ -25,7 +25,7 @@ public class SysDictController {
     * 业务处理类
     */
     @Autowired
-    private SysDictServiceImpl sysDict2Service;
+    private SysDictServiceImpl sysDictService;
 
     /**
      * 页面
@@ -44,7 +44,7 @@ public class SysDictController {
     @GetMapping("/list")
     @ResponseBody
     public MeeResult<Page<SysDict>> list(@RequestParam(defaultValue="1")Integer page_no, @RequestParam(defaultValue="10")Integer page_size, String name, String description){
-        return sysDict2Service.list(page_no,page_size,name,description);
+        return sysDictService.list(page_no,page_size,name,description);
     }
 
     /**
@@ -53,8 +53,8 @@ public class SysDictController {
     @RequiresPermissions("sys:sys_dict:list")
     @GetMapping("/id")
     @ResponseBody
-    public MeeResult<SysDict> findById(String id){
-        return sysDict2Service.findById( id );
+    public MeeResult<SysDict> findById(@RequestParam(required = true) String id){
+        return sysDictService.findById( id );
     }
 
     /**
@@ -63,8 +63,8 @@ public class SysDictController {
     @RequiresPermissions("sys:sys_dict:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult<Integer> add(@RequestBody SysDict sysDict2){
-        return sysDict2Service.add( sysDict2 );
+    public MeeResult<Integer> add(@RequestBody(required = true) SysDict sysDict){
+        return sysDictService.add( sysDict );
     }
 
     /**
@@ -73,8 +73,8 @@ public class SysDictController {
     @RequiresPermissions("sys:sys_dict:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult<Integer> edit(@RequestBody SysDict sysDict2 ){
-        return sysDict2Service.update( sysDict2 );
+    public MeeResult<Integer> edit(@RequestBody(required = true) SysDict sysDict ){
+        return sysDictService.update( sysDict );
     }
 
     /**
@@ -83,8 +83,8 @@ public class SysDictController {
     @RequiresPermissions("sys:sys_dict:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult<Integer> deleteById(String id){
-        return sysDict2Service.deleteById(id);
+    public MeeResult<Integer> deleteById(@RequestParam(required = true) String id){
+        return sysDictService.deleteById(id);
     }
 
 //    /**

@@ -11,7 +11,7 @@ import java.util.List;
  * @className SysRoleUser2DTO
  * @date 2023/6/5 10:00 PM
  */
-public class SysRoleUser2DTO implements Serializable {
+public class SysRoleUserDTO implements Serializable {
 
     /**
      * 序列化标识
