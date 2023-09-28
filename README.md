@@ -3,7 +3,7 @@
  这是一套由本人写到的后台系统，从0开始，其中v1.5是从2022年12月份开始一直开发现在(2023年7月3日)，这个项目耗费了我太多心血❤,如果您看到了觉得还行请[点赞](https://github.com/funnyzpc/mee-admin)
 如果能[FORK🎈](https://github.com/funnyzpc/mee-admin/fork)那可太感谢了~😉
 
-### v1.5.1 __new🎉__
+### v1.6 __new🎉__
 + js对象合并问题
 + fetch请求在session失效时重定向问题
 + 文件下载bug
