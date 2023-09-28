@@ -9,6 +9,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
@@ -27,7 +28,7 @@ import java.net.URLEncoder;
 @Controller
 @RequestMapping("/common/file")
 public class CommonFileController {
-    private static final Logger log = LoggerFactory.getLogger(CommonFileController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CommonFileController.class);
 
     @Value("${mee.file.upload-dir}")
     private String file_base_dir;
@@ -39,7 +40,11 @@ public class CommonFileController {
      * @param fileName 文件名称
      */
     @GetMapping
-    public void download(HttpServletResponse response,String filePath,String fileName) {
+    public void download(HttpServletResponse response, @RequestParam(required = true) String filePath, @RequestParam(required = true) String fileName) {
+        if( filePath.contains("..") || filePath.contains("./") ){
+            LOG.error("非法访问 filePath:{},fileName:{}",filePath,fileName);
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+        }
         File file = new File(file_base_dir+File.separator + filePath);
         if (file.exists()) {
             try(InputStream inputStream = new BufferedInputStream(new FileInputStream(file))){
@@ -49,14 +54,12 @@ public class CommonFileController {
                 response.setContentLength((int) file.length());
                 FileCopyUtils.copy(inputStream, response.getOutputStream());
             }catch (Exception e){
-                log.error("文件读取失败:");
+                LOG.error("文件读取失败:");
             }
         }else{
-            // file not found
-            // response.setStatus(HttpStatus.NOT_FOUND.value());
-            log.error("文件不存在 filePath:{},fileName:{}",filePath,fileName);
+            LOG.error("文件不存在 filePath:{},fileName:{}",filePath,fileName);
             response.setStatus(HttpStatus.NOT_FOUND.value());
-            // response.setIntHeader("文件不存在:"+filePath,HttpStatus.NOT_FOUND.value());
         }
     }
+
 }

@@ -3,7 +3,7 @@ package com.mee.sys.web;
 import com.mee.common.util.MeeResult;
 import com.mee.core.model.Page;
 import com.mee.sys.entity.SysRoleMenu;
-import com.mee.sys.service.impl.SysRoleMenuServiceImpl;
+import com.mee.sys.service.SysRoleMenuService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ public class SysRoleMenuController {
     * 业务处理类
     */
     @Autowired
-    private SysRoleMenuServiceImpl sysRoleMenuService;
+    private SysRoleMenuService sysRoleMenuService;
 
     /**
      * 页面

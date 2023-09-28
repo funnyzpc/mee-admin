@@ -12,7 +12,8 @@ import com.mee.core.model.Page;
 import com.mee.sys.dto.SysRoleUserDTO;
 import com.mee.sys.entity.SysRoleUser;
 import com.mee.sys.entity.SysUser;
-import com.mee.sys.vo.SysRoleUser2VO;
+import com.mee.sys.service.SysRoleUserService;
+import com.mee.sys.vo.SysRoleUserVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ import java.util.Map;
  * @date    2023-05-28 16:45:32
 */
 @Service
-public class SysRoleUserServiceImpl {
+public class SysRoleUserServiceImpl implements SysRoleUserService {
 
     /**
     *   日志
@@ -57,14 +58,15 @@ public class SysRoleUserServiceImpl {
      * @param page_size 请求分页大小
      * @return 系统::角色用户表分页集合
     */
-    public MeeResult<Page<SysRoleUser2VO>> list(Integer page_no, Integer page_size , String user_name, String nick_name, String user_id, String role_id){
+    @Override
+    public MeeResult<Page<SysRoleUserVO>> list(Integer page_no, Integer page_size , String user_name, String nick_name, String user_id, String role_id){
       LOG.info("接收到参数 {},{}, {},{},",page_no,page_size,user_id,role_id);
       Map<String,Object> param = new HashMap<String,Object>(4,1);
       param.put("user_name",(null==user_name||"".equals(user_name))?null:"%"+user_name+"%" );
       param.put("nick_name",(null==nick_name||"".equals(nick_name))?null:"%"+nick_name+"%" );
       param.put("user_id",null==user_id||"".equals(user_id)?null:user_id );
       param.put("role_id",null==role_id||"".equals(role_id)?null:role_id );
-      Page<SysRoleUser2VO> list = dbSQLDao.list("com.mee.xml.SysRoleUser.findList2",param,page_no,page_size);
+      Page<SysRoleUserVO> list = dbSQLDao.list("com.mee.xml.SysRoleUser.findList2",param,page_no,page_size);
       return ResultBuild.build(list);
     }
 
@@ -76,6 +78,7 @@ public class SysRoleUserServiceImpl {
      * @param page_size 请求分页大小
      * @return 系统::角色用户表分页集合
      */
+    @Override
     public MeeResult<Page<SysUser>> listUser(Integer page_no,Integer page_size ,String user_name,String phone,String role_id){
         LOG.info("接收到参数 {},{}, {},{},",page_no,page_size,phone,role_id);
         Map<String,Object> param = new HashMap<String,Object>(8,1);
@@ -96,6 +99,7 @@ public class SysRoleUserServiceImpl {
      * @param id 系统::角色用户表主键
      * @return 系统::角色用户表
     */
+    @Override
     public MeeResult<SysRoleUser> findById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
@@ -114,7 +118,8 @@ public class SysRoleUserServiceImpl {
      * @param sysRoleUserDTO SysRoleUser2(or Map) 系统::角色用户表
      * @return 插入条数
     */
-    public MeeResult add(SysRoleUserDTO sysRoleUserDTO){
+    @Override
+    public MeeResult<Void> add(SysRoleUserDTO sysRoleUserDTO){
         // check
         if( null==sysRoleUserDTO.getRole_id() || null==sysRoleUserDTO.getUser_ids() || sysRoleUserDTO.getUser_ids().isEmpty() ){
             return ResultBuild.fail("必要参数缺失，请至少选择一个！");
@@ -151,7 +156,8 @@ public class SysRoleUserServiceImpl {
      * @param sysRoleUser SysRoleUser2(or Map) 系统::角色用户表
      * @return 更新条数
     */
-    public MeeResult update(SysRoleUser sysRoleUser){
+    @Override
+    public MeeResult<Integer> update(SysRoleUser sysRoleUser){
       LOG.info("接收到参数 {}",sysRoleUser);
       if( null==sysRoleUser.getId()||null==sysRoleUser.getUser_id()||null==sysRoleUser.getRole_id() ){
           return ResultBuild.fail("必要参数缺失，请检查~");
@@ -172,7 +178,8 @@ public class SysRoleUserServiceImpl {
      * @id 系统::角色用户表 主键
      * @return 删除条数
     */
-    public MeeResult deleteById(String id){
+    @Override
+    public MeeResult<Integer> deleteById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
           LOG.error("必要参数为空:{}",id);
@@ -190,8 +197,8 @@ public class SysRoleUserServiceImpl {
      * @ids 系统::角色用户表 主键集合
      * @return 删除条数
     */
-    //@Override
-    public MeeResult deleteBatch(String[] ids){
+    @Override
+    public MeeResult<Integer> deleteBatch(String[] ids){
       if( null==ids || 0==ids.length ){
         LOG.error("必要参数为空:{}",ids);
         return ResultBuild.fail("必要参数为空[id]");

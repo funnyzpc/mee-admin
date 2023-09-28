@@ -2,7 +2,7 @@ package com.mee.common.web;
 
 import com.mee.common.service.impl.IndexServiceImpl;
 import com.mee.common.util.MeeResult;
-import com.mee.sys.vo.SysMenu2VO;
+import com.mee.sys.vo.SysMenuVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -42,7 +42,7 @@ public class IndexController {
      */
     @GetMapping(value = "menu",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public MeeResult<List<SysMenu2VO>> menu(){
+    public MeeResult<List<SysMenuVO>> menu(){
         return indexService.buildMenu();
     }
 

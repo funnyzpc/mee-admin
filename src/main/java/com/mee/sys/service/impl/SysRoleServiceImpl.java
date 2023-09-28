@@ -8,6 +8,7 @@ import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.core.model.Page;
 import com.mee.sys.entity.SysRole;
+import com.mee.sys.service.SysRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import java.util.Map;
  * @date    2023-05-28 16:45:31
 */
 @Service
-public class SysRoleServiceImpl /* implements SysRole2Service */ {
+public class SysRoleServiceImpl implements SysRoleService {
 
     /**
     *   日志
@@ -52,7 +53,7 @@ public class SysRoleServiceImpl /* implements SysRole2Service */ {
      * @param page_size 请求分页大小
      * @return 系统::角色表分页集合
     */
-    //@Override
+    @Override
     public MeeResult<Page<SysRole>> list(Integer page_no, Integer page_size, String name, String description, Integer status){
       LOG.info("接收到参数 {},{}, {},{},{},",page_no,page_size ,name,description,status);
       Map<String,Object> param = new HashMap<String,Object>(8,1);
@@ -69,7 +70,7 @@ public class SysRoleServiceImpl /* implements SysRole2Service */ {
      * @param id 系统::角色表主键
      * @return 系统::角色表
     */
-    //@Override
+    @Override
     public MeeResult<SysRole> findById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
@@ -89,7 +90,8 @@ public class SysRoleServiceImpl /* implements SysRole2Service */ {
      * @param sysRole2 SysRole2(or Map) 系统::角色表
      * @return 插入条数
     */
-    public MeeResult add(SysRole sysRole2){
+    @Override
+    public MeeResult<Integer> add(SysRole sysRole2){
       LOG.info("接收到参数 {}", sysRole2);
       if(null == sysRole2 || null==sysRole2.getName() || null==sysRole2.getDescription() || null==sysRole2.getStatus() ){
           return ResultBuild.fail("参数缺失请检查~");
@@ -114,7 +116,8 @@ public class SysRoleServiceImpl /* implements SysRole2Service */ {
      * @param sysRole2 SysRole2(or Map) 系统::角色表
      * @return 更新条数
     */
-    public MeeResult update(SysRole sysRole2){
+    @Override
+    public MeeResult<Integer> update(SysRole sysRole2){
       LOG.info("接收到参数 {}",sysRole2);
       if(null == sysRole2 ||null==sysRole2.getId()||null==sysRole2.getName()||null==sysRole2.getDescription()||null==sysRole2.getStatus() ){
           return ResultBuild.fail("必要参数缺失，请检查~");
@@ -136,9 +139,10 @@ public class SysRoleServiceImpl /* implements SysRole2Service */ {
      * @id 系统::角色表 主键
      * @return 删除条数
     */
+    @Override
     @Transactional(rollbackFor = Exception.class,readOnly = false)
     //@Override
-    public MeeResult deleteById(String id){
+    public MeeResult<Integer> deleteById(String id){
         LOG.info("开始查询:{}",id);
         if(null==id || "".equals(id)){
           LOG.error("必要参数为空:{}",id);

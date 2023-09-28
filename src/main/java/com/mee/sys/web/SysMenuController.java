@@ -2,8 +2,8 @@ package com.mee.sys.web;
 
 import com.mee.common.util.MeeResult;
 import com.mee.sys.entity.SysMenu;
-import com.mee.sys.service.impl.SysMenuServiceImpl;
-import com.mee.sys.vo.SysMenu2TreeVO;
+import com.mee.sys.service.SysMenuService;
+import com.mee.sys.vo.SysMenuTreeVO;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 系统::新菜单表web接口(SysMenu2Controller)
+ * 系统::新菜单表web接口(SysMenuController)
  *
  * @author  shadow
  * @version v1.3
@@ -26,7 +26,7 @@ public class SysMenuController {
     * 业务处理类
     */
     @Autowired
-    private SysMenuServiceImpl sysMenuService;
+    private SysMenuService sysMenuService;
 
     /**
      * 页面
@@ -42,7 +42,7 @@ public class SysMenuController {
     @RequiresPermissions("sys:sys_menu:list")
     @GetMapping("/list")
     @ResponseBody
-    public MeeResult<List<SysMenu2TreeVO>> list(String title){
+    public MeeResult<List<SysMenuTreeVO>> list(String title){
         return sysMenuService.menuAll(title);
     }
 
@@ -62,7 +62,7 @@ public class SysMenuController {
     @RequiresPermissions("sys:sys_menu:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult add(@RequestBody(required = true) SysMenu sysMenu){
+    public MeeResult<Void> add(@RequestBody(required = true) SysMenu sysMenu){
         return sysMenuService.add( sysMenu );
     }
 
@@ -72,7 +72,7 @@ public class SysMenuController {
     @RequiresPermissions("sys:sys_menu:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult update(@RequestBody(required = true) SysMenu sysMenu ){
+    public MeeResult<Integer> update(@RequestBody(required = true) SysMenu sysMenu ){
         return sysMenuService.update( sysMenu );
     }
 
@@ -82,7 +82,7 @@ public class SysMenuController {
     @RequiresPermissions("sys:sys_menu:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(@RequestParam(required = true) String id){
+    public MeeResult<Integer> deleteById(@RequestParam(required = true) String id){
         return sysMenuService.deleteById(id);
     }
 

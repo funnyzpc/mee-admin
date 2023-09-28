@@ -5,8 +5,8 @@ import com.mee.core.model.Page;
 import com.mee.sys.dto.SysRoleUserDTO;
 import com.mee.sys.entity.SysRoleUser;
 import com.mee.sys.entity.SysUser;
-import com.mee.sys.service.impl.SysRoleUserServiceImpl;
-import com.mee.sys.vo.SysRoleUser2VO;
+import com.mee.sys.service.SysRoleUserService;
+import com.mee.sys.vo.SysRoleUserVO;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ public class SysRoleUserController {
     * 业务处理类
     */
     @Autowired
-    private SysRoleUserServiceImpl sysRoleUserService;
+    private SysRoleUserService sysRoleUserService;
 
     /**
      * 页面
@@ -46,7 +46,7 @@ public class SysRoleUserController {
     @RequiresPermissions("sys:sys_role_user:list")
     @GetMapping("/list")
     @ResponseBody
-    public MeeResult<Page<SysRoleUser2VO>> list(
+    public MeeResult<Page<SysRoleUserVO>> list(
             @RequestParam(defaultValue="1")Integer page_no,
             @RequestParam(defaultValue="10")Integer page_size,
             String user_name,
@@ -59,11 +59,11 @@ public class SysRoleUserController {
 
     /**
      * 根据角色查询角色用户
-     * @param page_no
-     * @param page_size
-     * @param user_name
-     * @param phone
-     * @param role_id
+     * @param page_no   分页
+     * @param page_size 页大小
+     * @param user_name 用户
+     * @param phone 手机号
+     * @param role_id   角色ID
      * @return
      */
     @RequiresPermissions("sys:sys_role_user:list")
@@ -95,8 +95,8 @@ public class SysRoleUserController {
     @RequiresPermissions("sys:sys_role_user:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult add(@RequestBody(required = true) SysRoleUserDTO sysRoleUser2DTO){
-        return sysRoleUserService.add( sysRoleUser2DTO );
+    public MeeResult<Void> add(@RequestBody(required = true) SysRoleUserDTO sysRoleUserDTO){
+        return sysRoleUserService.add( sysRoleUserDTO );
     }
 
 //    /**
@@ -115,7 +115,7 @@ public class SysRoleUserController {
     @RequiresPermissions("sys:sys_role_user:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(@RequestParam(required = true) String id){
+    public MeeResult<Integer> deleteById(@RequestParam(required = true) String id){
         return sysRoleUserService.deleteById(id);
     }
 

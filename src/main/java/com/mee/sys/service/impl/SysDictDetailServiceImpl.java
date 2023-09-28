@@ -88,7 +88,7 @@ public class SysDictDetailServiceImpl implements SysDictDetailService {
      * @return 插入条数
     */
     @Override
-    public MeeResult add(SysDictDetail sysDictDetail){
+    public MeeResult<Integer> add(SysDictDetail sysDictDetail){
       LOG.info("接收到参数 {}", sysDictDetail);
       if(null==sysDictDetail.getDict_id() || null==sysDictDetail.getLabel() || null==sysDictDetail.getValue() || null==sysDictDetail.getSort() ){
           return ResultBuild.fail("参数缺失请检查~");
@@ -114,7 +114,7 @@ public class SysDictDetailServiceImpl implements SysDictDetailService {
      * @return 更新条数
     */
     @Override
-    public MeeResult update(SysDictDetail sysDictDetail){
+    public MeeResult<Integer> update(SysDictDetail sysDictDetail){
       LOG.info("接收到参数 {}",sysDictDetail);
       if( null==sysDictDetail.getId() || null==sysDictDetail.getDict_id()||null==sysDictDetail.getLabel()||null==sysDictDetail.getValue()||null==sysDictDetail.getSort() ){
           return ResultBuild.fail("必要参数缺失，请检查~");
@@ -126,7 +126,6 @@ public class SysDictDetailServiceImpl implements SysDictDetailService {
       sysDictDetail.setUpdate_by(Long.parseLong(user_id));
       sysDictDetail.setUpdate_time(now);
 
-      //int update_count = dbSQLDao.update("com.mee.module.sys.mapper.sys_dict_detail2.update",sysDictDetail2);
       int update_count = dbSQLDao.update("com.mee.xml.SysDictDetail.update",sysDictDetail);
       LOG.info("已更新数据字典详情明细：{}->{}条",sysDictDetail,update_count);
       return ResultBuild.build(update_count);
@@ -139,7 +138,7 @@ public class SysDictDetailServiceImpl implements SysDictDetailService {
      * @return 删除条数
     */
     @Override
-    public MeeResult deleteById(String id){
+    public MeeResult<Integer> deleteById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
           LOG.error("必要参数为空:{}",id);
@@ -165,7 +164,6 @@ public class SysDictDetailServiceImpl implements SysDictDetailService {
       }
       Map<String,Object> param = new HashMap<String,Object>(2,1);
       param.put("list",ids);
-      //int delete_count = dbSQLDao.delete("com.mee.module.sys.mapper.sys_dict_detail2.deleteBatch", param);
       int delete_count = dbSQLDao.delete("com.mee.xml.SysDictDetail.deleteBatch", param);
       LOG.info("已删除记录{}->{}条",ids,delete_count);
       return ResultBuild.build(delete_count);

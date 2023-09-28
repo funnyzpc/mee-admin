@@ -3,7 +3,7 @@ package com.mee.sys.web;
 import com.mee.common.util.MeeResult;
 import com.mee.core.model.Page;
 import com.mee.sys.entity.SysShedlock;
-import com.mee.sys.service.impl.SysShedlockServiceImpl;
+import com.mee.sys.service.SysShedlockService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class SysShedlockController {
 
     @Autowired
-    private SysShedlockServiceImpl sysShedlockService;
+    private SysShedlockService sysShedlockService;
 
     /**
      * 页面
@@ -39,7 +39,7 @@ public class SysShedlockController {
 
     /**
      * 分页查询
-     * @param name
+     * @param name  任务ID
      * @param label
      * @param locked_at_start
      * @param locked_at_end
@@ -59,13 +59,13 @@ public class SysShedlockController {
 
     /**
      * 更新
-     * @param sysShedlock
+     * @param sysShedlock 数据
      * @return
      */
     @RequiresPermissions("sys:sys_shedlock:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult update(@RequestBody(required = true) SysShedlock sysShedlock){
+    public MeeResult<Integer> update(@RequestBody(required = true) SysShedlock sysShedlock){
        return sysShedlockService.update(sysShedlock);
     }
 
@@ -77,7 +77,7 @@ public class SysShedlockController {
     @RequiresPermissions("sys:sys_shedlock:delete")
     @DeleteMapping("delete")
     @ResponseBody
-    public MeeResult delete(@RequestParam(required = true) String name){
+    public MeeResult<Integer> delete(@RequestParam(required = true) String name){
         return sysShedlockService.delete(name);
     }
 }

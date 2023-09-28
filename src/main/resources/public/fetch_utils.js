@@ -9,7 +9,12 @@ function fetchPostJson( url,data,callback ){
            'Content-Type': 'application/json'
          })
     })
-    .then(response => response.json())
+    .then( response => {
+      if( checkRedirected(response) ){
+        return response.text();
+      }
+      return response.json();
+    })
     .then(data => callback(data))
     .catch(error => console.log("请求超时,请刷新后重试~")
     );
@@ -29,15 +34,41 @@ function fetchPostForm( url,data,callback ){
 
 /* GET+json */
 function fetchGet(url,param,callback) {
-    let param_str = buildParam(param);
-    fetch(url+"?"+param_str,{ credentials:'include',method: 'GET' })
-        .then((response) => response.json())
-        .then((data)=>{
-            callback(data)
-        }).catch(error =>  {
-            console.log("请求超时,请刷新后重试[3]"+error);
-            callback(error)
-        });
+  let param_str = buildParam(param);
+  fetch(url+"?"+param_str,{ credentials:'include',method: 'GET' })
+      .then( response => {
+        if( checkRedirected(response) ){
+          return response.text();
+        }
+        return response.json();
+      })
+      .then((data)=>{
+          callback(data)
+      }).catch(error =>  {
+          console.log("请求超时,请刷新后重试[3]"+error);
+          callback(error)
+      });
+}
+
+/* 检查是否重定向 */
+function checkRedirected(response){
+    if( null==response ){
+      console.error("响应体为空:"+response);
+      return false;
+    }
+    // 重定向
+    if( true===response.redirected ){
+      alert("登录超时!");
+      window.parent.location.href=response.url;
+      return true;
+    }
+    // 状态
+    if( 200!==response.status ){
+        alert("系统异常:"+response.status);
+        console.error("响应体为空:"+response.text());
+        return true;
+    }
+    return false;
 }
 
 /* GET+json */
@@ -70,7 +101,12 @@ function fetchPutJson(url,data,callback) {
                 method: 'PUT',
                 body: JSON.stringify(data),
                 headers: new Headers({ 'Content-Type': 'application/json'}) })
-    .then((response) => response.json())
+    .then(response => {
+      if( checkRedirected(response) ){
+        return response.text();
+      }
+      return response.json();
+    })
     .then((data)=>{
         callback(data)
     }).catch(error =>  {
@@ -89,7 +125,12 @@ function fetchDelete( url,data,callback ){
            'Content-Type': 'application/json'
          })
     })
-    .then(response => response.json())
+    .then( response => {
+      if( checkRedirected(response) ){
+        return response.text();
+      }
+      return response.json();
+    })
     .then(data => callback(data))
     .catch(error => console.log("请求超时,请刷新后重试~")
     );

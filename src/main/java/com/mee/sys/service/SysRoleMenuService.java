@@ -3,6 +3,9 @@ package com.mee.sys.service;
 import com.mee.common.util.MeeResult;
 import com.mee.sys.entity.SysRoleMenu;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 角色菜单关联(SysRoleMenu2) 业务接口
  * 
@@ -33,14 +36,14 @@ public interface SysRoleMenuService {
      * @param SysRoleMenu2(or Map) 角色菜单关联
      * @return 插入条数
      */
-    MeeResult add(SysRoleMenu sysRoleMenu2);
+    MeeResult add(Map<String,Object> sysRoleMenu);
     /**
      * 修改角色菜单关联
      *
      * @param SysRoleMenu2(or Map) 角色菜单关联
      * @return 更新条数
      */
-    MeeResult update(SysRoleMenu sysRoleMenu2);
+    MeeResult update(SysRoleMenu sysRoleMenu);
 
     /**
      * 删除角色菜单关联
@@ -58,4 +61,10 @@ public interface SysRoleMenuService {
      */
     MeeResult deleteBatch(String[] ids);
 
+    /**
+     * 列出所有关联角色菜单信息
+     * @param roleId 角色ID
+     * @return MeeResult<List<SysRoleMenu>>
+     */
+    MeeResult<List<SysRoleMenu>> listByRoleId(String roleId);
 }

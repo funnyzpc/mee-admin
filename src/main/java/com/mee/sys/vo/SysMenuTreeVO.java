@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @className SysMenu2TreeVO
  * @date 2023/5/7 10:34 PM
  */
-public class SysMenu2TreeVO extends SysMenu  implements Serializable {
+public class SysMenuTreeVO extends SysMenu  implements Serializable {
 
     /**
      * 日志对象

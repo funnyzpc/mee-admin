@@ -6,7 +6,7 @@ import com.mee.common.util.ResultBuild;
 import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.sys.entity.SysMenu;
-import com.mee.sys.vo.SysMenu2VO;
+import com.mee.sys.vo.SysMenuVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class IndexServiceImpl {
     @Autowired
     private DBSQLDao dbSQLDao;
 
-    public MeeResult<List<SysMenu2VO>> buildMenu(){
+    public MeeResult<List<SysMenuVO>> buildMenu(){
         // 获取所有表数据
 //        List<SysMenu> data_list = dbSQLDao.find("com.mee.xml.SysMenu.findList");
         List<SysMenu> data_list = this.getUserMenus();
@@ -45,19 +45,19 @@ public class IndexServiceImpl {
             return ResultBuild.build(new ArrayList<>());
         }
         // 构建菜单结构
-        List<SysMenu2VO> result_list = new ArrayList<>(8);
+        List<SysMenuVO> result_list = new ArrayList<>(8);
         for( int i=0;i<data_list.size();i++ ){
             SysMenu item = data_list.get(i);
             //if( null==item.getPid() || "".equals(item.getPid()) ){
             if( "0".equals(item.getPid()) ){
-                SysMenu2VO sysMenu2VO = this.toVO(item);
+                SysMenuVO sysMenu2VO = this.toVO(item);
                 result_list.add(sysMenu2VO);
                 // make GC work
                 data_list.set(i,null);
             }
         }
         // children
-        for(SysMenu2VO menuVO2:result_list){
+        for(SysMenuVO menuVO2:result_list){
 //            if(menuVO2.getSub_count()>0){
             if( null!=menuVO2 ){
                 this.findChildren(data_list,menuVO2.getId(),menuVO2,0);
@@ -67,7 +67,7 @@ public class IndexServiceImpl {
     }
 
 
-    private void findChildren(List<SysMenu> menu_list, String menu_id, SysMenu2VO sysMenu2VO, int count) {
+    private void findChildren(List<SysMenu> menu_list, String menu_id, SysMenuVO sysMenu2VO, int count) {
         // 防止死循环
         if(count>=80){
             LOG.error("菜单存在死循环风险(>400)，请检查:{},{}", JacksonUtil.toJsonString(menu_list),menu_id);
@@ -77,7 +77,7 @@ public class IndexServiceImpl {
             LOG.error("user_menu_list 或 menu_id 为空:{},{}",JacksonUtil.toJsonString(menu_list),menu_id);
             return;
         }
-        List<SysMenu2VO> children_list = new ArrayList<SysMenu2VO>(8);
+        List<SysMenuVO> children_list = new ArrayList<SysMenuVO>(8);
         for( int i=0;i<menu_list.size();i++ ){
             SysMenu item = menu_list.get(i);
             if(null!=item && menu_id.equals(item.getPid())){
@@ -91,7 +91,7 @@ public class IndexServiceImpl {
             ++count;
             LOG.info("findChildren循环至=>{}",count);
             sysMenu2VO.setChildren(children_list);
-            for(SysMenu2VO item:children_list){
+            for(SysMenuVO item:children_list){
 //                if(item.getSub_count()>0){
                 if(null!=item){
                     this.findChildren(menu_list,item.getId(),item,count);
@@ -109,8 +109,8 @@ public class IndexServiceImpl {
      * @param sysMenu2 菜单对象
      * @return  新菜单对象
      */
-    private SysMenu2VO toVO( SysMenu sysMenu2 ){
-        SysMenu2VO sysMenu2VO = new SysMenu2VO();
+    private SysMenuVO toVO(SysMenu sysMenu2 ){
+        SysMenuVO sysMenu2VO = new SysMenuVO();
         sysMenu2VO.setId(sysMenu2.getId());
         sysMenu2VO.setPid(sysMenu2.getPid());
         sysMenu2VO.setType(sysMenu2.getType());

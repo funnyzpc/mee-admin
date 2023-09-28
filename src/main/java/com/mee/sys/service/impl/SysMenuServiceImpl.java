@@ -9,7 +9,8 @@ import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.core.model.Page;
 import com.mee.sys.entity.SysMenu;
-import com.mee.sys.vo.SysMenu2TreeVO;
+import com.mee.sys.service.SysMenuService;
+import com.mee.sys.vo.SysMenuTreeVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ import java.util.Map;
  * @date    2023-05-05 21:48:15
 */
 @Service
-public class SysMenuServiceImpl {
+public class SysMenuServiceImpl implements SysMenuService {
 
     /**
     *   日志
@@ -55,6 +56,7 @@ public class SysMenuServiceImpl {
      * @param ... (or Map) 系统::新菜单表
      * @return 系统::新菜单表分页集合
     */
+    @Override
     public MeeResult list(Integer page_no, Integer page_size , Integer type, String title, String path, String target, String permission, Integer show){
       LOG.info("接收到参数 {},{}, {},{},{},{},{},{},",page_no,page_size,type,title,path,target,permission,show);
       Map<String,Object> param = new HashMap<String,Object>(8,1);
@@ -74,6 +76,7 @@ public class SysMenuServiceImpl {
      * @param  id 系统::新菜单表主键
      * @return 系统::新菜单表
     */
+    @Override
     public MeeResult<SysMenu> findById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
@@ -112,8 +115,9 @@ public class SysMenuServiceImpl {
 //      return ResultBuild.success(insert_count);
 //    }
 
+    @Override
     @Transactional(rollbackFor = Exception.class,readOnly = false)
-    public MeeResult add(SysMenu sysMenu) {
+    public MeeResult<Void> add(SysMenu sysMenu) {
         // check
         if(null == sysMenu ||
                 null == sysMenu.getPid() ||
@@ -151,8 +155,9 @@ public class SysMenuServiceImpl {
      * @param sysMenu 数据
      * @return 更新结果
      */
+    @Override
     @Transactional(readOnly = false,rollbackFor = Exception.class)
-    public MeeResult update(SysMenu sysMenu) {
+    public MeeResult<Integer> update(SysMenu sysMenu) {
         if(null == sysMenu ||
                 null==sysMenu.getId() ||
                 null == sysMenu.getType() ||
@@ -202,8 +207,9 @@ public class SysMenuServiceImpl {
      * @param id 主键
      * @return 删除结果
      */
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public MeeResult deleteById(String id){
+    public MeeResult<Integer> deleteById(String id){
         if(null == id){
             LOG.error("参数为空 ~ ");
             return ResultBuild.fail("参数为空～");
@@ -218,31 +224,31 @@ public class SysMenuServiceImpl {
         // 如果有子级，则需要手动删除子级才可删除当前级
         param.clear();
         param.put("id",id);
-        SysMenu sysMenu2 = dbSQLDao.findOne("com.mee.xml.SysMenu.findById",param);
+        SysMenu sysMenu = dbSQLDao.findOne("com.mee.xml.SysMenu.findById",param);
         int delete_count = dbSQLDao.delete("com.mee.xml.SysMenu.deleteById",param);
         // 再更新sub_count
-        int update_sub_count = this.updateSubCount(sysMenu2);
+        int update_sub_count = this.updateSubCount(sysMenu);
         LOG.info("{}=>已删除{}条，更新{}条",id,delete_count,update_sub_count);
-        return ResultBuild.SUCCESS();
+        return ResultBuild.build(update_sub_count);
     }
 
     /**
      * 更新子级数,主意这个没有事物
      * @return 更新数
      */
-    private int updateSubCount(SysMenu sysMenu2){
-        if( null==sysMenu2 || null==sysMenu2.getPid() ||  "".equals(sysMenu2.getPid()) ){
+    private int updateSubCount(SysMenu sysMenu){
+        if( null==sysMenu || null==sysMenu.getPid() ||  "".equals(sysMenu.getPid()) ){
             return 0;
         }
-        final String pid = sysMenu2.getPid();
+        final String pid = sysMenu.getPid();
         final LocalDateTime now = DateUtil.now();
         final String user_id = ShiroUtils.getUserId();
-        SysMenu sysMenu = new SysMenu();
-        sysMenu.setPid(pid);
-        sysMenu.setUpdate_by(user_id);
-        sysMenu.setUpdate_time(now);
-        if(null != sysMenu.getPid()){
-            int update_count = dbSQLDao.update("com.mee.xml.SysMenu.updateSubCount",sysMenu);
+        SysMenu param = new SysMenu();
+        param.setPid(pid);
+        param.setUpdate_by(user_id);
+        param.setUpdate_time(now);
+        if(null != param.getPid()){
+            int update_count = dbSQLDao.update("com.mee.xml.SysMenu.updateSubCount",param);
             LOG.info("更新{}条",update_count);
             return update_count;
         }
@@ -254,7 +260,8 @@ public class SysMenuServiceImpl {
      * @ids 系统::新菜单表 主键集合
      * @return 删除条数
     */
-    public MeeResult deleteBatch(String[] ids){
+    @Override
+    public MeeResult<Integer> deleteBatch(String[] ids){
       if( null==ids || 0==ids.length ){
         LOG.error("必要参数为空:{}",ids);
         return ResultBuild.fail("必要参数为空[id]");
@@ -266,13 +273,15 @@ public class SysMenuServiceImpl {
       return ResultBuild.build(delete_count);
     }
 
-    public MeeResult menuAll(String title) {
+    @Override
+    public MeeResult<List<SysMenuTreeVO>> menuAll(String title) {
         List<SysMenu> data_list = dbSQLDao.find("com.mee.xml.SysMenu.findList");
         if( data_list.isEmpty() ){
-           return ResultBuild.build(new String[]{});
+           //return ResultBuild.build(new String[]{});
+           return ResultBuild.build(new ArrayList<>());
         }
         // 结构排序
-        List<SysMenu2TreeVO> result_list = new ArrayList<>(data_list.size());
+        List<SysMenuTreeVO> result_list = new ArrayList<>(data_list.size());
         for(int i=0;i<data_list.size();i++){
             SysMenu item = data_list.get(i);
             if( null==item ){
@@ -310,9 +319,9 @@ public class SysMenuServiceImpl {
 //            result_list=result_list2;
 //        }
         if( null!=title && !"".equals(title=title.trim()) ){
-            List<SysMenu2TreeVO> result_list2 = new ArrayList<>(data_list.size());
+            List<SysMenuTreeVO> result_list2 = new ArrayList<>(data_list.size());
             Boolean is_find = Boolean.FALSE;
-            for( SysMenu2TreeVO item:result_list ){
+            for( SysMenuTreeVO item:result_list ){
                 //if( Boolean.TRUE.equals(is_find) && ( null==item.getPid() || "".equals(item.getPid())) ){
                 if( Boolean.TRUE.equals(is_find) && "0".equals(item.getPid()) ){
                     break;
@@ -331,7 +340,7 @@ public class SysMenuServiceImpl {
         return ResultBuild.build(result_list);
     }
 
-    private void findLowerItem(List<SysMenu> menu_list, String menu_id, List<SysMenu2TreeVO> result_list, int count) {
+    private void findLowerItem(List<SysMenu> menu_list, String menu_id, List<SysMenuTreeVO> result_list, int count) {
         // 防止死循环
         if(count>=80){
             LOG.error("菜单存在死循环风险(>400)，请检查:{},{}", JacksonUtil.toJsonString(menu_list),menu_id);
@@ -379,31 +388,31 @@ public class SysMenuServiceImpl {
 
     /**
      * 对象转换
-     * @param sysMenu2 菜单对象
+     * @param sysMenu 菜单对象
      * @return  新菜单对象
      */
-    private SysMenu2TreeVO toTreeVO( SysMenu sysMenu2 ,int level){
-        SysMenu2TreeVO sysMenu2TreeVO = new SysMenu2TreeVO();
-        sysMenu2TreeVO.setId(sysMenu2.getId());
-        sysMenu2TreeVO.setPid(sysMenu2.getPid());
-        sysMenu2TreeVO.setType(sysMenu2.getType());
-        sysMenu2TreeVO.setTitle(sysMenu2.getTitle());
-        sysMenu2TreeVO.setIcon(sysMenu2.getIcon());
-        sysMenu2TreeVO.setPath(sysMenu2.getPath());
-        sysMenu2TreeVO.setTarget(sysMenu2.getTarget());
-        sysMenu2TreeVO.setPermission(sysMenu2.getPermission());
-        sysMenu2TreeVO.setSub_count(sysMenu2.getSub_count());
-        sysMenu2TreeVO.setShow(sysMenu2.getShow());
+    private SysMenuTreeVO toTreeVO(SysMenu sysMenu , int level){
+        SysMenuTreeVO sysMenuTreeVO = new SysMenuTreeVO();
+        sysMenuTreeVO.setId(sysMenu.getId());
+        sysMenuTreeVO.setPid(sysMenu.getPid());
+        sysMenuTreeVO.setType(sysMenu.getType());
+        sysMenuTreeVO.setTitle(sysMenu.getTitle());
+        sysMenuTreeVO.setIcon(sysMenu.getIcon());
+        sysMenuTreeVO.setPath(sysMenu.getPath());
+        sysMenuTreeVO.setTarget(sysMenu.getTarget());
+        sysMenuTreeVO.setPermission(sysMenu.getPermission());
+        sysMenuTreeVO.setSub_count(sysMenu.getSub_count());
+        sysMenuTreeVO.setShow(sysMenu.getShow());
         //sysMenu2TreeVO.setHidden( (null!=sysMenu2.getShow() && 1==sysMenu2.getShow()) ? Boolean.FALSE:Boolean.TRUE);
-        sysMenu2TreeVO.setSort(sysMenu2.getSort());
+        sysMenuTreeVO.setSort(sysMenu.getSort());
 
-        sysMenu2TreeVO.setCreate_time(sysMenu2.getCreate_time());
-        sysMenu2TreeVO.setCreate_by(sysMenu2.getCreate_by());
-        sysMenu2TreeVO.setUpdate_time(sysMenu2.getUpdate_time());
-        sysMenu2TreeVO.setUpdate_by(sysMenu2.getUpdate_by());
-        sysMenu2TreeVO.setLevel(level);
-        sysMenu2TreeVO.setLevel_locking((level+1)*16);
-        return sysMenu2TreeVO;
+        sysMenuTreeVO.setCreate_time(sysMenu.getCreate_time());
+        sysMenuTreeVO.setCreate_by(sysMenu.getCreate_by());
+        sysMenuTreeVO.setUpdate_time(sysMenu.getUpdate_time());
+        sysMenuTreeVO.setUpdate_by(sysMenu.getUpdate_by());
+        sysMenuTreeVO.setLevel(level);
+        sysMenuTreeVO.setLevel_locking((level+1)*16);
+        return sysMenuTreeVO;
 
     }
 

@@ -38,11 +38,11 @@ public class SysLogController {
 
     /**
      * 分页查询
-     * @param log_type
-     * @param log_title
-     * @param log_date
-     * @param page_no
-     * @param page_size
+     * @param log_type 日志类型
+     * @param log_title 日志标题
+     * @param log_date 日志日期
+     * @param page_no 分页
+     * @param page_size 页大小
      * @return .
      */
     @RequiresPermissions("sys:sys_log:list")
@@ -60,7 +60,7 @@ public class SysLogController {
     @RequiresPermissions("sys:sys_log:delete")
     @DeleteMapping("delete")
     @ResponseBody
-    public MeeResult delete(@RequestParam(required = true) String id){
+    public MeeResult<Integer> delete(@RequestParam(required = true) String id){
         return sysLogService.delete(id);
     }
 

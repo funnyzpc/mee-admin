@@ -17,7 +17,7 @@ import java.util.List;
  * @className SysMenu2Vo
  * @date 2023/5/6 14:44
  */
-public class SysMenu2VO implements Serializable {
+public class SysMenuVO implements Serializable {
     /**
      * 序列化标识
      */
@@ -108,7 +108,7 @@ public class SysMenu2VO implements Serializable {
      * 子级
      * @return
      */
-    private List<SysMenu2VO> children;
+    private List<SysMenuVO> children;
 
     public String getId() {
         return id;
@@ -230,11 +230,11 @@ public class SysMenu2VO implements Serializable {
         this.update_by = update_by;
     }
 
-    public List<SysMenu2VO> getChildren() {
+    public List<SysMenuVO> getChildren() {
         return children;
     }
 
-    public void setChildren(List<SysMenu2VO> children) {
+    public void setChildren(List<SysMenuVO> children) {
         this.children = children;
     }
 }

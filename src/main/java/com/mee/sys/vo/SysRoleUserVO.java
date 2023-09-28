@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  * @className SysRoleUser2VO
  * @date 2023/5/30 9:13 PM
  */
-public class SysRoleUser2VO extends SysRoleUser implements Serializable {
+public class SysRoleUserVO extends SysRoleUser implements Serializable {
 
     /**
      * 序列化标识

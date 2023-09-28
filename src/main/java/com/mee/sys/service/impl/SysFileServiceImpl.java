@@ -50,8 +50,7 @@ public class SysFileServiceImpl {
         return ResultBuild.build(list);
     }
 
-
-    public MeeResult deleteById(String id) {
+    public MeeResult<Integer> deleteById(String id) {
         LOG.info("开始查询:{}",id);
         if(null==id || "".equals(id)){
             LOG.error("必要参数为空:{}",id);

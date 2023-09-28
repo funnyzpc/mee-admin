@@ -8,6 +8,7 @@ import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.core.model.Page;
 import com.mee.sys.entity.SysDict;
+import com.mee.sys.service.SysDictService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import java.util.Map;
  * @date    2023-05-15 10:27:36
 */
 @Service
-public class SysDictServiceImpl {
+public class SysDictServiceImpl implements SysDictService {
 
     /**
     *   日志
@@ -52,12 +53,12 @@ public class SysDictServiceImpl {
      * @param description .
      * @return .
      */
+    @Override
     public MeeResult<Page<SysDict>> list(Integer page_no, Integer page_size , String name, String description){
       LOG.info("接收到参数 {},{}, {},{},",page_no,page_size,name,description);
       Map<String,Object> param = new HashMap<String,Object>(9,1);
       param.put("name",null==name||"".equals(name)?null:"%"+name+"%" );
       param.put("description",(null==description||"".equals(description))?null:"%"+description+"%" );
-      //Page list = dbSQLDao.list("com.mee.module.sys.mapper.sys_dict2.findList",param,page_no,page_size);
       Page<SysDict> list = dbSQLDao.list("com.mee.xml.SysDict.findList",param,page_no,page_size);
       return ResultBuild.build(list);
     }
@@ -67,6 +68,7 @@ public class SysDictServiceImpl {
      * @param id .
      * @return .
      */
+    @Override
     public MeeResult<SysDict> findById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
@@ -85,6 +87,7 @@ public class SysDictServiceImpl {
      * @param sysDict 数据字典
      * @return 插入条数
     */
+    @Override
     public MeeResult<Integer> add(SysDict sysDict){
       LOG.info("接收到参数 {}", sysDict);
       if(null == sysDict || null==sysDict.getName() || null==sysDict.getDescription() ){
@@ -110,19 +113,20 @@ public class SysDictServiceImpl {
      * @param SysDict2(or Map) 数据字典
      * @return 更新条数
     */
-    public MeeResult update(SysDict sysDict2){
-      LOG.info("接收到参数 {}",sysDict2);
-      if(null == sysDict2 ||null==sysDict2.getId()||null==sysDict2.getName() ){
+    @Override
+    public MeeResult<Integer> update(SysDict sysDict){
+      LOG.info("接收到参数 {}",sysDict);
+      if(null == sysDict ||null==sysDict.getId()||null==sysDict.getName() ){
           return ResultBuild.fail("必要参数缺失，请检查~");
       }
       final LocalDateTime now = DateUtil.now();
       final String user_id = ShiroUtils.getUserId();
 
       // 通用字段
-      sysDict2.setUpdate_by(Long.parseLong(user_id));
-      sysDict2.setUpdate_time(now);
-      int update_count = dbSQLDao.update("com.mee.xml.SysDict.update",sysDict2);
-      LOG.info("已更新数据字典明细：{}->{}条",sysDict2,update_count);
+      sysDict.setUpdate_by(Long.parseLong(user_id));
+      sysDict.setUpdate_time(now);
+      int update_count = dbSQLDao.update("com.mee.xml.SysDict.update",sysDict);
+      LOG.info("已更新数据字典明细：{}->{}条",sysDict,update_count);
       return ResultBuild.build(update_count);
     }
 
@@ -132,7 +136,8 @@ public class SysDictServiceImpl {
      * @id 数据字典 主键
      * @return 删除条数
     */
-    public MeeResult deleteById(String id){
+    @Override
+    public MeeResult<Integer> deleteById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
           LOG.error("必要参数为空:{}",id);
@@ -153,7 +158,8 @@ public class SysDictServiceImpl {
      * @ids 数据字典 主键集合
      * @return 删除条数
     */
-    public MeeResult deleteBatch(String[] ids){
+    @Override
+    public MeeResult<Integer> deleteBatch(String[] ids){
       if( null==ids || 0==ids.length ){
         LOG.error("必要参数为空:{}",ids);
         return ResultBuild.fail("必要参数为空[id]");

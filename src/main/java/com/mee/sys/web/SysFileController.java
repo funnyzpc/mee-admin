@@ -57,7 +57,7 @@ public class SysFileController  {
     @RequiresPermissions("sys:sys_file:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(@RequestParam(required = true) String id){
+    public MeeResult<Integer> deleteById(@RequestParam(required = true) String id){
         return sysFileService.deleteById(id);
     }
 

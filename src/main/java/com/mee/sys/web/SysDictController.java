@@ -3,7 +3,7 @@ package com.mee.sys.web;
 import com.mee.common.util.MeeResult;
 import com.mee.core.model.Page;
 import com.mee.sys.entity.SysDict;
-import com.mee.sys.service.impl.SysDictServiceImpl;
+import com.mee.sys.service.SysDictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,11 +25,11 @@ public class SysDictController {
     * 业务处理类
     */
     @Autowired
-    private SysDictServiceImpl sysDictService;
+    private SysDictService sysDictService;
 
     /**
      * 页面
-     * @return
+     * @return page
      */
     @RequiresPermissions("sys:sys_dict:list")
     @GetMapping
@@ -73,7 +73,7 @@ public class SysDictController {
     @RequiresPermissions("sys:sys_dict:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult<Integer> edit(@RequestBody(required = true) SysDict sysDict ){
+    public MeeResult<Integer> update(@RequestBody(required = true) SysDict sysDict ){
         return sysDictService.update( sysDict );
     }
 

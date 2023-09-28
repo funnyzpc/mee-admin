@@ -8,12 +8,11 @@ import com.mee.core.model.Page;
 import com.mee.sys.dto.SysUserDTO;
 import com.mee.sys.entity.SysRole;
 import com.mee.sys.entity.SysUser;
-import com.mee.sys.service.impl.SysUserServiceImpl;
+import com.mee.sys.service.SysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -34,7 +33,7 @@ public class SysUserController {
     * 业务处理类
     */
     @Autowired
-    private SysUserServiceImpl sysUserService;
+    private SysUserService sysUserService;
     /**
      * 登录用户锁定业务
      */
@@ -82,7 +81,7 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult add(@RequestBody(required = true) SysUserDTO sysUser2DTO){
+    public MeeResult<Void> add(@RequestBody(required = true) SysUserDTO sysUser2DTO){
         return sysUserService.add( sysUser2DTO );
     }
 
@@ -92,7 +91,7 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult update(@RequestBody(required = true) SysUser sysUser ){
+    public MeeResult<Integer> update(@RequestBody(required = true) SysUser sysUser ){
         return sysUserService.update( sysUser );
     }
 
@@ -102,7 +101,7 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(@RequestParam(required = true) String id){
+    public MeeResult<Integer> deleteById(@RequestParam(required = true) String id){
         return sysUserService.deleteById(id);
     }
 
@@ -121,7 +120,7 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:change_status")
     @PutMapping("/change_status")
     @ResponseBody
-    public MeeResult changeStatus(@RequestBody(required = true) SysUser user){
+    public MeeResult<Void> changeStatus(@RequestBody(required = true) SysUser user){
         return sysUserService.changeStatus(user);
     }
 
@@ -129,7 +128,7 @@ public class SysUserController {
     @RequiresPermissions("sys:sys_user:unlock")
     @PutMapping("/unlock")
     @ResponseBody
-    public MeeResult unlock(@RequestParam(value = "user_name",required = true) String user_name){
+    public MeeResult<Void> unlock(@RequestParam(value = "user_name",required = true) String user_name){
         shiroAccountLockedService.clearCounter(user_name);
         return ResultBuild.SUCCESS();
     }
@@ -154,19 +153,19 @@ public class SysUserController {
         return sysUserService.getRoles(user_id);
     }
 
-    /**
-     * 导入用户信息
-     * @param file 文件
-     * @param name 名称
-     * @return
-     */
-    @RequiresPermissions("dev")
-    @PostMapping("import")
-    @ResponseBody
-    public MeeResult<Integer> doImport(@RequestParam(value = "file",required = true) MultipartFile file,
-                        @RequestParam(value = "name",required = false) String name){
-        return sysUserService.doImport(file,name);
-    }
+//    /**
+//     * 导入用户信息
+//     * @param file 文件
+//     * @param name 名称
+//     * @return
+//     */
+//    @RequiresPermissions("dev")
+//    @PostMapping("import")
+//    @ResponseBody
+//    public MeeResult<Integer> doImport(@RequestParam(value = "file",required = true) MultipartFile file,
+//                        @RequestParam(value = "name",required = false) String name){
+//        return sysUserService.doImport(file,name);
+//    }
 
     /**
      * 导出文件信息

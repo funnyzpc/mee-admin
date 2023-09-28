@@ -125,10 +125,23 @@ function checkFormStruct( form_struct ){
         throw new Error('模板结构必要参数为空:fields')
     }
 
-    // 修真字段配置 [common to add OR common to update]
-    //let has_common = keys.includes("common");
-    let has_common = (form_struct.fields["common"] && form_struct.fields["common"].length>0);
+//    // 修真字段配置 [common to add OR common to update]
+//    if( form_struct.fields["common"] ){
+//      // 根据 form_struct::actions 构建 form_struct::fields结构
+//        for( let idx in keys ){
+//            // 不存在则填充一个common的fields
+//            if( !form_struct.fields[keys[idx]] ){
+//                form_struct.fields[keys[idx]]=form_struct.fields["common"]
+//            }else{
+//                throw new Error(`模板结构.action.${keys[idx]}项不在fields.${keys[idx]}`);
+//            }
+//        }
+//    }
+
+    // 根据 form_struct::actions 构建 form_struct::fields结构
+    let has_common = (form_struct.fields["common"] && form_struct.fields["common"][0])?true:false;
     for( let idx in keys ){
+        // 这样做保证了每个action项都有common的field可以使用，如果只定义了actions且没有没有定义任何fields项时 一定要抛错！
         if( !form_struct.fields[keys[idx]] ){
             if( has_common ){
                 form_struct.fields[keys[idx]]=form_struct.fields["common"]

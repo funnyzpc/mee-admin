@@ -1,7 +1,14 @@
 package com.mee.sys.service;
 
 import com.mee.common.util.MeeResult;
+import com.mee.core.model.Page;
+import com.mee.sys.dto.SysUserDTO;
+import com.mee.sys.entity.SysRole;
 import com.mee.sys.entity.SysUser;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 
 /**
@@ -18,7 +25,7 @@ public interface SysUserService {
      * @param SysUser2(or Map) 系统::用户信息表
      * @return 系统::用户信息表分页集合
      */
-    MeeResult list(Integer page_no,Integer page_size ,String user_name,String phone,String email,String status);
+    MeeResult<Page<SysUser>> list(@RequestParam(required = true)Integer page_no, @RequestParam(required = true)Integer page_size, String user_name,String nick_name,String phone, String email,String status,String del_flag);
 
     /**
      * 按主键查询系统::用户信息表
@@ -31,10 +38,10 @@ public interface SysUserService {
     /**
      * 新增系统::用户信息表
      *
-     * @param SysUser2(or Map) 系统::用户信息表
+     * @param sysUserDTO(or Map) 系统::用户信息表
      * @return 插入条数
      */
-    MeeResult add(SysUser sysUser2);
+    MeeResult add(SysUserDTO sysUserDTO);
     /**
      * 修改系统::用户信息表
      *
@@ -59,4 +66,40 @@ public interface SysUserService {
      */
     MeeResult deleteBatch(String[] ids);
 
+    /**
+     * 修改用户状态
+     * @param user 用户信息
+     * @return MeeResult<Void>
+     */
+
+    MeeResult<Void> changeStatus(SysUser user);
+
+    /**
+     * 修改密码
+     * @param id 用户ID
+     * @param pwd 密码
+     * @return
+     */
+    MeeResult<Integer> resetPwd(String id, String pwd);
+
+    /**
+     * 获取用户角色信息
+     * @param userId 用户ID
+     * @return
+     */
+    MeeResult<List<SysRole>> getRoles(String userId);
+
+    /**
+     * 导出用户信息
+     * @param response
+     * @param pageNo
+     * @param pageSize
+     * @param userName
+     * @param nickName
+     * @param phone
+     * @param email
+     * @param status
+     * @param delFlag
+     */
+    void doExport(HttpServletResponse response, Integer pageNo, Integer pageSize, String userName, String nickName, String phone, String email, String status, String delFlag);
 }

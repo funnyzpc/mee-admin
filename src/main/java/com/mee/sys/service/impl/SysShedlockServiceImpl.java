@@ -6,6 +6,7 @@ import com.mee.common.util.ResultBuild;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.core.model.Page;
 import com.mee.sys.entity.SysShedlock;
+import com.mee.sys.service.SysShedlockService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import java.util.Map;
  * @date 2023/6/4 1:06 AM
  */
 @Service
-public class SysShedlockServiceImpl {
+public class SysShedlockServiceImpl implements SysShedlockService {
 
     /**
      * 日志
@@ -36,6 +37,7 @@ public class SysShedlockServiceImpl {
     @Autowired
     private DBSQLDao dbSQLDao;
 
+    @Override
     public MeeResult<Page<SysShedlock>> list(String name, String label,LocalDateTime locked_at_start, LocalDateTime locked_at_end, int pageIdx, int pageSize){
         LOG.info("开始查询数据 pageIdx:{}, pageSize:{}",pageIdx,pageSize);
         Map<String,Object> queryParam = new HashMap<String,Object>(2,1);
@@ -51,6 +53,7 @@ public class SysShedlockServiceImpl {
         return ResultBuild.build(list);
     }
 
+    @Override
     public MeeResult<Integer> update(SysShedlock sysShedlock){
         // 参数校验
         if(null == sysShedlock || null==sysShedlock.getName() || "".equals(sysShedlock.getLabel()) || null==sysShedlock.getStatus() ){
@@ -66,6 +69,7 @@ public class SysShedlockServiceImpl {
         return ResultBuild.build(updateCount);
     }
 
+    @Override
     public MeeResult<Integer> delete(@RequestParam(required = true) String name){
         if(StringUtils.isEmpty(name)){
             return ResultBuild.FAIL();

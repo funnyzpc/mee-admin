@@ -44,7 +44,7 @@ public class SysLogServiceImpl {
         return ResultBuild.build(list);
     }
 
-    public MeeResult delete(String id){
+    public MeeResult<Integer> delete(String id){
         Map<String,Object> params = new HashMap<String,Object>(2,1);
         params.put("id",id);
         int deleteCount = dbSQLDao.delete("com.mee.xml.SysLog.delete",params);

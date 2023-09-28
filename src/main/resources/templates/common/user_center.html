@@ -20,55 +20,55 @@
 </body>
 <#include "../decorator/foot.html"/>
 <script type="text/cc-template" id="template-data-list">
-        <div><p style="font-size: 18pt;padding-left:8px;background-color: #ddd;margin-bottom:0px;">用户中心</p></div>
-        <div class="u_switch">
-            <ul>
-                <li><a href="#" onclick="to_content(0)" style="color:white;background-color:black;display:block;">基本信息</a></li>
-                <li><a href="#" onclick="to_content(1)">修改密码</a></li>
-            </ul>
+    <div><p style="font-size:18pt;padding:8px 8px;background-color:#ddd;margin-bottom:0px;font-weight: bold;">用户中心</p></div>
+    <div class="u_switch">
+        <ul>
+            <li><a href="#" onclick="to_content(0)" style="color:white;background-color:black;display:block;">基本信息</a></li>
+            <li><a href="#" onclick="to_content(1)">修改密码</a></li>
+        </ul>
+    </div>
+    <div class="u_content">
+        <div class="user_info">
+            <form>
+                <input type="hidden" name="id" value="{{id}}" />
+                <!--                <p>部门ID:{{dept_id}}</p>-->
+                <p><label>用户名称:</label> {{user_name}}</p>
+                <p><label>用户昵称:</label> <input type="text" name="nick_name" value="{{nick_name}}"/></p>
+                <p><label>性别:</label>
+                    <select style="width:160px;" name="gender">
+                        <option>--</option>
+                        <option value="M" {{#equal gender 'M'}}selected{{/equal}}>男</option>
+                        <option value="F" {{#equal gender 'F'}}selected{{/equal}}>女</option>
+                    </select>
+                </p>
+                <p><label>手机号码:</label> <input type="text" name="phone" value="{{phone}}"/></p>
+                <p><label>用户email:</label> <input type="text" name="email" value="{{email}}"/></p>
+                <p><label>用户注册时间:</label>{{register_date}}</p>
+                <p><label>最后登录时间:</label>{{last_login_date}}</p>
+                <p title="密码最后重置时间"><label>密码重置时间:</label> {{pwd_reset_time}}</p>
+                <p><label>启用状态:</label> {{sys_user_status status}}</p>
+                <p><label>删除状态:</label> {{del_flag del_flag}}</p>
+                <p><label>创建时间:</label> {{create_time}}</p>
+                <p><label>创建人:</label>  {{create_by}}</p>
+                <p><label>更新时间:</label> {{update_time}}</p>
+                <p><label>更新人:</label> {{update_by}}</p>
+                <p style="border-bottom:none;text-align:center;">
+                    <button type="button" class="btn btn-sm btn-success" onclick="UserCenterFunc.updateInfo()">更新</button>
+                </p>
+            </form>
         </div>
-        <div class="u_content">
-            <div class="user_info">
-                <form>
-                    <input type="hidden" name="id" value="{{id}}" />
-    <!--                <p>部门ID:{{dept_id}}</p>-->
-                    <p><label>用户名称:</label> {{user_name}}</p>
-                    <p><label>用户昵称:</label> <input type="text" name="nick_name" value="{{nick_name}}"/></p>
-                    <p><label>性别:</label>
-                        <select style="width:160px;" name="gender">
-                            <option>--</option>
-                            <option value="M" {{#equal gender 'M'}}selected{{/equal}}>男</option>
-                            <option value="F" {{#equal gender 'F'}}selected{{/equal}}>女</option>
-                        </select>
-                    </p>
-                    <p><label>手机号码:</label> <input type="text" name="phone" value="{{phone}}"/></p>
-                    <p><label>用户email:</label> <input type="text" name="email" value="{{email}}"/></p>
-                    <p><label>用户注册时间:</label>{{register_date}}</p>
-                    <p><label>最后登录时间:</label>{{last_login_date}}</p>
-                    <p title="密码最后重置时间"><label>密码重置时间:</label> {{pwd_reset_time}}</p>
-                    <p><label>启用状态:</label> {{sys_user_status status}}</p>
-                    <p><label>删除状态:</label> {{del_flag del_flag}}</p>
-                    <p><label>创建时间:</label> {{create_time}}</p>
-                    <p><label>创建人:</label>  {{create_by}}</p>
-                    <p><label>更新时间:</label> {{update_time}}</p>
-                    <p><label>更新人:</label> {{update_by}}</p>
-                    <p style="border-bottom:none;text-align:center;">
-                        <button type="button" class="btn btn-sm btn-success" onclick="UserCenterFunc.updateInfo()">更新</button>
-                    </p>
-                </form>
-            </div>
-            <div class="edit_pwd" style="display:none;">
-                <form>
-                    <input type="hidden" name="id" value="{{id}}" />
-                    <p><label>原密码<span class="em-point">*</span></label></span><input type="password" name="old_pwd" value=""/></p>
-                    <p><label>新密码<span class="em-point">*</span></label><input type="password" name="pwd1" value=""/></p>
-                    <p><label>确认密码<span class="em-point">*</span></label><input type="password" name="pwd2" value=""/></p>
-                    <p style="border-bottom:none;text-align:center;">
-                        <button type="button" class="btn btn-sm btn-success" onclick="UserCenterFunc.editPwd()">更新</button>
-                    </p>
-                </form>
-            </div>
+        <div class="edit_pwd" style="display:none;">
+            <form>
+                <input type="hidden" name="id" value="{{id}}" />
+                <p><label>原密码<span class="em-point">*</span></label></span><input type="password" name="old_pwd" value=""/></p>
+                <p><label>新密码<span class="em-point">*</span></label><input type="password" name="pwd1" value=""/></p>
+                <p><label>确认密码<span class="em-point">*</span></label><input type="password" name="pwd2" value=""/></p>
+                <p style="border-bottom:none;text-align:center;">
+                    <button type="button" class="btn btn-sm btn-success" onclick="UserCenterFunc.editPwd()">更新</button>
+                </p>
+            </form>
         </div>
+    </div>
 </script>
 
 <script type="module">

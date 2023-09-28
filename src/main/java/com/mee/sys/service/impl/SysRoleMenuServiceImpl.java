@@ -8,6 +8,7 @@ import com.mee.core.configuration.ShiroUtils;
 import com.mee.core.dao.DBSQLDao;
 import com.mee.core.model.Page;
 import com.mee.sys.entity.SysRoleMenu;
+import com.mee.sys.service.SysRoleMenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import java.util.Map;
  * @date    2023-05-28 16:45:29
 */
 @Service
-public class SysRoleMenuServiceImpl {
+public class SysRoleMenuServiceImpl implements SysRoleMenuService {
 
     /**
     *   日志
@@ -54,6 +55,7 @@ public class SysRoleMenuServiceImpl {
      * @param page_size 请求分页大小
      * @return 角色菜单关联分页集合
     */
+    @Override
     public MeeResult<Page<SysRoleMenu>> list(Integer page_no, Integer page_size , String menu_id, String role_id){
       LOG.info("接收到参数 {},{}, {},{},",page_no,page_size,menu_id,role_id);
       Map<String,Object> param = new HashMap<String,Object>(4,1);
@@ -69,7 +71,7 @@ public class SysRoleMenuServiceImpl {
      * @param id 角色菜单关联主键
      * @return 角色菜单关联
     */
-    //@Override
+    @Override
     public MeeResult<SysRoleMenu> findById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
@@ -88,6 +90,7 @@ public class SysRoleMenuServiceImpl {
      * @param params sysRoleMenu2 SysRoleMenu2(or Map) 角色菜单关联
      * @return 插入条数
     */
+    @Override
     @Transactional(readOnly = false,rollbackFor = Exception.class)
     public MeeResult add(Map<String,Object> params){
       LOG.info("接收到参数 {}", params);
@@ -131,6 +134,7 @@ public class SysRoleMenuServiceImpl {
      * @param sysRoleMenu2 SysRoleMenu2(or Map) 角色菜单关联
      * @return 更新条数
     */
+    @Override
     public MeeResult update(SysRoleMenu sysRoleMenu2){
       LOG.info("接收到参数 {}",sysRoleMenu2);
       if(null == sysRoleMenu2 ||null==sysRoleMenu2.getId()||null==sysRoleMenu2.getMenu_id()||null==sysRoleMenu2.getRole_id() ){
@@ -152,7 +156,7 @@ public class SysRoleMenuServiceImpl {
      * @id 角色菜单关联 主键
      * @return 删除条数
     */
-    //@Override
+    @Override
     public MeeResult deleteById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
@@ -171,6 +175,7 @@ public class SysRoleMenuServiceImpl {
      * @ids 角色菜单关联 主键集合
      * @return 删除条数
     */
+    @Override
     public MeeResult deleteBatch(String[] ids){
       if( null==ids || 0==ids.length ){
         LOG.error("必要参数为空:{}",ids);
@@ -183,6 +188,7 @@ public class SysRoleMenuServiceImpl {
       return ResultBuild.build(delete_count);
     }
 
+    @Override
     public MeeResult<List<SysRoleMenu>> listByRoleId(String role_id) {
         LOG.info("接收到参数 {}",role_id);
         Map<String,Object> param = new HashMap<String,Object>(2,1);

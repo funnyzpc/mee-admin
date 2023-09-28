@@ -2,12 +2,14 @@ import * as FetchUtils  from "./fetch_utils.js"
 import * as MeeUtils  from "./mee_utils.js"
 import * as MeeDicts  from "./mee_dicts.js"
 import * as Form  from "../form.js"
-import * as SearchFormFields  from "../search_form_fields.js"
+import * as SearchForm  from "../search_form.js"
 
 /*通用api及参数定义，init后会自动合并到各自的模块:module */
 var global_module = {
     /* 调用Common.init后是否调用一次查询 */
     default_query:true,
+    /* 著录(修改/新增)表单结构定义 */
+    form_struct:{ on:false },
     /* 分页表单的默认参数 _selected:已选择的数据体id，一般定义多选框需要此参数*/
     search_form:{"page_no":1,"page_size":10,"_total":0,"_page_count":0,"_selected":[]},
     /* 主键字段,如果module定义了则会覆盖此字段 */
@@ -16,6 +18,14 @@ var global_module = {
     events:{"query": doQuery,"add":toAdd,"export":doExport,"import":doImport,"delete_batch":deleteBatch,/*分页方法start*/"previous_page":previousPage,"first_page":firstPage,"last_page":lastPage,"next_page":nextPage,"_page_size":pageSize},
     /* select_one为单选, select_all为多选 */
     data_events:{"select_one":doSelectOne,"select_all":doSelectAll,"update":toUpdate,"delete":toDelete},
+    // 搜索框ID，可由外层module定义
+    search_form_id:"data-search",
+    // 分页列表ID，可由外层module定义
+    data_list_id:"data-list",
+    // 模板ID，可由外层module定义
+    template_id:"template-data-list",
+    // 这里的data可能是Object也可能是Array,所以这里不申明
+    // data:[],
     /* 增删改查api,一般定义非表单类api */
     api:{
         /* 列表分页查询：GET请求 */
@@ -27,8 +37,6 @@ var global_module = {
         /* 导入：GET请求 */
         "export":"/export",
     },
-    /* 列表查询请求，如果执行的是Common的相关请求则数据会回写到此字段内*/
-    data:[],
     // 定义初始化字典数据,这个字典是表单还有查询列表都要用到的
     init_dict:[],
     // 上面需要初始化字典在调用接口后会回写到此处
@@ -67,7 +75,7 @@ function initSearchFormDicts(){
     //let search_form_region_id = global_module.search_form_region?global_module.search_form_region:"data-search";
     let query_id = global_module.search_form_id;
     if( global_module.dicts ){
-        SearchFormFields.init(query_id,global_module.dicts);
+        SearchForm.init(query_id,global_module.dicts);
     }
 }
 
@@ -130,43 +138,16 @@ function registerSearchForm(){
 
 // 合并module 用户态的module合并到global_module
 function mergeProperty(module){
-    //global_module.ctx_path=module.ctx_path;
-    global_module.default_query=(true===module.default_query || false===module.default_query)?module.default_query:global_module.default_query;
-    global_module.form_struct=module.form_struct?module.form_struct:{};
-    // 用户态的property合并到global的property
-    MeeUtils.addProperty(module.events,global_module.events);
-    MeeUtils.addProperty(module.data_events,global_module.data_events);
-    // MeeUtils.addProperty(module.search_form,global_module.search_form);
-    MeeUtils.addPropertyOverwritten(module.search_form,global_module.search_form);
-    MeeUtils.addPropertyOverwritten(module.api,global_module.api);
-    if( module.default_query && (true===module.default_query || false===module.default_query) ){
-        global_module.default_query=module.default_query;
-    }
-    if( module.id_field ){
-        global_module.id_field=module.id_field;
-    }
     // api fill base
-    let has_common = module.api["base"]?true:false;
-    for( let key in global_module.api ){
-        if( !module.api[key] ){
-            // 填充一个base
-            if( has_common ){
-                global_module.api[key]=module.api["base"]+global_module.api[key];
-            }else{
-                throw new Error(`api未定义 module.api[${key}]，请检查!`)
-            }
-        }
+    if( module.api["base"] ){
+      for( let key in global_module.api ){
+        global_module.api[key]=module.api["base"]+global_module.api[key];
+      }
     }
-    // 合并init_dict,默认为空 这里面定义的字典项最终是从接口过来
-    global_module.init_dict=module.init_dict?module.init_dict:[];
-    // 合并来自用户自己定义的字典项
-    //global_module.dicts=MeeUtils.addProperty(module.dicts,global_module.dicts);
-    MeeUtils.addProperty(module.dicts,global_module.dicts);
-    // 合并标识id
-    global_module.search_form_id=module.search_form_id?module.search_form_id:"data-search";
-    global_module.data_list_id=module.data_list_id?module.data_list_id:"data-list";
-    global_module.template_id=module.template_id?module.template_id:"template-data-list";
-
+    // 合并module数据至global_module
+    MeeUtils.assign(module,global_module);
+    //console.log(module);
+    //console.log(global_module);
 }
 
 // fetch请求并注册table行数据

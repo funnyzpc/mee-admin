@@ -3,7 +3,7 @@ package com.mee.sys.web;
 import com.mee.common.util.MeeResult;
 import com.mee.core.model.Page;
 import com.mee.sys.entity.SysRole;
-import com.mee.sys.service.impl.SysRoleServiceImpl;
+import com.mee.sys.service.SysRoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +24,7 @@ public class SysRoleController {
     * 业务处理类
     */
     @Autowired
-    private SysRoleServiceImpl sysRoleService;
+    private SysRoleService sysRoleService;
 
     /**
      * 页面
@@ -66,7 +66,7 @@ public class SysRoleController {
     @RequiresPermissions("sys:sys_role:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult add(@RequestBody(required = true) SysRole sysRole){
+    public MeeResult<Integer> add(@RequestBody(required = true) SysRole sysRole){
         return sysRoleService.add( sysRole );
     }
 
@@ -76,7 +76,7 @@ public class SysRoleController {
     @RequiresPermissions("sys:sys_role:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult update(@RequestBody(required = true) SysRole sysRole ){
+    public MeeResult<Integer> update(@RequestBody(required = true) SysRole sysRole ){
         return sysRoleService.update( sysRole );
     }
 
@@ -86,7 +86,7 @@ public class SysRoleController {
     @RequiresPermissions("sys:sys_role:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(@RequestParam(required = true) String id){
+    public MeeResult<Integer> deleteById(@RequestParam(required = true) String id){
         return sysRoleService.deleteById(id);
     }
 

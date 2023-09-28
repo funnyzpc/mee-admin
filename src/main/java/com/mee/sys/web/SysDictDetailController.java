@@ -56,7 +56,7 @@ public class SysDictDetailController {
     @RequiresPermissions("sys:sys_dict:add")
     @PostMapping("add")
     @ResponseBody
-    public MeeResult add(@RequestBody(required = true) SysDictDetail sysDictDetail){
+    public MeeResult<Integer> add(@RequestBody(required = true) SysDictDetail sysDictDetail){
         return sysDictDetailService.add( sysDictDetail );
     }
 
@@ -66,7 +66,7 @@ public class SysDictDetailController {
     @RequiresPermissions("sys:sys_dict:update")
     @PutMapping("update")
     @ResponseBody
-    public MeeResult update(@RequestBody(required = true) SysDictDetail sysDictDetail ){
+    public MeeResult<Integer> update(@RequestBody(required = true) SysDictDetail sysDictDetail ){
         return sysDictDetailService.update( sysDictDetail );
     }
 
@@ -76,7 +76,7 @@ public class SysDictDetailController {
     @RequiresPermissions("sys:sys_dict:delete")
     @DeleteMapping("/delete")
     @ResponseBody
-    public MeeResult deleteById(@RequestParam(required = true) String id){
+    public MeeResult<Integer> deleteById(@RequestParam(required = true) String id){
         return sysDictDetailService.deleteById(id);
     }
 

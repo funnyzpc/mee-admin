@@ -29,7 +29,7 @@
         order by id desc
     </select>
 
-    <select id="findList2" resultType="com.mee.sys.vo.SysRoleUser2VO">
+    <select id="findList2" resultType="com.mee.sys.vo.SysRoleUserVO">
         select ru.*,u.user_name,u.nick_name,u.register_date,u.status,u.del_flag from sys_user as u
         inner join sys_role_user  as ru on ru.user_id=u.id
         <where>

@@ -33,7 +33,7 @@ public interface SysDictDetailService {
      * @param SysDictDetail2(or Map) 数据字典详情
      * @return 插入条数
      */
-    MeeResult add(SysDictDetail sysDictDetail2);
+    MeeResult<Integer> add(SysDictDetail sysDictDetail2);
     /**
      * 修改数据字典详情
      *

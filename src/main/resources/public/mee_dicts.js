@@ -43,7 +43,8 @@ function dictTemplate(dicts,dict_name){
 function mergeDicts(_global_module,new_dicts){
     if( new_dicts && "object"===(typeof new_dicts)  ){
         //_global_module.dicts=MeeUtils.addProperty(new_dicts,_global_module.dicts);
-        MeeUtils.addProperty(new_dicts,_global_module.dicts);
+        //MeeUtils.addProperty(new_dicts,_global_module.dicts);
+        MeeUtils.assign(new_dicts,_global_module.dicts);
     }
 }
 

@@ -15,6 +15,7 @@ import com.mee.core.model.Page;
 import com.mee.sys.dto.SysUserDTO;
 import com.mee.sys.entity.SysRole;
 import com.mee.sys.entity.SysUser;
+import com.mee.sys.service.SysUserService;
 import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -40,7 +40,7 @@ import java.util.Map;
  * @date    2023-05-30 20:59:40
 */
 @Service
-public class SysUserServiceImpl {
+public class SysUserServiceImpl implements SysUserService {
 
     /**
     *   日志
@@ -74,23 +74,19 @@ public class SysUserServiceImpl {
     /**
      * 查询系统::用户信息表列表
      *
-     * @param SysUser2(or Map) 系统::用户信息表
+     * @param SysUser(or Map) 系统::用户信息表
      * @return 系统::用户信息表分页集合
     */
-    //@Override
+    @Override
     public MeeResult<Page<SysUser>> list(Integer page_no, Integer page_size , String user_name, String nick_name, String phone, String email, String status, String del_flag){
       LOG.info("接收到参数 {},{}, {},{},{},{},",page_no,page_size ,user_name,phone,email,status);
       Map<String,Object> param = new HashMap<String,Object>(19,1);
-      //param.put("dept_id",null==dept_id||"".equals(dept_id)?null:dept_id );
       param.put("user_name",null==user_name||"".equals(user_name)?null:"%"+user_name+"%" );
       param.put("nick_name",null==nick_name||"".equals(nick_name)?null:"%"+nick_name+"%" );
-      //param.put("gender",null==gender||"".equals(gender)?null:gender );
       param.put("phone",null==phone||"".equals(phone)?null:"%"+phone+"%" );
       param.put("email",null==email||"".equals(email)?null:"%"+email+"%" );
       param.put("status",null==status||"".equals(status)?null:status );
-      //param.put("del_flag",null==del_flag||"".equals(del_flag)?null:del_flag );
       param.put("del_flag",DeleteFlagEnum.NORMAL.code );
-      //Page list = dbSQLDao.list("com.mee.module.sys.mapper.sys_user2.findList",param,page_no,page_size);
       Page<SysUser> list = dbSQLDao.list("com.mee.xml.SysUser.findList",param,page_no,page_size);
       return ResultBuild.build(list);
     }
@@ -98,10 +94,10 @@ public class SysUserServiceImpl {
     /**
      * 系统::用户信息表::按主键查询
      *
-     * @param 系统::用户信息表主键
+     * @param id::用户信息表主键
      * @return 系统::用户信息表
     */
-    //@Override
+    @Override
     public MeeResult<SysUser> findById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
@@ -120,8 +116,8 @@ public class SysUserServiceImpl {
      * @param sysUserDTO SysUser2(or Map) 系统::用户信息表
      * @return 插入条数
     */
-    //@Override
-    public MeeResult add(SysUserDTO sysUserDTO){
+    @Override
+    public MeeResult<Void> add(SysUserDTO sysUserDTO){
         LOG.info("接收到参数 {}", sysUserDTO);
         if( null==sysUserDTO.getUser_name() ||  "".equals(sysUserDTO.getUser_name()) || null==sysUserDTO.getStatus() ){
             return ResultBuild.fail("参数缺失请检查~");
@@ -170,35 +166,36 @@ public class SysUserServiceImpl {
     /**
      * 系统::用户信息表::修改
      *
-     * @param SysUser2(or Map) 系统::用户信息表
+     * @param sysUser(or Map) 系统::用户信息表
      * @return 更新条数
     */
-    //@Override
-    public MeeResult update(SysUser sysUser2){
-      LOG.info("接收到参数 {}",sysUser2);
-      if(null == sysUser2 ||null==sysUser2.getId()||null==sysUser2.getUser_name()|| null==sysUser2.getStatus() ){
+    @Override
+    public MeeResult<Integer> update(SysUser sysUser){
+      LOG.info("接收到参数 {}",sysUser);
+      if(null == sysUser ||null==sysUser.getId()||null==sysUser.getUser_name()|| null==sysUser.getStatus() ){
           return ResultBuild.fail("必要参数缺失，请检查~");
       }
       final LocalDateTime now = DateUtil.now();
       final String user_id = ShiroUtils.getUserId();
 
       // 通用字段
-      sysUser2.setUpdate_time(now);
-      sysUser2.setUpdate_by(user_id);
+      sysUser.setUpdate_time(now);
+      sysUser.setUpdate_by(user_id);
 
-      int update_count = dbSQLDao.update("com.mee.xml.SysUser.update",sysUser2);
-      LOG.info("已更新系统::用户信息表明细：{}->{}条",sysUser2,update_count);
+      int update_count = dbSQLDao.update("com.mee.xml.SysUser.update",sysUser);
+      LOG.info("已更新系统::用户信息表明细：{}->{}条",sysUser,update_count);
       return ResultBuild.build(update_count);
     }
 
     /**
      * 系统::用户信息表::删除
      *
-     * @id 系统::用户信息表 主键
+     * @param id 系统::用户信息表 主键
      * @return 删除条数
     */
+    @Override
     @Transactional(readOnly = false,rollbackFor = Exception.class)
-    public MeeResult deleteById(String id){
+    public MeeResult<Integer> deleteById(String id){
       LOG.info("开始查询:{}",id);
       if(null==id || "".equals(id)){
           LOG.error("必要参数为空:{}",id);
@@ -229,7 +226,8 @@ public class SysUserServiceImpl {
      * @ids 系统::用户信息表 主键集合
      * @return 删除条数
     */
-    public MeeResult deleteBatch(String[] ids){
+    @Override
+    public MeeResult<Integer> deleteBatch(String[] ids){
       if( null==ids || 0==ids.length ){
         LOG.error("必要参数为空:{}",ids);
         return ResultBuild.fail("必要参数为空[id]");
@@ -241,7 +239,8 @@ public class SysUserServiceImpl {
       return ResultBuild.build(delete_count);
     }
 
-    public MeeResult changeStatus(SysUser sysUser2) {
+    @Override
+    public MeeResult<Void> changeStatus(SysUser sysUser2) {
         // 参数校验
         if(null == sysUser2 || null==sysUser2.getId() || null==sysUser2.getStatus()){
             return ResultBuild.FAIL();
@@ -259,6 +258,7 @@ public class SysUserServiceImpl {
      * @param pwd 密码
      * @return
      */
+    @Override
     public MeeResult<Integer> resetPwd(String id, String pwd) {
         if( null==id || null==pwd || "".equals(pwd) ||"".equals(pwd)  ){
             return ResultBuild.fail("必要参数为空[id,pwd]");
@@ -292,9 +292,10 @@ public class SysUserServiceImpl {
 
     /**
      * 获取用户角色信息
-     * @param userId 用户ID
+     * @param user_id 用户ID
      * @return 角色信息
      */
+    @Override
     public MeeResult<List<SysRole>> getRoles(String user_id) {
         Map<String,String> param = new HashMap<>(2,1);
         param.put("user_id",user_id);
@@ -302,25 +303,25 @@ public class SysUserServiceImpl {
         return ResultBuild.build(result);
     }
 
-    /**
-     * 导入数据（仅测试）
-     * @param file 文件
-     * @param name 名称
-     * @return
-     */
-    public MeeResult doImport(@RequestParam(value = "file",required = true) MultipartFile file,
-                        @RequestParam(value = "name",required = false) String name){
-        try{
-            if( file.isEmpty() || !file.getOriginalFilename().endsWith(".xlsx")){
-                return ResultBuild.fail("文件异常...");
-            }
-            LOG.info("导入文件{},name={}",file.getOriginalFilename(),name);
-            return ResultBuild.SUCCESS();
-        }catch(Exception ex){
-            LOG.error("上传发生错误:",ex);
-            return ResultBuild.fail("上传发生错误...[数据有重复]");
-        }
-    }
+//    /**
+//     * 导入数据（仅测试）
+//     * @param file 文件
+//     * @param name 名称
+//     * @return
+//     */
+//    public MeeResult doImport(@RequestParam(value = "file",required = true) MultipartFile file,
+//                        @RequestParam(value = "name",required = false) String name){
+//        try{
+//            if( file.isEmpty() || !file.getOriginalFilename().endsWith(".xlsx")){
+//                return ResultBuild.fail("文件异常...");
+//            }
+//            LOG.info("导入文件{},name={}",file.getOriginalFilename(),name);
+//            return ResultBuild.SUCCESS();
+//        }catch(Exception ex){
+//            LOG.error("上传发生错误:",ex);
+//            return ResultBuild.fail("上传发生错误...[数据有重复]");
+//        }
+//    }
 
     /**
      * 导出数据
@@ -334,6 +335,7 @@ public class SysUserServiceImpl {
      * @param status    status
      * @param del_flag  del_flag
      */
+    @Override
     public void doExport(HttpServletResponse response,
                          @RequestParam(required = true)Integer page_no,
                          @RequestParam(required = true)Integer page_size,
