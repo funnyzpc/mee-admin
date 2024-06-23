@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  * @author funnyzpc
  * @description 分佈式&集群 定時任務鎖表
  */
+@Deprecated
 public class SysShedlock  {
 
     private String name;

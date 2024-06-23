@@ -26,6 +26,7 @@ import java.util.Map;
  * @className SysShedlockServiceImpl
  * @date 2023/6/4 1:06 AM
  */
+@Deprecated
 @Service
 public class SysShedlockServiceImpl implements SysShedlockService {
 

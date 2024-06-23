@@ -1,5 +1,6 @@
 package com.mee;
 
+import com.mee.timed.annotation.EnableMeeTimed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -20,7 +21,8 @@ import java.net.InetAddress;
 */
 @SpringBootApplication
 @EnableAsync // 开启异步调用
-@EnableScheduling // 开启定时任务
+//@EnableScheduling // 开启定时任务
+@EnableMeeTimed
 public class MeeAdminApplication {
 	/**
 	 * 日志

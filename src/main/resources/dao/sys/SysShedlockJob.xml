@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    集群分佈式鎖-任务配置 SysShedlockJob(SYS_SHEDLOCK_JOB) DAO
+@author         ash
+@date           2024-06-18 16:31:16
+-->
+<!--<mapper namespace="com.mee.module.sys.mapper.SysShedlockJobMapper">-->
+<!--<mapper namespace="com.mee.xml.sys.SysShedlockJob">-->
+<mapper namespace="com.mee.xml.sys.SysShedlockJob">
+
+    <!-- 字段 -->
+    <!--<resultMap type="com.mee.module.sys.entity.SysShedlockJob" id="SysShedlockJobResult">-->
+    <resultMap type="com.mee.sys.entity.SysShedlockJob" id="SysShedlockJobResult">
+      <result property="application" column="application"/>
+      <result property="name" column="name"/>
+      <result property="host_ip" column="host_ip"/>
+      <result property="locked_at" column="locked_at"/>
+      <result property="lock_until" column="lock_until"/>
+      <result property="locked_by" column="locked_by"/>
+      <result property="state" column="state"/>
+      <result property="data" column="data"/>
+      <result property="label" column="label"/>
+      <result property="call_type" column="call_type"/>
+      <result property="call_value" column="call_value"/>
+      <result property="update_time" column="update_time"/>
+    </resultMap>
+
+    <!-- 查询::postgresql -->
+    <select id="findList" resultMap="SysShedlockJobResult" databaseId="postgresql" >
+      select * from SYS_SHEDLOCK_JOB
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
+          <if test="name != null and name != ''">AND NAME LIKE #{name}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="locked_at != null">AND LOCKED_AT = #{locked_at}</if>
+          <if test="lock_until != null">AND LOCK_UNTIL = #{lock_until}</if>
+          <if test="locked_by != null and locked_by != ''">AND LOCKED_BY = #{locked_by}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="data != null and data != ''">AND DATA = #{data}</if>
+          <if test="label != null and label != ''">AND LABEL = #{label}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+        ORDER BY APPLICATION DESC,NAME ASC
+    </select>
+    <!-- 查询::mysql -->
+    <select id="findList" resultMap="SysShedlockJobResult" databaseId="mysql" >
+      select * from SYS_SHEDLOCK_JOB
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
+          <if test="name != null and name != ''">AND `name` LIKE #{name}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="locked_at != null">AND LOCKED_AT = #{locked_at}</if>
+          <if test="lock_until != null">AND LOCK_UNTIL = #{lock_until}</if>
+          <if test="locked_by != null and locked_by != ''">AND LOCKED_BY = #{locked_by}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="data != null and data != ''">AND DATA = #{data}</if>
+          <if test="label != null and label != ''">AND LABEL = #{label}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+      ORDER BY APPLICATION DESC,NAME ASC
+    </select>
+    <!-- 查询::oracle -->
+    <select id="findList" resultMap="SysShedlockJobResult" databaseId="oracle" >
+      select * from SYS_SHEDLOCK_JOB
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
+          <if test="name != null and name != ''">AND "NAME" LIKE #{name}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="locked_at != null">AND LOCKED_AT = #{locked_at}</if>
+          <if test="lock_until != null">AND LOCK_UNTIL = #{lock_until}</if>
+          <if test="locked_by != null and locked_by != ''">AND LOCKED_BY = #{locked_by}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="data != null and data != ''">AND DATA = #{data}</if>
+          <if test="label != null and label != ''">AND LABEL = #{label}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+        ORDER BY APPLICATION DESC,NAME ASC
+    </select>
+    <!-- 查询::sqlserver -->
+    <select id="findList" resultMap="SysShedlockJobResult" databaseId="sqlserver" >
+      select * from SYS_SHEDLOCK_JOB
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
+          <if test="name != null and name != ''">AND NAME LIKE #{name}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="locked_at != null">AND LOCKED_AT = #{locked_at}</if>
+          <if test="lock_until != null">AND LOCK_UNTIL = #{lock_until}</if>
+          <if test="locked_by != null and locked_by != ''">AND LOCKED_BY = #{locked_by}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="data != null and data != ''">AND DATA = #{data}</if>
+          <if test="label != null and label != ''">AND LABEL = #{label}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+        ORDER BY APPLICATION DESC,NAME ASC
+    </select>
+
+    <!-- 按主键主键查询::postgresql -->
+    <select id="findByApplication" resultMap="SysShedlockJobResult" databaseId="postgresql">
+        SELECT * from SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::mysql -->
+    <select id="findByApplication" resultMap="SysShedlockJobResult" databaseId="mysql">
+        SELECT * from SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::oracle -->
+    <select id="findByApplication" resultMap="SysShedlockJobResult" databaseId="oracle">
+        SELECT * from SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::sqlserver -->
+    <select id="findByApplication" resultMap="SysShedlockJobResult" databaseId="sqlserver">
+        SELECT * from SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
+    </select>
+
+    <!-- 插入::postgresql -->
+    <insert id="insert" databaseId="postgresql">
+    INSERT INTO SYS_SHEDLOCK_JOB(
+        APPLICATION,
+        NAME,
+        HOST_IP,
+        LOCKED_AT,
+        LOCK_UNTIL,
+        LOCKED_BY,
+        STATE,
+        DATA,
+        LABEL,
+        UPDATE_TIME
+    ) values (
+        #{application},
+        #{name},
+        #{host_ip},
+        #{locked_at},
+        #{lock_until},
+        #{locked_by},
+        #{state},
+        #{data},
+        #{label},
+        #{update_time}
+    )
+    </insert>
+    <!-- 插入::mysql -->
+    <insert id="insert" databaseId="mysql">
+    INSERT INTO SYS_SHEDLOCK_JOB(
+        APPLICATION,
+        `name`,
+        HOST_IP,
+        LOCKED_AT,
+        LOCK_UNTIL,
+        LOCKED_BY,
+        STATE,
+        DATA,
+        LABEL,
+        UPDATE_TIME
+    ) values (
+        #{application},
+        #{name},
+        #{host_ip},
+        #{locked_at},
+        #{lock_until},
+        #{locked_by},
+        #{state},
+        #{data},
+        #{label},
+        #{update_time}
+    )
+    </insert>
+    <!-- 插入::oracle -->
+    <insert id="insert" databaseId="oracle">
+    INSERT INTO SYS_SHEDLOCK_JOB(
+        APPLICATION,
+        "NAME",
+        HOST_IP,
+        LOCKED_AT,
+        LOCK_UNTIL,
+        LOCKED_BY,
+        STATE,
+        DATA,
+        LABEL,
+        UPDATE_TIME
+    ) values (
+        #{application},
+        #{name},
+        #{host_ip},
+        #{locked_at},
+        #{lock_until},
+        #{locked_by},
+        #{state},
+        #{data},
+        #{label},
+        #{update_time}
+    )
+    </insert>
+    <!-- 插入::sqlserver -->
+    <insert id="insert" databaseId="sqlserver">
+    INSERT INTO SYS_SHEDLOCK_JOB(
+        APPLICATION,
+        NAME,
+        HOST_IP,
+        LOCKED_AT,
+        LOCK_UNTIL,
+        LOCKED_BY,
+        STATE,
+        DATA,
+        LABEL,
+        UPDATE_TIME
+    ) values (
+        #{application},
+        #{name},
+        #{host_ip},
+        #{locked_at},
+        #{lock_until},
+        #{locked_by},
+        #{state},
+        #{data},
+        #{label},
+        #{update_time}
+    )
+    </insert>
+
+    <!-- 批量插入::postgresql -->
+    <insert id="insertBatch" databaseId="postgresql">
+    INSERT INTO SYS_SHEDLOCK_JOB(
+        APPLICATION,
+        NAME,
+        HOST_IP,
+        LOCKED_AT,
+        LOCK_UNTIL,
+        LOCKED_BY,
+        STATE,
+        DATA,
+        LABEL,
+        UPDATE_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.name},
+        #{i.host_ip},
+        #{i.locked_at},
+        #{i.lock_until},
+        #{i.locked_by},
+        #{i.state},
+        #{i.data},
+        #{i.label},
+        #{i.update_time}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::mysql -->
+    <insert id="insertBatch" databaseId="mysql">
+    INSERT INTO SYS_SHEDLOCK_JOB(
+        APPLICATION,
+        `name`,
+        HOST_IP,
+        LOCKED_AT,
+        LOCK_UNTIL,
+        LOCKED_BY,
+        STATE,
+        DATA,
+        LABEL,
+        UPDATE_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.name},
+        #{i.host_ip},
+        #{i.locked_at},
+        #{i.lock_until},
+        #{i.locked_by},
+        #{i.state},
+        #{i.data},
+        #{i.label},
+        #{i.update_time}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::oracle -->
+    <insert id="insertBatch" databaseId="oracle">
+    INSERT INTO SYS_SHEDLOCK_JOB(
+        APPLICATION,
+        "NAME",
+        HOST_IP,
+        LOCKED_AT,
+        LOCK_UNTIL,
+        LOCKED_BY,
+        STATE,
+        DATA,
+        LABEL,
+        UPDATE_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.name},
+        #{i.host_ip},
+        #{i.locked_at},
+        #{i.lock_until},
+        #{i.locked_by},
+        #{i.state},
+        #{i.data},
+        #{i.label},
+        #{i.update_time}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::sqlserver -->
+    <insert id="insertBatch" databaseId="sqlserver">
+    INSERT INTO SYS_SHEDLOCK_JOB(
+        APPLICATION,
+        NAME,
+        HOST_IP,
+        LOCKED_AT,
+        LOCK_UNTIL,
+        LOCKED_BY,
+        STATE,
+        DATA,
+        LABEL,
+        UPDATE_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.name},
+        #{i.host_ip},
+        #{i.locked_at},
+        #{i.lock_until},
+        #{i.locked_by},
+        #{i.state},
+        #{i.data},
+        #{i.label},
+        #{i.update_time}
+      )
+    </foreach>
+    </insert>
+
+    <!-- 更新::postgresql -->
+    <update id="update" databaseId="postgresql">
+      UPDATE SYS_SHEDLOCK_JOB
+      <set>
+<!--       <if test="host_ip != null and host_ip != ''">HOST_IP=#{host_ip},</if>-->
+<!--       <if test="locked_at != null">LOCKED_AT=#{locked_at},</if>-->
+<!--       <if test="lock_until != null">LOCK_UNTIL=#{lock_until},</if>-->
+<!--       <if test="locked_by != null and locked_by != ''">LOCKED_BY=#{locked_by},</if>-->
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="data != null and data != ''">DATA=#{data},</if>
+       <if test="label != null and label != ''">LABEL=#{label},</if>
+       <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+      WHERE APPLICATION=#{application} AND NAME=#{name}
+    </update>
+    <!-- 更新::mysql -->
+    <update id="update" databaseId="mysql">
+      UPDATE SYS_SHEDLOCK_JOB
+      <set>
+<!--       <if test="host_ip != null and host_ip != ''">HOST_IP=#{host_ip},</if>-->
+<!--       <if test="locked_at != null">LOCKED_AT=#{locked_at},</if>-->
+<!--       <if test="lock_until != null">LOCK_UNTIL=#{lock_until},</if>-->
+<!--       <if test="locked_by != null and locked_by != ''">LOCKED_BY=#{locked_by},</if>-->
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="data != null and data != ''">DATA=#{data},</if>
+       <if test="label != null and label != ''">LABEL=#{label},</if>
+       <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+        WHERE APPLICATION=#{application} AND NAME=#{name}
+    </update>
+    <!-- 更新::oracle -->
+    <update id="update" databaseId="oracle">
+      UPDATE SYS_SHEDLOCK_JOB
+      <set>
+<!--       <if test="host_ip != null and host_ip != ''">HOST_IP=#{host_ip},</if>-->
+<!--       <if test="locked_at != null">LOCKED_AT=#{locked_at},</if>-->
+<!--       <if test="lock_until != null">LOCK_UNTIL=#{lock_until},</if>-->
+<!--       <if test="locked_by != null and locked_by != ''">LOCKED_BY=#{locked_by},</if>-->
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="data != null and data != ''">DATA=#{data},</if>
+       <if test="label != null and label != ''">LABEL=#{label},</if>
+       <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+        WHERE APPLICATION=#{application} AND NAME=#{name}
+    </update>
+    <!-- 更新::sqlserver -->
+    <update id="update" databaseId="sqlserver">
+      UPDATE SYS_SHEDLOCK_JOB
+      <set>
+<!--       <if test="host_ip != null and host_ip != ''">HOST_IP=#{host_ip},</if>-->
+<!--       <if test="locked_at != null">LOCKED_AT=#{locked_at},</if>-->
+<!--       <if test="lock_until != null">LOCK_UNTIL=#{lock_until},</if>-->
+<!--       <if test="locked_by != null and locked_by != ''">LOCKED_BY=#{locked_by},</if>-->
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="data != null and data != ''">DATA=#{data},</if>
+       <if test="label != null and label != ''">LABEL=#{label},</if>
+       <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+        WHERE APPLICATION=#{application} AND NAME=#{name}
+    </update>
+
+    <!-- 按主键删除::postgresql -->
+    <delete id="deleteByApplication" databaseId="postgresql">
+       DELETE FROM SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application} AND NAME=#{name}
+    </delete>
+    <!-- 按主键删除::mysql -->
+    <delete id="deleteByApplication" databaseId="mysql">
+       DELETE FROM SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application} AND NAME=#{name}
+    </delete>
+    <!-- 按主键删除::oracle -->
+    <delete id="deleteByApplication" databaseId="oracle">
+       DELETE FROM SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application} AND NAME=#{name}
+    </delete>
+    <!-- 按主键删除::sqlserver -->
+    <delete id="deleteByApplication" databaseId="sqlserver">
+       DELETE FROM SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application} AND NAME=#{name}
+    </delete>
+
+
+    <select id="findUTC" resultType="java.time.LocalDateTime" databaseId="postgresql">
+        SELECT TIMEZONE('UTC', CURRENT_TIMESTAMP)
+    </select>
+    <select id="findUTC" resultType="java.time.LocalDateTime" databaseId="mysql">
+        SELECT UTC_TIMESTAMP(3)
+    </select>
+    <select id="findUTC" resultType="java.time.LocalDateTime" databaseId="oracle">
+        SELECT SYS_EXTRACT_UTC(SYSTIMESTAMP) FROM DUAL
+    </select>
+
+</mapper>

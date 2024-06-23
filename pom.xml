@@ -149,7 +149,7 @@
             <version>3.17</version>
         </dependency>
 
-        <dependency>
+<!--        <dependency>
             <groupId>net.javacrumbs.shedlock</groupId>
             <artifactId>shedlock-spring</artifactId>
             <version>4.14.0</version>
@@ -159,7 +159,7 @@
             <groupId>net.javacrumbs.shedlock</groupId>
             <artifactId>shedlock-provider-jdbc-template</artifactId>
             <version>4.14.0</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
@@ -191,6 +191,13 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mee.timed</groupId>
+            <artifactId>mee_timed</artifactId>
+            <version>1.0.1</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/resources/lib/mee_timed-1.0.1.jar</systemPath>
         </dependency>
 
     </dependencies>
@@ -247,6 +254,7 @@
                     <exclude>static/fonts/**</exclude>
                     <exclude>static/css/font/**</exclude>
                     <exclude>static/xlsx/**</exclude>
+                    <exclude>lib/**</exclude>
                 </excludes>
             </resource>
             <resource>
@@ -256,6 +264,7 @@
                     <include>static/fonts/**</include>
                     <include>static/css/font/**</include>
                     <include>static/xlsx/**</include>
+<!--                    <include>lib/**</include>-->
                 </includes>
             </resource>
 
@@ -281,6 +290,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
             </plugin>
             <!-- 跳过单元测试 -->
 <!--            <plugin>-->
@@ -298,6 +310,9 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+<!--                    <compilerArguments>-->
+<!--                        <extdirs>${basedir}/src/main/resources/lib</extdirs>-->
+<!--                    </compilerArguments>-->
                 </configuration>
             </plugin>
 

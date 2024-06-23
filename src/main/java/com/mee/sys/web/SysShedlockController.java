@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 *   @date       2023/6/18 10:41 PM
 *   @version    v1.0
 */
+@Deprecated
 @Controller
 @RequestMapping("/sys/sys_shedlock")
 public class SysShedlockController {

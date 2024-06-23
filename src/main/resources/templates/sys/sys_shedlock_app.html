@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <link rel="stylesheet" href="${ctxPath}/static/css/fix-table.css">
+    <title>${applicationName}-集群分佈式鎖-应用配置</title>
+</head>
+<body>
+<!--<div class="row">-->
+<!-- 定时任务:任务实例 -->
+<div class="col-md-10">
+    <!-- 查询表单 -->
+    <div id="data-search">
+        <h4>分布式任务-应用配置</h4>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form" class="form-search">
+            <label class="form-label" >应用</label>
+            <input type="text" name="application" placeholder="当前实例应用">&nbsp;
+
+            <label class="form-label" title="当前实例应用所属IP">实例IP</label>
+            <input type="text" name="host_ip" placeholder="当前实例应用所属IP">&nbsp;
+
+<!--            <label class="form-label" >实例机器</label>-->
+<!--            <input type="text" name="host_name" placeholder="创建机器">&nbsp;-->
+            <label class="form-label" title="状态">状态</label>
+            <span _dom_type="select" _field_name="state" _dict_type="shedlock_state"></span>&nbsp;&nbsp;
+
+            <button _func="query" type="submit" class="btn btn-primary">查询</button>
+            &nbsp;&nbsp;
+            <button _func="add" class="btn btn-success">新增</button>
+            &nbsp;
+            <button _func="export" class="btn btn-info">导出</button>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+    <!-- dialog -->
+    <div id="data-dialog"></div>
+</div>
+
+<!-- 定时任务：任务明细-->
+<div class="col-md-12">
+    <!-- 查询表单 -->
+    <div id="data-search2">
+        <h4>分布式任务-任务配置</h4>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form2" class="form-search">
+            <label class="form-label" >应用</label>
+            <input type="text" name="application" placeholder="当前实例应用" style="font-weight:bold;color:red;">&nbsp;
+            <label class="form-label" title="包名#方法名#lockName">任务KEY</label>
+            <input type="text" name="name" placeholder="包名#方法名#lockName">&nbsp;
+            <label class="form-label" title="当前执行任务的IP">实例IP</label>
+            <input type="text" name="host_ip" placeholder="当前执行任务的IP">&nbsp;
+<!--            <label class="form-label" >任務開始鎖定</label>-->
+<!--            <input type="text" name="locked_at" placeholder="任務開始鎖定">&nbsp;-->
+            <label class="form-label" title="状态 0.close关闭 1.open开启">状态</label>
+            <span _dom_type="select" _field_name="state" _dict_type="shedlock_state"></span>&nbsp;&nbsp;
+            <label class="form-label" >任务备注</label>
+            <input type="text" name="label" placeholder="任务备注">&nbsp;
+
+            <button _func="query" type="submit" class="btn btn-primary">查询</button>
+            &nbsp;&nbsp;
+            <button _func="add" class="btn btn-success">新增</button>
+            &nbsp;
+            <button _func="export" class="btn btn-info">导出</button>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list2"></div>
+    <!-- dialog -->
+    <div id="data-dialog2"></div>
+</div>
+<hr/>
+<!--</div>-->
+</body>
+<#include "../decorator/foot.html"/>
+<script type="text/cc-template" id="template-data-list">
+    <div style="overflow-x: scroll; white-space: nowrap;">
+    <table class="table table-bordered table-condensed table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th _idx="1" >应用</th>
+            <th _idx="2" title="当前实例应用所属IP">实例IP</th>
+            <th _idx="3" >实例机器</th>
+            <th _idx="4" title="状态 0.关闭 1.开启"> 状态</th>
+            <th>备注信息</th>
+            <th _idx="5" >更新时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+            <td _idx="1" func="show_job"><a href="#" title="点击查看当前应用下任务明细">{{application}}</a></td>
+            <td _idx="2" func="show_job">{{host_ip}}</td>
+            <td _idx="3" >{{host_name}}</td>
+            <td _idx="4" class="shedlock_state_{{state}}"><a href="#" title="启用/禁用操作,关闭则关闭当前实例下所有任务，其他当前应用下的其他实例不受影响" func="app_state" >已{{shedlock_state state}}</a></td>
+            <td>{{label}}</td>
+            <td _idx="5" width="140px">{{update_time}}</td>
+            <td>
+                <a href="#" func="update">修改</a>
+                <a href="#" func="delete_app">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    </div>
+<#include "../decorator/page-form.html"/>
+</script>
+
+<script type="text/cc-template" id="template-data-list2">
+    <div style="overflow-x: scroll; white-space: nowrap;">
+        <table class="table table-bordered table-condensed table-hover">
+            <thead class="table-dark">
+            <tr>
+
+                <th _idx="1" >应用 : 任务KEY</th>
+<!--                <th _idx="2" title="包名#方法名#lockName">任务KEY</th>-->
+                <th _idx="7" title="状态 0.close关闭 1.open开启(默认)">状态</th>
+                <th _idx="3" title="当前实例应用所属IP"> 实例IP </th>
+                <th _idx="4" >锁定开始</th>
+                <th _idx="5" >锁定结束</th>
+                <th _idx="6" >执行机器</th>
+                <th _idx="8" title="传入数据（必须为JSON）">JOB传入数据</th>
+                <th _idx="9" >任务备注</th>
+                <th>时间类型</th>
+                <th>时间表达式</th>
+                <th>下一次执行时间</th>
+                <th _idx="10" title="最后更新时间(也即最近一次执行时间/获取锁时间)">更新时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each data}}
+            <tr>
+                <td _idx="1">{{application}} : {{name}}</td>
+<!--                <td _idx="2">{{name}}</td>-->
+                <td _idx="7" class="shedlock_state_{{state}}"><a href="#" title="启用/禁用操作,关闭此任务则当前应用下所有此任务均关闭" func="job_state">已{{shedlock_state state}}</a></td>
+                <td _idx="3">{{host_ip}}</td>
+                <td _idx="4">{{locked_at}}</td>
+                <td _idx="5">{{lock_until}}</td>
+                <td _idx="6">{{locked_by}}</td>
+                <td _idx="8">{{data}}</td>
+                <td _idx="9">{{label}}</td>
+                <td>{{call_type}}</td>
+                <td>{{call_value}}</td>
+                <td>{{call_next}}</td>
+                <td _idx="10">{{update_time}}</td>
+                <td>
+                    <a href="#" func="update">修改</a>
+                    <a href="#" func="delete_job">删除</a>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <#include "../decorator/page-form.html"/>
+</script>
+
+<script type="module">
+    import { init } from "${ctxPath}/public/sys/sys_shedlock_app.js"
+    init();
+</script>
+<style>
+    .shedlock_state_0 a{color:red;}
+    .shedlock_state_1 a{color:green;font-weight:bold;}
+</style>
+</html>

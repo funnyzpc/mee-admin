@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    集群分佈式鎖-应用配置 SysShedlockApp(SYS_SHEDLOCK_APP) DAO
+@author         ash
+@date           2024-06-18 16:31:23
+-->
+<!--<mapper namespace="com.mee.module.sys.mapper.SysShedlockAppMapper">-->
+<!--<mapper namespace="com.mee.xml.sys.SysShedlockApp">-->
+<mapper namespace="com.mee.xml.sys.SysShedlockApp">
+
+    <!-- 字段 -->
+    <!--<resultMap type="com.mee.module.sys.entity.SysShedlockApp" id="SysShedlockAppResult">-->
+    <resultMap type="com.mee.sys.entity.SysShedlockApp" id="SysShedlockAppResult">
+      <result property="application" column="application"/>
+      <result property="host_ip" column="host_ip"/>
+      <result property="host_name" column="host_name"/>
+      <result property="state" column="state"/>
+      <result property="label" column="label"/>
+      <result property="update_time" column="update_time"/>
+    </resultMap>
+
+    <!-- 查询::postgresql -->
+    <select id="findList" resultMap="SysShedlockAppResult" databaseId="postgresql" >
+      SELECT * from SYS_SHEDLOCK_APP
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+      ORDER BY APPLICATION DESC,HOST_IP
+    </select>
+    <!-- 查询::mysql -->
+    <select id="findList" resultMap="SysShedlockAppResult" databaseId="mysql" >
+      select * from SYS_SHEDLOCK_APP
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+        ORDER BY APPLICATION DESC,HOST_IP
+    </select>
+    <!-- 查询::oracle -->
+    <select id="findList" resultMap="SysShedlockAppResult" databaseId="oracle" >
+      select * from SYS_SHEDLOCK_APP
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+        ORDER BY APPLICATION DESC,HOST_IP
+    </select>
+    <!-- 查询::sqlserver -->
+    <select id="findList" resultMap="SysShedlockAppResult" databaseId="sqlserver" >
+      select * from SYS_SHEDLOCK_APP
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+        ORDER BY APPLICATION DESC,HOST_IP
+    </select>
+
+    <!-- 按主键主键查询::postgresql -->
+    <select id="findByApplication" resultMap="SysShedlockAppResult" databaseId="postgresql">
+        SELECT * from SYS_SHEDLOCK_APP WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::mysql -->
+    <select id="findByApplication" resultMap="SysShedlockAppResult" databaseId="mysql">
+        SELECT * from SYS_SHEDLOCK_APP WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::oracle -->
+    <select id="findByApplication" resultMap="SysShedlockAppResult" databaseId="oracle">
+        SELECT * from SYS_SHEDLOCK_APP WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::sqlserver -->
+    <select id="findByApplication" resultMap="SysShedlockAppResult" databaseId="sqlserver">
+        SELECT * from SYS_SHEDLOCK_APP WHERE APPLICATION=#{application}
+    </select>
+
+    <!-- 插入::postgresql -->
+    <insert id="insert" databaseId="postgresql">
+    INSERT INTO SYS_SHEDLOCK_APP(
+        APPLICATION,
+        HOST_IP,
+        HOST_NAME,
+        STATE,
+        LABEL,
+        UPDATE_TIME
+    ) values (
+        #{application},
+        #{host_ip},
+        #{host_name},
+        #{state},
+        #{label},
+        #{update_time}
+    )
+    </insert>
+    <!-- 插入::mysql -->
+    <insert id="insert" databaseId="mysql">
+    INSERT INTO SYS_SHEDLOCK_APP(
+        APPLICATION,
+        HOST_IP,
+        HOST_NAME,
+        STATE,
+        LABEL,
+        UPDATE_TIME
+    ) values (
+        #{application},
+        #{host_ip},
+        #{host_name},
+        #{state},
+        #{label},
+        #{update_time}
+    )
+    </insert>
+    <!-- 插入::oracle -->
+    <insert id="insert" databaseId="oracle">
+    INSERT INTO SYS_SHEDLOCK_APP(
+        APPLICATION,
+        HOST_IP,
+        HOST_NAME,
+        STATE,
+        LABEL,
+        UPDATE_TIME
+    ) values (
+        #{application},
+        #{host_ip},
+        #{host_name},
+        #{state},
+        #{label},
+        #{update_time}
+    )
+    </insert>
+    <!-- 插入::sqlserver -->
+    <insert id="insert" databaseId="sqlserver">
+    INSERT INTO SYS_SHEDLOCK_APP(
+        APPLICATION,
+        HOST_IP,
+        HOST_NAME,
+        STATE,
+        LABEL,
+        UPDATE_TIME
+    ) values (
+        #{application},
+        #{host_ip},
+        #{host_name},
+        #{state},
+        #{label},
+        #{update_time}
+    )
+    </insert>
+
+<!--    &lt;!&ndash; 批量插入::postgresql &ndash;&gt;-->
+<!--    <insert id="insertBatch" databaseId="postgresql">-->
+<!--    INSERT INTO SYS_SHEDLOCK_APP(-->
+<!--        APPLICATION,-->
+<!--        HOST_IP,-->
+<!--        HOST_NAME,-->
+<!--        STATE,-->
+<!--        UPDATE_TIME-->
+<!--    ) values-->
+<!--    <foreach collection ="list" item="i" separator =",">-->
+<!--      (-->
+<!--        #{i.application},-->
+<!--        #{i.host_ip},-->
+<!--        #{i.host_name},-->
+<!--        #{i.state},-->
+<!--        #{i.update_time}-->
+<!--      )-->
+<!--    </foreach>-->
+<!--    </insert>-->
+<!--    &lt;!&ndash; 批量插入::mysql &ndash;&gt;-->
+<!--    <insert id="insertBatch" databaseId="mysql">-->
+<!--    INSERT INTO SYS_SHEDLOCK_APP(-->
+<!--        APPLICATION,-->
+<!--        HOST_IP,-->
+<!--        HOST_NAME,-->
+<!--        STATE,-->
+<!--        UPDATE_TIME-->
+<!--    ) values-->
+<!--    <foreach collection ="list" item="i" separator =",">-->
+<!--      (-->
+<!--        #{i.application},-->
+<!--        #{i.host_ip},-->
+<!--        #{i.host_name},-->
+<!--        #{i.state},-->
+<!--        #{i.update_time}-->
+<!--      )-->
+<!--    </foreach>-->
+<!--    </insert>-->
+<!--    &lt;!&ndash; 批量插入::oracle &ndash;&gt;-->
+<!--    <insert id="insertBatch" databaseId="oracle">-->
+<!--    INSERT INTO SYS_SHEDLOCK_APP(-->
+<!--        APPLICATION,-->
+<!--        HOST_IP,-->
+<!--        HOST_NAME,-->
+<!--        STATE,-->
+<!--        UPDATE_TIME-->
+<!--    ) values-->
+<!--    <foreach collection ="list" item="i" separator =",">-->
+<!--      (-->
+<!--        #{i.application},-->
+<!--        #{i.host_ip},-->
+<!--        #{i.host_name},-->
+<!--        #{i.state},-->
+<!--        #{i.update_time}-->
+<!--      )-->
+<!--    </foreach>-->
+<!--    </insert>-->
+<!--    &lt;!&ndash; 批量插入::sqlserver &ndash;&gt;-->
+<!--    <insert id="insertBatch" databaseId="sqlserver">-->
+<!--    INSERT INTO SYS_SHEDLOCK_APP(-->
+<!--        APPLICATION,-->
+<!--        HOST_IP,-->
+<!--        HOST_NAME,-->
+<!--        STATE,-->
+<!--        UPDATE_TIME-->
+<!--    ) values-->
+<!--    <foreach collection ="list" item="i" separator =",">-->
+<!--      (-->
+<!--        #{i.application},-->
+<!--        #{i.host_ip},-->
+<!--        #{i.host_name},-->
+<!--        #{i.state},-->
+<!--        #{i.update_time}-->
+<!--      )-->
+<!--    </foreach>-->
+<!--    </insert>-->
+
+    <!-- 更新::postgresql -->
+    <update id="update" databaseId="postgresql">
+      UPDATE SYS_SHEDLOCK_APP
+      <set>
+       <if test="host_name != null and host_name != ''">HOST_NAME=#{host_name},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="label != null and label != ''">LABEL=#{label},</if>
+       <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+      WHERE APPLICATION=#{application} AND HOST_IP = #{host_ip}
+    </update>
+    <!-- 更新::mysql -->
+    <update id="update" databaseId="mysql">
+      UPDATE SYS_SHEDLOCK_APP
+      <set>
+       <if test="host_name != null and host_name != ''">HOST_NAME=#{host_name},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+          <if test="label != null and label != ''">LABEL=#{label},</if>
+          <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+        WHERE APPLICATION=#{application} AND HOST_IP = #{host_ip}
+    </update>
+    <!-- 更新::oracle -->
+    <update id="update" databaseId="oracle">
+      UPDATE SYS_SHEDLOCK_APP
+      <set>
+       <if test="host_name != null and host_name != ''">HOST_NAME=#{host_name},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+          <if test="label != null and label != ''">LABEL=#{label},</if>
+          <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+        WHERE APPLICATION=#{application} AND HOST_IP = #{host_ip}
+    </update>
+    <!-- 更新::sqlserver -->
+    <update id="update" databaseId="sqlserver">
+      UPDATE SYS_SHEDLOCK_APP
+      <set>
+       <if test="host_name != null and host_name != ''">HOST_NAME=#{host_name},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+          <if test="label != null and label != ''">LABEL=#{label},</if>
+          <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+        WHERE APPLICATION=#{application} AND HOST_IP = #{host_ip}
+    </update>
+
+    <!-- 按主键删除::postgresql -->
+    <delete id="deleteByApplication" databaseId="postgresql">
+       DELETE FROM SYS_SHEDLOCK_APP WHERE APPLICATION=#{application} AND HOST_IP = #{host_ip}
+    </delete>
+    <!-- 按主键删除::mysql -->
+    <delete id="deleteByApplication" databaseId="mysql">
+       DELETE FROM SYS_SHEDLOCK_APP WHERE APPLICATION=#{application} AND HOST_IP = #{host_ip}
+    </delete>
+    <!-- 按主键删除::oracle -->
+    <delete id="deleteByApplication" databaseId="oracle">
+       DELETE FROM SYS_SHEDLOCK_APP WHERE APPLICATION=#{application} AND HOST_IP = #{host_ip}
+    </delete>
+    <!-- 按主键删除::sqlserver -->
+    <delete id="deleteByApplication" databaseId="sqlserver">
+       DELETE FROM SYS_SHEDLOCK_APP WHERE APPLICATION=#{application} AND HOST_IP = #{host_ip}
+    </delete>
+
+    <!-- 批量删除::postgresql -->
+    <delete id="deleteBatch" databaseId="postgresql">
+      DELETE FROM SYS_SHEDLOCK_APP WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::mysql -->
+    <delete id="deleteBatch" databaseId="mysql">
+      DELETE FROM SYS_SHEDLOCK_APP WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::oracle -->
+    <delete id="deleteBatch" databaseId="oracle">
+      DELETE FROM SYS_SHEDLOCK_APP WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::sqlserver -->
+    <delete id="deleteBatch" databaseId="sqlserver">
+      DELETE FROM SYS_SHEDLOCK_APP WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+
+</mapper>
