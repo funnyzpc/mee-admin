@@ -311,7 +311,7 @@ function buildForm( type,action,field_list,dicts ){
 // function buildDialog( form_data,type,header_str,body_str,footer_str){
 function buildDialog( action,header_str,body_str,footer_str,field_count){
     let dialog_width=(action.width?action.width:"");
-    let dialog_top= field_count>10?"-8%":"-30%"
+    let dialog_top= action.top?action.top:(field_count>10?"-8%":"-30%");
     let dialog_id=action.dialog_id;
     let form_id=action.form_id;
     let form_method=(action.method?action.method:"POST");

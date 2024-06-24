@@ -70,9 +70,9 @@
             <label>手机号码</label>
             <input type="text" name="phone" placeholder="手机号码" class="input-sm">
             <span class="seprator"></span>
-            <button type="submit" name="query" class="btn btn-sm btn-primary">查询</button>
+            <button type="submit" _func="query" class="btn btn-sm btn-primary">查询</button>
             <@shiro.hasPermission name="sys:sys_role_user:add">
-            <button type="button" name="add_user_batch" class="btn btn-sm btn-success">✔添加</button>
+            <button type="button" _func="add_user_batch" class="btn btn-sm btn-success">✔添加</button>
             </@shiro.hasPermission>
         </form>
     </div>

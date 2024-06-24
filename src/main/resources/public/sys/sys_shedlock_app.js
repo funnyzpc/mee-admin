@@ -100,9 +100,9 @@ var module_job={
         // form id，这只是一个prefix后面会加上actions.type
         id:"sys_shedlock_job_form",
         actions:{
-            "add":{"api":ctxPath+"/sys/sys_shedlock_job/add","enc":"json","method":"POST","title":"新增集群分佈式鎖-任务配置","width":"600px"},
+            "add":{"api":ctxPath+"/sys/sys_shedlock_job/add","enc":"json","method":"POST","title":"新增集群分佈式鎖-任务配置","width":"700px","top": "-10%"},
             // 修改
-            "update":{"api":ctxPath+"/sys/sys_shedlock_job/update","enc":"json","method":"PUT","title":"修改集群分佈式鎖-任务配置","width":"600px"},
+            "update":{"api":ctxPath+"/sys/sys_shedlock_job/update","enc":"json","method":"PUT","title":"修改集群分佈式鎖-任务配置","width":"700px","top": "-10%"},
         },
         // 生成模板(这里的数据实在init时生成,进入页面后只生成一次)
         templates:{"add":"","update":""},

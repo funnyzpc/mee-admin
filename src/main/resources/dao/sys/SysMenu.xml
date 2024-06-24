@@ -116,6 +116,41 @@
             #{update_by}
         )
     </insert>
+    <insert id="insert" databaseId="mysql">
+        insert into sys_menu(
+            id,
+            pid,
+            `type`,
+            title,
+            icon,
+            `path`,
+            target,
+            permission,
+            sub_count,
+            `show`,
+            `sort`,
+            create_time,
+            create_by,
+            update_time,
+            update_by
+        ) values (
+            #{id},
+            #{pid},
+            #{type},
+            #{title},
+            #{icon},
+            #{path},
+            #{target},
+            #{permission},
+            #{sub_count},
+            #{show},
+            #{sort},
+            #{create_time},
+            #{create_by},
+            #{update_time},
+            #{update_by}
+        )
+    </insert>
 
     <!-- 批量插入 -->
     <insert id="insertBatch">
@@ -177,9 +212,37 @@
         where id=#{id}
     </update>
 
+    <update id="update" databaseId="mysql">
+        update sys_menu
+        <set>
+            <if test="pid != null">pid=#{pid},</if>
+            <if test="type != null">type=#{type},</if>
+            <if test="title != null and title != ''">title=#{title},</if>
+            <if test="icon != null and icon != ''">icon=#{icon},</if>
+            <if test="path != null and path != ''">path=#{path},</if>
+            <if test="target != null and target != ''">target=#{target},</if>
+            <if test="permission != null and permission != ''">permission=#{permission},</if>
+            <if test="sub_count != null">sub_count=#{sub_count},</if>
+            <if test="show != null">`show`=#{show},</if>
+            <if test="sort != null">sort=#{sort},</if>
+            <if test="update_time != null">update_time=#{update_time},</if>
+            <if test="update_by != null and update_by != ''">update_by=#{update_by},</if>
+        </set>
+        where id=#{id}
+    </update>
+
     <!-- 更新子级数 -->
     <update id="updateSubCount" >
         update sys_menu set sub_count = (select count(1) from sys_menu where pid=#{pid} ),update_time=#{update_time},update_by=#{update_by} where id=#{pid}
+    </update>
+    <!-- 更新子级数 -->
+    <update id="updateSubCount" databaseId="mysql">
+        <!-- set @ct:= (select count(1) from sys_menu where pid=#{pid});-->
+        <!-- update sys_menu set sub_count = @ct,update_time=#{update_time},update_by=#{update_by} where id=#{pid} -->
+        <selectKey keyProperty="sub_count" resultType="int" order="BEFORE">
+            select count(1) from sys_menu where pid=#{pid}
+        </selectKey>
+        update sys_menu set sub_count = ${sub_count},update_time=#{update_time},update_by=#{update_by} where id=#{pid}
     </update>
 
     <!-- 按主键id删除 -->

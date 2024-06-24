@@ -26,8 +26,9 @@
             <span _dom_type="select" _field_name="state" _dict_type="shedlock_state"></span>&nbsp;&nbsp;
 
             <button _func="query" type="submit" class="btn btn-primary">查询</button>
-            &nbsp;&nbsp;
+            <@shiro.hasPermission name="sys:sys_shedlock:add">
             <button _func="add" class="btn btn-success">新增</button>
+            </@shiro.hasPermission>
             &nbsp;
             <button _func="export" class="btn btn-info">导出</button>
         </form>
@@ -60,7 +61,9 @@
 
             <button _func="query" type="submit" class="btn btn-primary">查询</button>
             &nbsp;&nbsp;
+            <@shiro.hasPermission name="sys:sys_shedlock:add">
             <button _func="add" class="btn btn-success">新增</button>
+            </@shiro.hasPermission>
             &nbsp;
             <button _func="export" class="btn btn-info">导出</button>
         </form>
@@ -98,8 +101,12 @@
             <td>{{label}}</td>
             <td _idx="5" width="140px">{{update_time}}</td>
             <td>
+                <@shiro.hasPermission name="sys:sys_shedlock:update">
                 <a href="#" func="update">修改</a>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="sys:sys_shedlock:delete">
                 <a href="#" func="delete_app">删除</a>
+                </@shiro.hasPermission>
             </td>
         </tr>
         {{/each}}
@@ -148,8 +155,12 @@
                 <td>{{call_next}}</td>
                 <td _idx="10">{{update_time}}</td>
                 <td>
+                    <@shiro.hasPermission name="sys:sys_shedlock:update">
                     <a href="#" func="update">修改</a>
+                    </@shiro.hasPermission>
+                    <@shiro.hasPermission name="sys:sys_shedlock:delete">
                     <a href="#" func="delete_job">删除</a>
+                    </@shiro.hasPermission>
                 </td>
             </tr>
             {{/each}}
