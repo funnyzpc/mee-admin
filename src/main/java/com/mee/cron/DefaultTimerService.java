@@ -16,7 +16,7 @@ public class DefaultTimerService {
 
 
     // 每5分钟执行一次
-    @MeeTimed(cron = "0 */5 * * * *",lockName = "testTask1", lockAtMostFor = "PT1M", lockAtLeastFor = "PT1M")
+    @MeeTimed(cron = "0 0/5 * * * ?",lockName = "testTask1", lockAtMostFor = "PT1M", lockAtLeastFor = "PT1M")
     public void testTask1() {
         log.info("===>testTask1執行時間: {}", DateUtil.now().format(DateUtil.FORMAT_DAY_TIME));
     }
@@ -28,7 +28,7 @@ public class DefaultTimerService {
     }
 
     // 每天9点0分触发
-    @MeeTimed(cron = "0 0 9 ? * *",lockName = "testTask3", lockAtMostFor = "PT10M", lockAtLeastFor = "PT10M")
+    @MeeTimed(cron = "0 0 9,11,13,15 ? * *", lockAtMostFor = "PT10M", lockAtLeastFor = "PT10M")
     public void testTask3(){
         log.info("===>testTask3執行時間: {}", DateUtil.now().format(DateUtil.FORMAT_DAY_TIME));
     }

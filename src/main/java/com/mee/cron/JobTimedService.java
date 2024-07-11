@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class JobTimedService implements Job {
     private static final Logger LOGGER = LoggerFactory.getLogger(JobTimedService.class);
 
-    @MeeTimed(cron = "*/20 * * * * *",lockAtLeastFor = "PT5S",lockAtMostFor ="PT10S" )
+    @MeeTimed(cron = "0/20 * * * * ?",lockAtLeastFor = "PT5S",lockAtMostFor ="PT10S" )
     @Override
     public void execute(JobExecutionContext context) {
         LOGGER.info("=====> proxy job exec! data:"+context.getJobDataJson()+"  <=====");
