@@ -9,7 +9,8 @@
 + 文件下载bug
 + 进一步简化module参数项
 + controller到service层抽出接口
-+
++ 新增定时任务及集群配置(new)
++ 
 
 
 ### v1.5+相较于v1.0
@@ -37,6 +38,7 @@
 >![...](./view/6.jpg)
 >![...](./view/7.jpg)
 >![...](./view/8.jpg)
+>![...](./view/9.jpg)
 
 #### 主要技术栈
 + SpringBoot 2.6
