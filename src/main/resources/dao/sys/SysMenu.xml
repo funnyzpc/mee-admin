@@ -28,7 +28,7 @@
 
     <!-- 查询 -->
     <select id="findList" resultMap="SysMenuResult">
-        select * from sys_menu
+        SELECT * FROM SYS_MENU
         <where>
             <if test="id != null and id != ''"> and id = #{id}</if>
             <if test="pid != null"> and pid = #{pid}</if>
@@ -51,7 +51,7 @@
     </select>
 
     <select id="findList" resultMap="SysMenuResult" databaseId="mysql">
-        select * from sys_menu
+        SELECT * FROM SYS_MENU
         <where>
             <if test="id != null and id != ''"> and id = #{id}</if>
             <if test="pid != null"> and pid = #{pid}</if>

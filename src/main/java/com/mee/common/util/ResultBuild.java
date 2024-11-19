@@ -50,7 +50,7 @@ public class ResultBuild {
      * 默认成功
      * @return
      */
-    public static final MeeResult<Void> SUCCESS(){
+    public static final MeeResult SUCCESS(){
         return new MeeResult<Void>();
     }
 
@@ -95,10 +95,20 @@ public class ResultBuild {
         return new MeeResult<Void>().setStatus(FAIL).setMsg(msg).setTimestamp(System.currentTimeMillis());
     }
 
-
-    /** 保存成功 **/
+    /**
+     * 处理中/进行中
+     *
+     * **/
     public static MeeResult<Void> PADDING(){
         return new MeeResult<Void>().setStatus(PADDING).setMsg("process").setTimestamp(System.currentTimeMillis());
+    }
+
+    /**
+     * 处理中/进行中
+     *
+     * **/
+    public static MeeResult<Void> padding(String msg){
+        return new MeeResult<Void>().setStatus(PADDING).setMsg(msg).setTimestamp(System.currentTimeMillis());
     }
 
     public static void toResponse(HttpServletResponse response, File file) {
@@ -131,6 +141,28 @@ public class ResultBuild {
         }finally {
             //文件删除
             file.delete();
+        }
+    }
+
+    /**
+     * 文件写入至Response
+     * @param response 响应
+     * @param fileName 下载文件名
+     */
+    public static void toResponse(HttpServletResponse response,String fileName){
+        try {
+            String file_name = new String(fileName.getBytes(StandardCharsets.UTF_8),"ISO-8859-1");
+            /**
+             * 设置attachment ，防止下载文件出现未知文件类型/文件名
+             */
+            response.reset();
+            response.setHeader("content-type","application/octet-stream;charset=utf-8");
+            //response.setContentType("application/octet-stream");
+            //response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName,"UTF-8"));
+            // 只有此种方式是成功的其他方式均失败！
+            response.setHeader("Content-Disposition", "attachment;filename=\"" + file_name + "\"");
+        }catch (Exception iOException){
+            LOG.error("文件 下载失败! ",iOException);
         }
     }
 

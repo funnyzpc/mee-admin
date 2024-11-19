@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    定时任务::任务配置表 QrtzJob(QRTZ_JOB) DAO
+@author         ash
+@date           2024-09-14 16:11:41
+-->
+<!--<mapper namespace="com.mee.module.sys.mapper.QrtzJobMapper">-->
+<!--<mapper namespace="com.mee.xml.sys.QrtzJob">-->
+<mapper namespace="com.mee.xml.sys.QrtzJob">
+
+    <!-- 字段 -->
+    <!--<resultMap type="com.mee.module.sys.entity.QrtzJob" id="QrtzJobResult">-->
+    <resultMap type="org.quartz.impl.QrtzJob" id="QrtzJobResult">
+      <result property="id" column="id"/>
+      <result property="application" column="application"/>
+      <result property="state" column="state"/>
+      <result property="jobClass" column="job_class"/>
+      <result property="jobData" column="job_data"/>
+      <result property="jobDescription" column="job_description"/>
+      <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 查询::postgresql -->
+    <select id="findList" resultMap="QrtzJobResult" databaseId="postgresql" >
+      SELECT * FROM QRTZ_JOB
+      <where>
+          <if test="id != null and id != ''">AND ID = #{id}</if>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="job_class != null and job_class != ''">AND JOB_CLASS LIKE #{job_class}</if>
+          <if test="job_data != null and job_data != ''">AND JOB_DATA LIKE #{job_data}</if>
+          <if test="job_description != null and job_description != ''">AND JOB_DESCRIPTION LIKE #{job_description}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+      ORDER BY ID DESC
+    </select>
+    <!-- 查询::mysql -->
+    <select id="findList" resultMap="QrtzJobResult" databaseId="mysql" >
+      SELECT * FROM QRTZ_JOB
+      <where>
+          <if test="id != null and id != ''">AND ID = #{id}</if>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="job_class != null and job_class != ''">AND JOB_CLASS LIKE #{job_class}</if>
+          <if test="job_data != null and job_data != ''">AND JOB_DATA LIKE #{job_data}</if>
+          <if test="job_description != null and job_description != ''">AND JOB_DESCRIPTION LIKE #{job_description}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+      ORDER BY ID DESC
+    </select>
+    <!-- 查询::oracle -->
+    <select id="findList" resultMap="QrtzJobResult" databaseId="oracle" >
+      SELECT * FROM QRTZ_JOB
+      <where>
+          <if test="id != null and id != ''">AND ID = #{id}</if>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="job_class != null and job_class != ''">AND JOB_CLASS LIKE #{job_class}</if>
+          <if test="job_data != null and job_data != ''">AND JOB_DATA LIKE #{job_data}</if>
+          <if test="job_description != null and job_description != ''">AND JOB_DESCRIPTION LIKE #{job_description}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+      ORDER BY ID DESC
+    </select>
+    <!-- 查询::sqlserver -->
+    <select id="findList" resultMap="QrtzJobResult" databaseId="sqlserver" >
+      SELECT * FROM QRTZ_JOB
+      <where>
+          <if test="id != null and id != ''">AND ID = #{id}</if>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="job_class != null and job_class != ''">AND JOB_CLASS LIKE #{job_class}</if>
+          <if test="job_data != null and job_data != ''">AND JOB_DATA LIKE #{job_data}</if>
+          <if test="job_description != null and job_description != ''">AND JOB_DESCRIPTION LIKE #{job_description}</if>
+          <if test="update_time != null">AND UPDATE_TIME = #{update_time}</if>
+      </where>
+      ORDER BY ID DESC
+    </select>
+
+    <!-- 按主键主键查询::postgresql -->
+    <select id="findById" resultMap="QrtzJobResult" databaseId="postgresql">
+        SELECT * from QRTZ_JOB WHERE ID=#{id}
+    </select>
+    <!-- 按主键主键查询::mysql -->
+    <select id="findById" resultMap="QrtzJobResult" databaseId="mysql">
+        SELECT * from QRTZ_JOB WHERE ID=#{id}
+    </select>
+    <!-- 按主键主键查询::oracle -->
+    <select id="findById" resultMap="QrtzJobResult" databaseId="oracle">
+        SELECT * from QRTZ_JOB WHERE ID=#{id}
+    </select>
+    <!-- 按主键主键查询::sqlserver -->
+    <select id="findById" resultMap="QrtzJobResult" databaseId="sqlserver">
+        SELECT * from QRTZ_JOB WHERE ID=#{id}
+    </select>
+
+    <!-- 插入::postgresql -->
+    <insert id="insert" databaseId="postgresql">
+    INSERT INTO QRTZ_JOB(
+        ID,
+        APPLICATION,
+        STATE,
+        JOB_CLASS,
+        JOB_DATA,
+        JOB_DESCRIPTION,
+        UPDATE_TIME
+    ) values (
+        #{id},
+        #{application},
+        #{state},
+        #{job_class},
+        #{job_data},
+        #{job_description},
+        #{update_time}
+    )
+    </insert>
+    <!-- 插入::mysql -->
+    <insert id="insert" databaseId="mysql">
+    INSERT INTO QRTZ_JOB(
+        ID,
+        APPLICATION,
+        STATE,
+        JOB_CLASS,
+        JOB_DATA,
+        JOB_DESCRIPTION,
+        UPDATE_TIME
+    ) values (
+        #{id},
+        #{application},
+        #{state},
+        #{job_class},
+        #{job_data},
+        #{job_description},
+        #{update_time}
+    )
+    </insert>
+    <!-- 插入::oracle -->
+    <insert id="insert" databaseId="oracle">
+    INSERT INTO QRTZ_JOB(
+        ID,
+        APPLICATION,
+        STATE,
+        JOB_CLASS,
+        JOB_DATA,
+        JOB_DESCRIPTION,
+        UPDATE_TIME
+    ) values (
+        #{id},
+        #{application},
+        #{state},
+        #{job_class},
+        #{job_data},
+        #{job_description},
+        #{update_time}
+    )
+    </insert>
+    <!-- 插入::sqlserver -->
+    <insert id="insert" databaseId="sqlserver">
+    INSERT INTO QRTZ_JOB(
+        ID,
+        APPLICATION,
+        STATE,
+        JOB_CLASS,
+        JOB_DATA,
+        JOB_DESCRIPTION,
+        UPDATE_TIME
+    ) values (
+        #{id},
+        #{application},
+        #{state},
+        #{job_class},
+        #{job_data},
+        #{job_description},
+        #{update_time}
+    )
+    </insert>
+
+    <!-- 批量插入::postgresql -->
+    <insert id="insertBatch" databaseId="postgresql">
+    INSERT INTO QRTZ_JOB(
+        ID,
+        APPLICATION,
+        STATE,
+        JOB_CLASS,
+        JOB_DATA,
+        JOB_DESCRIPTION,
+        UPDATE_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.id},
+        #{i.application},
+        #{i.state},
+        #{i.job_class},
+        #{i.job_data},
+        #{i.job_description},
+        #{i.update_time}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::mysql -->
+    <insert id="insertBatch" databaseId="mysql">
+    INSERT INTO QRTZ_JOB(
+        ID,
+        APPLICATION,
+        STATE,
+        JOB_CLASS,
+        JOB_DATA,
+        JOB_DESCRIPTION,
+        UPDATE_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.id},
+        #{i.application},
+        #{i.state},
+        #{i.job_class},
+        #{i.job_data},
+        #{i.job_description},
+        #{i.update_time}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::oracle -->
+    <insert id="insertBatch" databaseId="oracle">
+    INSERT INTO QRTZ_JOB(
+        ID,
+        APPLICATION,
+        STATE,
+        JOB_CLASS,
+        JOB_DATA,
+        JOB_DESCRIPTION,
+        UPDATE_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.id},
+        #{i.application},
+        #{i.state},
+        #{i.job_class},
+        #{i.job_data},
+        #{i.job_description},
+        #{i.update_time}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::sqlserver -->
+    <insert id="insertBatch" databaseId="sqlserver">
+    INSERT INTO QRTZ_JOB(
+        ID,
+        APPLICATION,
+        STATE,
+        JOB_CLASS,
+        JOB_DATA,
+        JOB_DESCRIPTION,
+        UPDATE_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.id},
+        #{i.application},
+        #{i.state},
+        #{i.job_class},
+        #{i.job_data},
+        #{i.job_description},
+        #{i.update_time}
+      )
+    </foreach>
+    </insert>
+
+    <!-- 更新::postgresql -->
+    <update id="update" databaseId="postgresql">
+      UPDATE QRTZ_JOB
+      <set>
+<!--       <if test="application != null and application != ''">APPLICATION=#{application},</if>-->
+       <if test="state != null and state != ''">STATE=#{state},</if>
+<!--       <if test="job_class != null and job_class != ''">JOB_CLASS=#{job_class},</if>-->
+       <if test="job_data != null and job_data != ''">JOB_DATA=#{job_data},</if>
+       <if test="job_description != null and job_description != ''">JOB_DESCRIPTION=#{job_description},</if>
+       <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+      WHERE ID=#{id}
+    </update>
+    <!-- 更新::mysql -->
+    <update id="update" databaseId="mysql">
+      UPDATE QRTZ_JOB
+      <set>
+<!--       <if test="application != null and application != ''">APPLICATION=#{application},</if>-->
+       <if test="state != null and state != ''">STATE=#{state},</if>
+<!--       <if test="job_class != null and job_class != ''">JOB_CLASS=#{job_class},</if>-->
+       <if test="job_data != null and job_data != ''">JOB_DATA=#{job_data},</if>
+       <if test="job_description != null and job_description != ''">JOB_DESCRIPTION=#{job_description},</if>
+       <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+      WHERE ID=#{id}
+    </update>
+    <!-- 更新::oracle -->
+    <update id="update" databaseId="oracle">
+      UPDATE QRTZ_JOB
+      <set>
+<!--       <if test="application != null and application != ''">APPLICATION=#{application},</if>-->
+       <if test="state != null and state != ''">STATE=#{state},</if>
+<!--       <if test="job_class != null and job_class != ''">JOB_CLASS=#{job_class},</if>-->
+       <if test="job_data != null and job_data != ''">JOB_DATA=#{job_data},</if>
+       <if test="job_description != null and job_description != ''">JOB_DESCRIPTION=#{job_description},</if>
+       <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+      WHERE ID=#{id}
+    </update>
+    <!-- 更新::sqlserver -->
+    <update id="update" databaseId="sqlserver">
+      UPDATE QRTZ_JOB
+      <set>
+<!--       <if test="application != null and application != ''">APPLICATION=#{application},</if>-->
+       <if test="state != null and state != ''">STATE=#{state},</if>
+<!--       <if test="job_class != null and job_class != ''">JOB_CLASS=#{job_class},</if>-->
+       <if test="job_data != null and job_data != ''">JOB_DATA=#{job_data},</if>
+       <if test="job_description != null and job_description != ''">JOB_DESCRIPTION=#{job_description},</if>
+       <if test="update_time != null">UPDATE_TIME=#{update_time},</if>
+      </set>
+      WHERE ID=#{id}
+    </update>
+
+    <!-- 按主键删除::postgresql -->
+    <delete id="deleteById" databaseId="postgresql">
+       DELETE FROM QRTZ_JOB WHERE ID=#{id}
+    </delete>
+    <!-- 按主键删除::mysql -->
+    <delete id="deleteById" databaseId="mysql">
+       DELETE FROM QRTZ_JOB WHERE ID=#{id}
+    </delete>
+    <!-- 按主键删除::oracle -->
+    <delete id="deleteById" databaseId="oracle">
+       DELETE FROM QRTZ_JOB WHERE ID=#{id}
+    </delete>
+    <!-- 按主键删除::sqlserver -->
+    <delete id="deleteById" databaseId="sqlserver">
+       DELETE FROM QRTZ_JOB WHERE ID=#{id}
+    </delete>
+
+    <!-- 批量删除::postgresql -->
+    <delete id="deleteBatch" databaseId="postgresql">
+      DELETE FROM QRTZ_JOB WHERE ID IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::mysql -->
+    <delete id="deleteBatch" databaseId="mysql">
+      DELETE FROM QRTZ_JOB WHERE ID IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::oracle -->
+    <delete id="deleteBatch" databaseId="oracle">
+      DELETE FROM QRTZ_JOB WHERE ID IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::sqlserver -->
+    <delete id="deleteBatch" databaseId="sqlserver">
+      DELETE FROM QRTZ_JOB WHERE ID IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+
+</mapper>

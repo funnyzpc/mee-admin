@@ -16,7 +16,7 @@ public class Job02TestService implements Job {
 
     @MeeTimeds({
             @MeeTimed(fixedRate = 10000,lockName = "t10",lockAtLeastFor = "PT5S",lockAtMostFor ="PT5S" ),
-            @MeeTimed(fixedRate = 5000,lockName = "t11",lockAtLeastFor = "PT5S",lockAtMostFor ="PT5S" ),
+//            @MeeTimed(fixedRate = 5000,lockName = "t11",lockAtLeastFor = "PT5S",lockAtMostFor ="PT5S" ),
             @MeeTimed(fixedDelay = 4000,lockName = "t11",lockAtLeastFor = "PT5S",lockAtMostFor ="PT5S" ),
     })
     public void exec01() throws InterruptedException {
@@ -27,7 +27,7 @@ public class Job02TestService implements Job {
     @MeeTimeds({
          @MeeTimed(cron = "10,20,30,40,50 * * * * ?",lockAtMostFor ="PT5S",lockName = "t1"),
          @MeeTimed(cron = "0/3 * * * * ?",lockAtMostFor ="PT1M",lockName = "t2"),
-         @MeeTimed(cron = "0/6 * * * * ?",lockAtMostFor ="PT1M",lockName = "t3")
+//         @MeeTimed(cron = "0/6 * * * * ?",lockAtMostFor ="PT1M",lockName = "t3")
     })
     @Override
     public void execute(JobExecutionContext context) {

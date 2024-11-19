@@ -18,7 +18,7 @@
 
     <!-- 查询 -->
     <select id="findList" resultMap="SysRoleMenuResult">
-        select * from sys_role_menu
+        SELECT * FROM SYS_ROLE_MENU
         <where>
             <if test="id != null and id != ''"> and id = #{id}</if>
             <if test="menu_id != null"> and menu_id = #{menu_id}</if>
@@ -26,18 +26,17 @@
             <if test="create_by != null"> and create_by = #{create_by}</if>
             <if test="create_time != null"> and create_time = #{create_time}</if>
         </where>
-        order by id desc
+        ORDER BY ID DESC
     </select>
 
     <!-- 按主键id查询 -->
     <select id="findById" resultMap="SysRoleMenuResult">
-        select * from sys_role_menu
-        where id=#{id}
+        SELECT * FROM SYS_ROLE_MENU  WHERE ID=#{id}
     </select>
 
     <!-- 插入 -->
     <insert id="insert">
-        insert into sys_role_menu(
+        INSERT INTO SYS_ROLE_MENU(
             id,
             menu_id,
             role_id,
@@ -54,7 +53,7 @@
 
     <!-- 批量插入 -->
     <insert id="insertBatch">
-        insert into sys_role_menu(
+        INSERT INTO SYS_ROLE_MENU(
            id,
            menu_id,
            role_id,
@@ -74,31 +73,31 @@
 
     <!-- 更新 -->
     <update id="update">
-        update sys_role_menu
+        UPDATE SYS_ROLE_MENU
         <set>
             <if test="menu_id != null">menu_id=#{menu_id},</if>
             <if test="role_id != null">role_id=#{role_id},</if>
             <if test="create_by != null">create_by=#{create_by},</if>
             <if test="create_time != null">create_time=#{create_time},</if>
         </set>
-        where id=#{id}
+        WHERE ID=#{id}
     </update>
 
     <!-- 按主键id删除 -->
     <delete id="deleteById">
-        delete from sys_role_menu where id=#{id}
+        DELETE FROM SYS_ROLE_MENU WHERE ID=#{id}
     </delete>
 
     <!-- 批量删除 -->
     <delete id="deleteBatch">
-        delete from sys_role_menu where id in
+        DELETE FROM SYS_ROLE_MENU WHERE ID IN
         <foreach collection ="list" item="item" open="(" close=")" separator =",">
             #{item}
         </foreach>
     </delete>
 
     <delete id="deleteByRoleId">
-        delete from sys_role_menu where role_id=#{role_id}
+        DELETE FROM SYS_ROLE_MENU WHERE ROLE_ID=#{role_id}
     </delete>
 
 </mapper>

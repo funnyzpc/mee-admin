@@ -45,8 +45,8 @@ public class UserCenterServiceImpl implements UserCenterService {
      * @param SysUser2(or Map) 系统::用户信息表
      * @return 系统::用户信息表分页集合
      */
-    //@Override
-    public MeeResult list(){
+    @Override
+    public MeeResult<SysUser> list(){
         final String user_id = ShiroUtils.getUserId();
         if( null==user_id ){
             throw new RuntimeException("用户不存在，请重新登录!");
@@ -54,24 +54,25 @@ public class UserCenterServiceImpl implements UserCenterService {
         Map<String,String> param = new HashMap<>(2,1);
         param.put("id",user_id);
         // 用户信息
-        SysUser sys_user2 = dbSQLDao.findOne("com.mee.xml.SysUser.findById",param);
+        SysUser sysUser = dbSQLDao.findOne("com.mee.xml.SysUser.findById",param);
         // 角色信息 todo ...
 
-        return ResultBuild.build(sys_user2);
+        return ResultBuild.build(sysUser);
     }
 
 
     /**
      * 更新用户基本信息
-     * @param sysUser2 用户信息
+     * @param sysUser 用户信息
      * @return 更新结果
      */
-    public MeeResult updateUserInfo(SysUser sysUser2) {
-        if( null==sysUser2.getId() ){
+    @Override
+    public MeeResult<Integer> updateUserInfo(SysUser sysUser) {
+        if( null==sysUser.getId() ){
             return ResultBuild.fail("必要参数不可为空[id]");
         }
-        int update_count = dbSQLDao.update("com.mee.xml.SysUser.updateInfoBySelf", sysUser2);
-        LOG.info("用户自行修改资料{}=>{}条",sysUser2,update_count);
+        int update_count = dbSQLDao.update("com.mee.xml.SysUser.updateInfoBySelf", sysUser);
+        LOG.info("用户自行修改资料{}=>{}条",sysUser,update_count);
 
         // 更改密码后退出登陆
         Subject subject = SecurityUtils.getSubject();
@@ -80,14 +81,15 @@ public class UserCenterServiceImpl implements UserCenterService {
         return ResultBuild.build(update_count);
     }
 
-    public MeeResult updateUserPwd(SysUserDTO sysUser2DTO) {
+    @Override
+    public MeeResult<Integer> updateUserPwd(SysUserDTO sysUserDTO) {
         // 验证并解密
-        if( null==sysUser2DTO.getOld_pwd() || null==sysUser2DTO.getPwd1() || null==sysUser2DTO.getPwd2() ){
+        if( null==sysUserDTO.getOld_pwd() || null==sysUserDTO.getPwd1() || null==sysUserDTO.getPwd2() ){
             return ResultBuild.fail("必要参数为空[原密码，新密码，确认密码]");
         }
-        final String dec_old_pwd = ChaosUtil.dec(sysUser2DTO.getOld_pwd());
-        final String dec_pwd1 = ChaosUtil.dec(sysUser2DTO.getPwd1());
-        final String dec_pwd2 = ChaosUtil.dec(sysUser2DTO.getPwd2());
+        final String dec_old_pwd = ChaosUtil.dec(sysUserDTO.getOld_pwd());
+        final String dec_pwd1 = ChaosUtil.dec(sysUserDTO.getPwd1());
+        final String dec_pwd2 = ChaosUtil.dec(sysUserDTO.getPwd2());
         if( null==dec_old_pwd || null==dec_pwd1 || null==dec_pwd2 ){
             return ResultBuild.fail("密码异常，请检查[原密码，新密码，确认密码]");
         }

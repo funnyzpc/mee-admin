@@ -30,8 +30,7 @@ public class CommonDictController {
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Map getDicts(String[] names){
-        //return commonDictService.getDicts(names);
-        return commonDictService.getDicts2(names);
+        return commonDictService.getDicts(names);
     }
 
 }

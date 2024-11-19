@@ -43,18 +43,18 @@ var module={
             "add":[
                   {name:"id",type: "hidden",label:"表ID/用户ID"},
                   //{name:"dept_id",label:"部门ID(保留字段暂不使用)",col:6,attrs:{required:false} },
-                  {name:"user_name",label:"用户名称",col:6,attrs:{"required":"required"} },
+                  {name:"user_name",label:"用户名称",col:6,attrs:{"required":"required","placeholder":"eg: 秋风梧"} },
                   {name:"nick_name",label:"用户昵称",col:6 },
                   {name:"gender",label:"性别",type:"select",col:6,"dict_type":"sys_user_gender" },
                   {name:"phone",label:"手机号码",type:"text",col:6,attrs:{"pattern":"^\\d{11}$","placeholder":"必须为11位数字","title":"必须为11位数字"} },
-                  {name:"email",label:"用户email",type:"email",col:6 },
+                  {name:"email",label:"用户email",type:"email",col:6,attrs:{"placeholder":"eg: zhangSun@mee.com"} },
                   //{name:"password",label:"用户密码",col:6,attrs:{required:true} },
                   //{name:"register_date",label:"用户注册时间",col:6,attrs:{required:true} },
                   //{name:"last_login_date",label:"最后登录时间",col:6,attrs:{required:false} },
                   //{name:"pwd_reset_time",label:"密码最后重置时间",col:6,attrs:{required:false} },
                   {name:"status",label:"状态",type:"select",col:6,attrs:{required:"required"},"dict_type":"sys_user_status" },
-                  {name:"pwd1",label:"设置密码",col:6,attrs:{required:"required",minlength:"5"}},
-                  {name:"pwd2",label:"确认密码",col:6,attrs:{required:"required",minlength:"5"}},
+                  {name:"pwd1",label:"设置密码",col:6,attrs:{required:"required",minlength:"5"},"title":"密码不可少于5位!"},
+                  {name:"pwd2",label:"确认密码",col:6,attrs:{required:"required",minlength:"5"},"title":"密码不可少于5位!"},
 
                   // {name:"del_flag",label:"删除标记1.正常 0.删除",col:6,attrs:{required:false} },
                   // {name:"create_time",label:"创建时间",col:6,attrs:{required:false} },
@@ -65,11 +65,11 @@ var module={
             "update":[
                   {name:"id",type: "hidden",label:"表ID/用户ID"},
                   //{name:"dept_id",label:"部门ID(保留字段暂不使用)",col:6,attrs:{required:false} },
-                  {name:"user_name",label:"用户名称",col:6,attrs:{readonly:"readonly",required:"required"} },
+                  {name:"user_name",label:"用户名称",col:6,attrs:{readonly:"readonly",required:"required","placeholder":"eg: 秋风梧"} },
                   {name:"nick_name",label:"用户昵称",col:6},
                   {name:"gender",label:"性别",type:"select",col:6,"dict_type":"sys_user_gender" },
                   {name:"phone",label:"手机号码",type:"text",col:6,attrs:{"pattern":"^\\d{11}$","placeholder":"必须为11位数字","title":"必须为11位数字"} },
-                  {name:"email",label:"用户email",type:"email",col:6 },
+                  {name:"email",label:"用户email",type:"email",col:6,attrs:{"placeholder":"eg: zhangSun@mee.com"} },
                   //{name:"password",label:"用户密码",col:6,attrs:{required:true} },
                   {name:"register_date",label:"用户注册时间",col:6,attrs:{readonly:"readonly"} },
                   {name:"last_login_date",label:"最后登录时间",col:6,attrs:{readonly:"readonly"} },
@@ -87,10 +87,11 @@ var module={
                 ],
             }
     },
-    // 定义初始化角色数据,这个角色是表单还有查询列表都要用到的
+    // 定义字典项，init时会自动到后台查询字典
     init_dict:["sys_user_status","sys_user_gender","del_flag"],
-    // 上面需要初始化角色在调用接口后会回写到此处
-    dicts:{ },
+    // 定义字典，最终会合并到common的dicts中，init_dict中的字典项最终也会合并到dicts
+    //dicts:{"sys_job_status2":{"0":{"dict_id":9,"v":"0","detail_id":14,"l":"正常"},"1":{"dict_id":9,"v":"1","detail_id":15,"l":"暂停"}}},
+
 };
 
 // 改变状态

@@ -17,9 +17,9 @@
                 <label class="col-sm-3">字典描述</label>
                 <input type="text" name="description" placeholder="字典描述" style="max-width:200px;">
 
-                <button type="submit" name="query" class="btn btn-info">查询</button>
+                <button type="submit" _func="query" class="btn btn-info">查询</button>
                 <@shiro.hasPermission name="sys:sys_dict:add">
-                <button type="button" name="add" class="btn btn-success">增加</button>
+                <button type="button" _func="add" class="btn btn-success">增加</button>
                 </@shiro.hasPermission>
         </form>
     </div>

@@ -38,7 +38,7 @@ public class UserCenterController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public MeeResult list( ){
+    public MeeResult<SysUser> list( ){
         return userCenterService.list();
     }
 
@@ -47,8 +47,8 @@ public class UserCenterController {
      */
     @PutMapping("update_user_info")
     @ResponseBody
-    public MeeResult updateUserInfo(@RequestBody(required = true) SysUser sysUser2){
-        return userCenterService.updateUserInfo(sysUser2);
+    public MeeResult<Integer> updateUserInfo(@RequestBody(required = true) SysUser sysUser){
+        return userCenterService.updateUserInfo(sysUser);
     }
 
     /**
@@ -56,8 +56,8 @@ public class UserCenterController {
      */
     @PutMapping("update_user_pwd")
     @ResponseBody
-    public MeeResult updateUserPwd(@RequestBody(required = true) SysUserDTO sysUser2DTO){
-        return userCenterService.updateUserPwd(sysUser2DTO);
+    public MeeResult<Integer> updateUserPwd(@RequestBody(required = true) SysUserDTO sysUserDTO){
+        return userCenterService.updateUserPwd(sysUserDTO);
     }
 
 }

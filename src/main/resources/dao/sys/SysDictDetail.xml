@@ -153,4 +153,14 @@
         order by d.name,dd.`sort` asc
     </select>
 
+    <select id="findByNames" resultType="com.mee.core.model.MapOrclBean" useCache="true" databaseId="oracle">
+        SELECT D.NAME,DD.ID AS DETAIL_ID,DD.DICT_ID ,DD.LABEL ,DD.VALUE ,DD.SORT FROM SYS_DICT D
+        LEFT JOIN SYS_DICT_DETAIL DD ON D.ID=DD.DICT_ID
+        WHERE D.NAME IN
+        <foreach collection ="list" item="item" open="(" close=")" separator =",">
+            #{item}
+        </foreach>
+        ORDER BY D.NAME,DD.SORT ASC
+    </select>
+
 </mapper>

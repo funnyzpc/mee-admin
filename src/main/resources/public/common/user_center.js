@@ -4,22 +4,16 @@ import * as FetchUtils  from "../fetch_utils.js"
 import { enc }  from "../../static/js/chaos.js"
 
 var module={
-    ctx_path:app,
     default_query:true,
-    search_form: { },
     id_field:"id",
-    events:{  },
-    data_events:{  },
     api:{
         "base": app+"/common/user_center",
     },
-    data:[],
     form_struct:{
         // 关闭
         on:false,
     },
     init_dict:["sys_user_status","sys_user_gender","del_flag"],
-    dicts:{ },
 };
 
 

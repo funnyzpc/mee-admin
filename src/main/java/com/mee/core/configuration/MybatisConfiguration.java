@@ -1,6 +1,7 @@
 package com.mee.core.configuration;
 
 import com.mee.core.annotion.PhysicalPageInterceptor;
+import com.mee.core.annotion.PhysicalPageOracleInterceptor;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -29,7 +30,10 @@ public class MybatisConfiguration {
         bean.setDataSource(dataSource);
         bean.setConfiguration(new org.apache.ibatis.session.Configuration());
         // 加入sql语句拦截器
+        // support mysql or postgresql
         bean.setPlugins(new Interceptor[] {new PhysicalPageInterceptor()});
+        // support oracle
+//        bean.setPlugins(new Interceptor[] {new PhysicalPageOracleInterceptor()});
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:dao/*/*.xml"));
         // 多廠商數據源支持,這裏只是申明，具體樣例見：com.mee.xml.SysDictDetail.findByNames
         // 所有數據庫操作，對於mybatis而言，他默認走不帶databaseId參數的mapper項，如果當前匹配到這個databaseId則走這個mapper項

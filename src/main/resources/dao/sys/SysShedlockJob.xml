@@ -28,7 +28,7 @@
 
     <!-- 查询::postgresql -->
     <select id="findList" resultMap="SysShedlockJobResult" databaseId="postgresql" >
-      select * from SYS_SHEDLOCK_JOB
+      SELECT * FROM SYS_SHEDLOCK_JOB
       <where>
           <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
           <if test="name != null and name != ''">AND NAME LIKE #{name}</if>
@@ -45,7 +45,7 @@
     </select>
     <!-- 查询::mysql -->
     <select id="findList" resultMap="SysShedlockJobResult" databaseId="mysql" >
-      select * from SYS_SHEDLOCK_JOB
+      SELECT * FROM SYS_SHEDLOCK_JOB
       <where>
           <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
           <if test="name != null and name != ''">AND `name` LIKE #{name}</if>
@@ -62,7 +62,7 @@
     </select>
     <!-- 查询::oracle -->
     <select id="findList" resultMap="SysShedlockJobResult" databaseId="oracle" >
-      select * from SYS_SHEDLOCK_JOB
+      SELECT * FROM SYS_SHEDLOCK_JOB
       <where>
           <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
           <if test="name != null and name != ''">AND "NAME" LIKE #{name}</if>
@@ -79,7 +79,7 @@
     </select>
     <!-- 查询::sqlserver -->
     <select id="findList" resultMap="SysShedlockJobResult" databaseId="sqlserver" >
-      select * from SYS_SHEDLOCK_JOB
+      SELECT * FROM SYS_SHEDLOCK_JOB
       <where>
           <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
           <if test="name != null and name != ''">AND NAME LIKE #{name}</if>
@@ -97,19 +97,19 @@
 
     <!-- 按主键主键查询::postgresql -->
     <select id="findByApplication" resultMap="SysShedlockJobResult" databaseId="postgresql">
-        SELECT * from SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
+        SELECT * FROM SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
     </select>
     <!-- 按主键主键查询::mysql -->
     <select id="findByApplication" resultMap="SysShedlockJobResult" databaseId="mysql">
-        SELECT * from SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
+        SELECT * FROM SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
     </select>
     <!-- 按主键主键查询::oracle -->
     <select id="findByApplication" resultMap="SysShedlockJobResult" databaseId="oracle">
-        SELECT * from SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
+        SELECT * FROM SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
     </select>
     <!-- 按主键主键查询::sqlserver -->
     <select id="findByApplication" resultMap="SysShedlockJobResult" databaseId="sqlserver">
-        SELECT * from SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
+        SELECT * FROM SYS_SHEDLOCK_JOB WHERE APPLICATION=#{application}
     </select>
 
     <!-- 插入::postgresql -->

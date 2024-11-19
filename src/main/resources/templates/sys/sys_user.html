@@ -55,9 +55,9 @@
 <!--        <thead class="table-dark">-->
         <thead>
         <tr>
-            <th>用户名称</th>
-            <th>表ID/用户ID</th>
-            <th>用户昵称</th>
+            <th>登录名称</th>
+            <th>用户姓名/昵称</th>
+            <th>表ID</th>
             <th>性别</th>
             <th>手机</th>
             <th>email</th>
@@ -78,8 +78,8 @@
         {{#each data}}
         <tr>
             <td>{{user_name}}</td>
-            <td>{{id}}</td>
             <td>{{nick_name}}</td>
+            <td>{{id}}</td>
             <td>{{sys_user_gender gender}}</td>
             <td>{{phone}}</td>
             <td>{{email}}</td>
@@ -112,4 +112,12 @@
     import {init} from "${ctxPath}/public/sys/sys_user.js"
     init();
 </script>
+<style>
+    td:nth-child(2),th:nth-child(2){
+      position:sticky;
+      left:80px;
+      z-index:1;
+      background-color:#eaeaea;
+    }
+</style>
 </html>

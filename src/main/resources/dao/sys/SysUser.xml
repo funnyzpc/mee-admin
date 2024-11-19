@@ -30,7 +30,7 @@
 
     <!-- 查询 -->
     <select id="findList" resultMap="SysUserResult">
-        select * from sys_user
+        SELECT * FROM SYS_USER
         <where>
             <if test="id != null and id != ''"> and id = #{id}</if>
             <if test="dept_id != null"> and dept_id = #{dept_id}</if>
@@ -50,7 +50,7 @@
 <!--            <if test="update_time != null"> and update_time = #{update_time}</if>-->
 <!--            <if test="update_by != null and update_by != ''"> and update_by = #{update_by}</if>-->
         </where>
-        order by id desc
+        ORDER BY ID DESC
     </select>
 
     <!-- 查询 -->
@@ -67,18 +67,17 @@
             <if test="del_flag != null and del_flag != ''"> and u.del_flag = #{del_flag}</if>
             <if test="status != null and status != ''"> and u.status = #{status}</if>
         </where>
-        order by id desc
+        ORDER BY ID DESC
     </select>
 
     <!-- 按主键id查询 -->
     <select id="findById" resultMap="SysUserResult">
-        select * from sys_user
-        where id=#{id}
+        SELECT * FROM SYS_USER WHERE ID=#{id}
     </select>
 
     <!-- 插入 -->
     <insert id="insert">
-        insert into sys_user(
+        INSERT INTO SYS_USER(
             id,
             dept_id,
             user_name,
@@ -119,7 +118,7 @@
 
     <!-- 批量插入 -->
     <insert id="insertBatch">
-        insert into sys_user(
+        INSERT INTO SYS_USER(
            id,
            dept_id,
            user_name,
@@ -163,7 +162,7 @@
 
     <!-- 更新 -->
     <update id="update">
-        update sys_user
+        UPDATE SYS_USER
         <set>
             <if test="dept_id != null">dept_id=#{dept_id},</if>
 <!--            <if test="user_name != null and user_name != ''">user_name=#{user_name},</if>-->
@@ -185,7 +184,7 @@
 
     <!-- 用户自行更新信息 -->
     <update id="updateInfoBySelf">
-        update sys_user set
+        UPDATE SYS_USER SET
             nick_name=#{nick_name},
             gender=#{gender},
             phone=#{phone},
@@ -196,12 +195,12 @@
     <!-- 按主键id删除 -->
     <delete id="deleteById">
 <!--        delete from sys_user where id=#{id}-->
-        update sys_user set del_flag=#{del_flag} where  id=#{id}
+        UPDATE SYS_USER SET DEL_FLAG=#{del_flag} WHERE ID=#{id}
     </delete>
 
     <!-- 批量删除 -->
     <delete id="deleteBatch">
-        delete from sys_user where id in
+        DELETE FROM SYS_USER WHERE ID IN
         <foreach collection ="list" item="item" open="(" close=")" separator =",">
             #{item}
         </foreach>
@@ -209,12 +208,12 @@
 
     <!-- change user status -->
     <update id="changeStatus">
-        update sys_user set status = #{status} where id = #{id}
+        UPDATE SYS_USER SET STATUS = #{status} WHERE ID = #{id}
     </update>
 
     <!-- 更新密码 -->
     <update id="updatePwd">
-        update sys_user set
+        UPDATE SYS_USER SET
             password = #{password},
             pwd_reset_time = #{pwd_reset_time},
             update_time = #{update_time},
@@ -224,7 +223,7 @@
 
     <!-- update last login date -->
     <update id="updateLastLoginDate">
-        update sys_user set last_login_date = #{last_login_date} where id = #{id}
+        UPDATE SYS_USER SET LAST_LOGIN_DATE = #{last_login_date} WHERE ID = #{id}
     </update>
 
 </mapper>
