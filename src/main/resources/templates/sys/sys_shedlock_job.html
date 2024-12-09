@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <title>${applicationName}-集群分佈式鎖-任务配置</title>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-5">
+
+    <!-- 查询表单 -->
+    <div id="data-search">
+        <h5>集群分佈式鎖-任务配置</h5>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form" class="form-search">
+            <label class="form-label" >当前实例应用
+            </label>
+            <input type="text" name="application" placeholder="当前实例应用">&nbsp;
+            <label class="form-label" title="任務名稱(即ID)">任務名稱(即ID</label>
+            <input type="text" name="name" placeholder="任務名稱(即ID)">&nbsp;
+            <label class="form-label" title="当前实例应用所属IP">当前实例应用所属
+            </label>
+            <input type="text" name="host_ip" placeholder="当前实例应用所属IP">&nbsp;
+            <label class="form-label" >任務開始鎖定
+            </label>
+            <input type="text" name="locked_at" placeholder="任務開始鎖定">&nbsp;
+            <label class="form-label" title="状态 0.close关闭 1.open开启">状态</label>
+            <span _dom_type="select" _field_name="state" _dict_type="shedlock_state"></span>&nbsp;&nbsp;
+            <label class="form-label" >任务标识</label>
+            <input type="text" name="label" placeholder="任務標識">&nbsp;
+
+            <button _func="query" type="submit" class="btn btn-primary">查询</button>
+            &nbsp;&nbsp;
+            <@shiro.hasPermission name="sys:sys_shedlock:add">
+            <button _func="add" class="btn btn-success">新增</button>
+            </@shiro.hasPermission>
+            &nbsp;
+            <button _func="export" class="btn btn-info">导出</button>
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+    <!-- dialog -->
+    <div id="data-dialog"></div>
+     </div>
+</div>
+</body>
+<#include "../decorator/foot.html"/>
+<script type="text/cc-template" id="template-data-list">
+    <div style="overflow-x: scroll; white-space: nowrap;">
+    <table class="table table-bordered table-condensed table-hover">
+        <thead class="table-dark">
+        <tr>
+
+            <th _idx="1" > 当前实例应用 </th>
+            <th _idx="2" title="任務名稱(即ID)"> 任務名稱(即ID </th>
+            <th _idx="3" title="当前实例应用所属IP"> 当前实例应用所属 </th>
+            <th _idx="4" > 任務開始鎖定 </th>
+            <th _idx="5" > 任務鎖定至 </th>
+            <th _idx="6" > 任務執行人 </th>
+            <th _idx="7" title="0.close关闭 1.open开启(默认) 局部限制标志位(只限制所有相同实例中的此任务)"> 0.close关 </th>
+            <th _idx="8" > job传入数据 </th>
+            <th _idx="9" > 任務標識 </th>
+            <th _idx="10" title="最后更新时间(也即最近一次执行时间/获取锁时间)"> 最后更新时间(也 </th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+            <td _idx="1">{{application}}</td>
+            <td _idx="2">{{name}}</td>
+            <td _idx="3">{{host_ip}}</td>
+            <td _idx="4">{{locked_at}}</td>
+            <td _idx="5">{{lock_until}}</td>
+            <td _idx="6">{{locked_by}}</td>
+            <td _idx="7">{{state}}</td>
+            <td _idx="8">{{data}}</td>
+            <td _idx="9">{{label}}</td>
+            <td _idx="10">{{update_time}}</td>
+            <td>
+                <@shiro.hasPermission name="sys:sys_shedlock:update">
+                <a href="#" func="update">修改</a>
+                </@shiro.hasPermission>
+                <@shiro.hasPermission name="sys:sys_shedlock:delete">
+                <a href="#" func="delete">删除</a>
+                </@shiro.hasPermission>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    </div>
+<#include "../decorator/page-form.html"/>
+</script>
+
+<script type="module">
+    import { init } from "${ctxPath}/public/sys/sys_shedlock_job.js"
+    init();
+</script>
+</html>
