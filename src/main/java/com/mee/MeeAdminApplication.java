@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -19,7 +20,7 @@ import java.net.InetAddress;
 *   @date       2023/4/18 8:34 PM
 *   @version    v1.0
 */
-@SpringBootApplication
+@SpringBootApplication(exclude = {QuartzAutoConfiguration.class})
 @EnableAsync // 开启异步调用
 //@EnableScheduling // 开启定时任务
 @EnableMeeTimed

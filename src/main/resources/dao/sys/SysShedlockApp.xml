@@ -58,7 +58,7 @@
     </select>
     <!-- 查询::sqlserver -->
     <select id="findList" resultMap="SysShedlockAppResult" databaseId="sqlserver" >
-      select * from SYS_SHEDLOCK_APP
+      SELECT * FROM SYS_SHEDLOCK_APP
       <where>
           <if test="application != null and application != ''">AND APPLICATION = #{application}</if>
           <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>

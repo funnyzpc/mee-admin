@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+    <link rel="stylesheet" href="${ctxPath}/static/css/fix-table.css">
+    <title>${applicationName}-定时任务::任务配置&执行配置</title>
+</head>
+<body>
+<div class="col-md-12">
+    <!-- 查询表单 -->
+    <div id="data-search">
+        <h4>定时任务::任务配置</h4>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form" class="form-search">
+            <label class="form-label" title="调度名称/应用名称">应用名</label>
+            <span _dom_type="select" _field_name="application" _dict_type="qrtz_job_app"></span>&nbsp;&nbsp;
+<!--            <input type="text" name="application" placeholder="调度名称/应用名称">&nbsp;-->
+            <label class="form-label" title="任务状态 传入_默认INIT(EXECUTING.执行中 PAUSED.暂停 COMPLETE.完成 ERROR.异常 INIT.初始化/未启动）">任务状态</label>
+<!--            <input type="text" name="state" placeholder="任务状态 传入_默认INIT(EXECUTING.执行中 PAUSED.暂停 COMPLETE.完成 ERROR.异常 INIT.初始化/未启动）">&nbsp;-->
+            <span _dom_type="select" _field_name="state" _dict_type="qrtz_job_state"></span>&nbsp;&nbsp;
+            <label class="form-label" >任务全类名</label>
+            <input type="text" name="jobClass" placeholder="任务全类名">&nbsp;
+            <label class="form-label" >任务数据</label>
+            <input type="text" name="jobData" placeholder="任务数据">&nbsp;
+            <label class="form-label" >任务描述</label>
+            <input type="text" name="jobDescription" placeholder="任务描述">&nbsp;
+
+            <button _func="query" type="submit" class="btn btn-primary">查询</button>
+            &nbsp;&nbsp;
+            <button _func="add" class="btn btn-success">新增</button>
+<!--            <button _func="delete_batch" class="btn btn-danger">删除</button>-->
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+    <!-- dialog -->
+    <div id="data-dialog"></div>
+</div>
+<div class="col-md-12">
+    <!-- 查询表单 -->
+    <div id="data-search2">
+        <h4>定时任务::执行配置</h4>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form2" class="form-search">
+            <label class="form-label" title="关联任务(QRTZ_JOB::ID)">关联任务配置</label>
+            <input type="number" name="pid" placeholder="关联任务(QRTZ_JOB::ID)">&nbsp;
+            <label class="form-label" >执行类型类型</label>
+            <select name="jobType" style="min-width:120px;">
+                <option value="">--</option>
+                <option value="CRON" title="EXECUTING 正常执行">CRON-表达式任务</option>
+                <option value="SIMPLE" title="PAUSED 停止">SIMPLE-简单任务</option>
+            </select>
+<!--            <input type="text" name="jobType" placeholder="任务类型">&nbsp;-->
+            <label class="form-label" title="任务状态 _默认INIT (EXECUTING.执行中 PAUSED.暂停 COMPLETE.完成 ERROR.异常 INIT.初始化/未启动）">
+                执行状态
+            </label>
+<!--            <input type="text" name="state" placeholder="任务状态 传入_默认INIT(EXECUTING.执行中 PAUSED.暂停 COMPLETE.完成 ERROR.异常 INIT.初始化/未启动）">&nbsp;-->
+            <span _dom_type="select" _field_name="state" _dict_type="qrtz_execute_state"></span>&nbsp;&nbsp;
+
+            <button _func="query" type="submit" class="btn btn-primary">查询</button>
+            &nbsp;&nbsp;
+<!--            <button _func="add" class="btn btn-success">新增</button>-->
+<!--            <button _func="delete_batch" class="btn btn-danger">删除</button>-->
+            &nbsp;
+<!--            <button _func="export" class="btn btn-info">导出</button>-->
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list2"></div>
+    <!-- dialog -->
+    <div id="data-dialog2"></div>
+</div>
+</body>
+<#include "../decorator/foot.html"/>
+<script type="text/cc-template" id="template-data-list">
+    <div style="overflow-x: scroll; white-space: nowrap;">
+    <table class="table table-bordered table-condensed table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th _idx="1" > 主键 </th>
+            <th _idx="2" title="调度名称/应用名称"> 调度名称/应用名 </th>
+            <th _idx="4" >任务全类名</th>
+            <th _idx="3" title="任务状态 传入_默认INIT(EXECUTING.执行中 PAUSED.暂停 COMPLETE.完成 ERROR.异常 INIT.初始化/未启动）">任务状态</th>
+            <th _idx="5" >任务数据</th>
+            <th _idx="6" >任务描述</th>
+            <th _idx="7" >更新时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each data}}
+        <tr>
+            <td _idx="1" func="show_execute" title="点击以筛选执行配置"><a href="#" title="点击以筛选执行配置">{{id}}</a></td>
+            <td _idx="2">{{application}}</td>
+            <td _idx="4" func="show_execute"><a href="#" title="点击以筛选执行配置">{{jobClass}}</a></td>
+            <td _idx="3" title="{{state}}.{{qrtz_job_state state}}"
+                {{#equal state 'PAUSED'}}style="color:orange;"{{/equal}}
+                {{#equal state 'ERROR'}}style="color:red;"{{/equal}}
+                {{#equal state 'COMPLETE'}}style="color:green;"{{/equal}}
+            >{{qrtz_job_state state}}</td>
+            <td _idx="5">{{jobData}}</td>
+            <td _idx="6">{{jobDescription}}</td>
+            <td _idx="7">{{datetime updateTime}}</td>
+            <td>
+                <a href="#" func="update">修改</a>
+                <a href="#" func="delete">删除</a>
+                <a href="#" func="add_execute">新增执行配置</a>
+                <a href="#" func="job_state" style="color:purple;">
+                    <!--EXECUTING,PAUSED,COMPLETE,ERROR,INIT-->
+                    {{#equal state 'EXECUTING'}} 暂停 {{/equal}}
+                    {{#equal state 'ERROR'}} 暂停 {{/equal}}
+                    {{#equal state 'PAUSED'}} 启动 {{/equal}}
+                    {{#equal state 'INIT'}} 启动 {{/equal}}
+                    {{#equal state 'COMPLETE'}}启动{{/equal}}
+                </a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    </div>
+<#include "../decorator/page-form.html"/>
+</script>
+<script type="text/cc-template" id="template-data-list2">
+    <div style="overflow-x: scroll; white-space: nowrap;">
+        <table class="table table-bordered table-condensed table-hover">
+            <thead class="table-dark">
+            <tr>
+<!--                <th>  <input type="checkbox" title="全选"></th>-->
+                <th _idx="3" > 任务类型 </th>
+                <th _idx="2" title="关联任务(QRTZ_JOB::ID)">关联任务配置</th>
+                <th _idx="1" > 主键 </th>
+                <th _idx="4" title="任务状态 传入_默认INIT(EXECUTING.执行中 PAUSED.暂停 COMPLETE.完成 ERROR.异常 INIT.初始化/未启动）">任务状态</th>
+                <th _idx="5" title="CRON:cron表达式"> CRON:表达式</th>
+                <th _idx="6" > CRON:时区 </th>
+                <th _idx="7" title="SIMPLE:重复/执行次数">SIMPLE:执行次数 </th>
+                <th _idx="8" title="SIMPLE:执行时间间隔">SIMPLE:时间间隔 </th>
+                <th _idx="9" title="SIMPLE:已执行次数">SIMPLE:已执行次数 </th>
+                <th _idx="10" > 上一次执行时间 </th>
+                <th _idx="11" title="下一次执行时间(当前次)">下一次执行时间</th>
+                <th _idx="12" title="最后操作:执行机器地址">执行地址 </th>
+                <th _idx="13" title="最后操作:执行机器名称">执行名称 </th>
+                <th _idx="14" > 任务开始时间 </th>
+                <th _idx="15" title="任务结束时间,<1时没有结束时间">任务结束时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each data}}
+            <tr class="_state-{{state}}">
+<!--                <td id="{{ id }}">
+                    <input type="checkbox" value="{{ id }}" title="{{ id }}">
+                </td>-->
+                <td _idx="3">{{jobType}}</td>
+                <td _idx="2">{{pid}}</td>
+                <td _idx="1">{{id}}</td>
+                <td _idx="4" title="{{state}}-{{qrtz_execute_state state}}">{{qrtz_execute_state state}}</td>
+                <td _idx="5">{{cron}}</td>
+                <td _idx="6">{{zoneId}}</td>
+                <td _idx="7">{{repeatCount}}</td>
+                <td _idx="8">{{repeatInterval}}</td>
+                <td _idx="9">{{timeTriggered}}</td>
+                <td _idx="10">{{#equal prevFireTime -1}} {{else}}{{datetime prevFireTime}}{{/equal}}</td>
+                <td _idx="11">{{datetime nextFireTime}}</td>
+                <td _idx="12">{{hostIp}}</td>
+                <td _idx="13">{{hostName}}</td>
+                <td _idx="14">{{#equal startTime -1}}{{else}}{{datetime startTime}}{{/equal}}</td>
+                <td _idx="15" title="{{datetime end_time}}">{{#equal endTime -1}}{{else}}{{datetime endTime}}{{/equal}}</td>
+                <td>
+                    <a href="#" func="update">{{#equal state 'COMPLETE'}} {{else}} 修改 {{/equal}}</a>
+                    <a href="#" func="delete">删除</a>
+                    <a href="#" func="execute_state" style="color:purple;">
+                        <!--EXECUTING,PAUSED,COMPLETE,ERROR,INIT-->
+                        {{#equal state 'EXECUTING'}} 暂停 {{/equal}}
+                        {{#equal state 'ERROR'}} 暂停 {{/equal}}
+                        {{#equal state 'PAUSED'}} 启动 {{/equal}}
+                        {{#equal state 'INIT'}} 启动 {{/equal}}
+                        {{#equal state 'COMPLETE'}}  {{/equal}}
+                    </a>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <#include "../decorator/page-form.html"/>
+</script>
+<style>
+    ._state-ERROR,._state-ERROR:hover{ font-weight:bold;background-color:#f99 !important;}
+    ._state-COMPLETE,._state-COMPLETE:hover{ background-color:#adffad !important;}
+    ._state-PAUSED,._state-PAUSED:hover{ background-color:orange !important;}
+</style>
+<script type="module">
+    import { init } from "${ctxPath}/public/sys/qrtz_job.js"
+    init();
+</script>
+</html>

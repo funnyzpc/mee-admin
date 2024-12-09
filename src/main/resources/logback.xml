@@ -57,6 +57,7 @@
 <!--    <logger name="java.sql.PreparedStatement" level="DEBUG"/>-->
     <!-- 自己项目的 -->
     <logger name="com.mee" level="DEBUG"/>
+    <logger name="com.mee.timed" level="INFO"/>
     <!-- dev环境 -->
     <springProfile name="dev,mysql">
         <root level="debug"><!-- 这里输出所有日志文件 -->

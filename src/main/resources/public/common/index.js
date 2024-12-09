@@ -57,12 +57,16 @@ function addEvent(dom){
         });
     });
  }
-
+/** 构造左侧菜单 **/
 function loadSidebarMenu(menu_data){
    let color = 40+8*(menu_data[0].level);
    let menu_str = menu_data[0].is_top === true ? "<ul>" : "<ul style='display:none;background-color:rgb("+color+","+color+","+color+");'>";
    for(let idx in  menu_data){
+       let _item = menu_data[idx];
+       // 不构造按钮的dom
+       if(_item && 3!==_item.type && "3"!==_item.type){
            menu_str+=buildItem(menu_data[idx]);
+       }
    }
    return ( menu_str + "</ul>" );
 }
@@ -96,7 +100,7 @@ function buildHref(item,level){
           item.title+
           "</a>";
 }
-
+/**格式化菜单结构数据**/
 function filterMenu(data){
  let result = [];
  let level = 0;
@@ -122,7 +126,9 @@ function filterMenu(data){
 function filterItem(sub_data,level){
  let result = [];
  for( let i=0;i<sub_data.length;i++){
-   if( !sub_data[i].hidden===true ){
+   // 踢掉不显示的以及按钮
+//   if( !sub_data[i].hidden===true ){
+   if( !sub_data[i].hidden===true && sub_data[i].type!==3 ){
       let item = sub_data[i];
       item.level=level;
       if( !item.children || item.children.length==0 ){

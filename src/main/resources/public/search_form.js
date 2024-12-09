@@ -45,7 +45,7 @@ function buildSelect( name,dict ){
     if( dict ){
         for( let v in dict ){
           let l = dict[v].l;
-          option_str=option_str+`<option value="${v}">${l}</option>`;
+          option_str=option_str+`<option value="${v}" title="${v} ${l}">${l}</option>`;
         }
     }
     return `
@@ -60,7 +60,7 @@ function buildRadio( name,dict ){
     if( dict ){
         for( let v in dict ){
           let l = dict[v].l;
-          radio_str=radio_str+`<input type="radio" name="${name}" value="${v}">${l}&nbsp;&nbsp;`;
+          radio_str=radio_str+`<input type="radio" name="${name}" value="${v}" title="${v} ${l}">${l}&nbsp;&nbsp;`;
         }
     }
     return radio_str;
@@ -72,7 +72,7 @@ function buildCheckbox( name,dict ){
     if( dict ){
         for( let v in dict ){
           let l = dict[v].l;
-          checkbox_str=checkbox_str+`<input type="checkbox" name="${name}" value="${v}">${l}</input>&nbsp;`;
+          checkbox_str=checkbox_str+`<input type="checkbox" name="${name}" value="${v}" title="${v} ${l}">${l}</input>&nbsp;`;
         }
     }
     return checkbox_str;

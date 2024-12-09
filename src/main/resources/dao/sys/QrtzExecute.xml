@@ -1,0 +1,571 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    定时任务::执行配置表 QrtzExecute(QRTZ_EXECUTE) DAO
+@author         ash
+@date           2024-09-14 16:11:46
+-->
+<!--<mapper namespace="com.mee.module.sys.mapper.QrtzExecuteMapper">-->
+<!--<mapper namespace="com.mee.xml.sys.QrtzExecute">-->
+<mapper namespace="com.mee.xml.sys.QrtzExecute">
+
+    <!-- 字段 -->
+    <!--<resultMap type="com.mee.module.sys.entity.QrtzExecute" id="QrtzExecuteResult">-->
+    <resultMap type="org.quartz.impl.QrtzExecute" id="QrtzExecuteResult">
+      <result property="id" column="id"/>
+      <result property="pid" column="pid"/>
+      <result property="jobType" column="job_type"/>
+      <result property="state" column="state"/>
+      <result property="cron" column="cron"/>
+      <result property="zoneId" column="zone_id"/>
+      <result property="repeatCount" column="repeat_count"/>
+      <result property="repeatInterval" column="repeat_interval"/>
+      <result property="timeTriggered" column="time_triggered"/>
+      <result property="prevFireTime" column="prev_fire_time"/>
+      <result property="nextFireTime" column="next_fire_time"/>
+      <result property="hostIp" column="host_ip"/>
+      <result property="hostName" column="host_name"/>
+      <result property="startTime" column="start_time"/>
+      <result property="endTime" column="end_time"/>
+    </resultMap>
+
+    <!-- 查询::postgresql -->
+    <select id="findList" resultMap="QrtzExecuteResult" databaseId="postgresql" >
+      SELECT * FROM QRTZ_EXECUTE
+      <where>
+          <if test="id != null and id != ''">AND ID = #{id}</if>
+          <if test="pid != null">AND PID = #{pid}</if>
+          <if test="job_type != null and job_type != ''">AND JOB_TYPE = #{job_type}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="cron != null and cron != ''">AND CRON = #{cron}</if>
+          <if test="zone_id != null and zone_id != ''">AND ZONE_ID = #{zone_id}</if>
+          <if test="repeat_count != null">AND REPEAT_COUNT = #{repeat_count}</if>
+          <if test="repeat_interval != null">AND REPEAT_INTERVAL = #{repeat_interval}</if>
+          <if test="time_triggered != null">AND TIME_TRIGGERED = #{time_triggered}</if>
+          <if test="prev_fire_time != null">AND PREV_FIRE_TIME = #{prev_fire_time}</if>
+          <if test="next_fire_time != null">AND NEXT_FIRE_TIME = #{next_fire_time}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="start_time != null">AND START_TIME = #{start_time}</if>
+          <if test="end_time != null">AND END_TIME = #{end_time}</if>
+      </where>
+      ORDER BY ID DESC
+    </select>
+    <!-- 查询::mysql -->
+    <select id="findList" resultMap="QrtzExecuteResult" databaseId="mysql" >
+      SELECT * FROM QRTZ_EXECUTE
+      <where>
+          <if test="id != null and id != ''">AND ID = #{id}</if>
+          <if test="pid != null">AND PID = #{pid}</if>
+          <if test="job_type != null and job_type != ''">AND JOB_TYPE = #{job_type}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="cron != null and cron != ''">AND CRON = #{cron}</if>
+          <if test="zone_id != null and zone_id != ''">AND ZONE_ID = #{zone_id}</if>
+          <if test="repeat_count != null">AND REPEAT_COUNT = #{repeat_count}</if>
+          <if test="repeat_interval != null">AND REPEAT_INTERVAL = #{repeat_interval}</if>
+          <if test="time_triggered != null">AND TIME_TRIGGERED = #{time_triggered}</if>
+          <if test="prev_fire_time != null">AND PREV_FIRE_TIME = #{prev_fire_time}</if>
+          <if test="next_fire_time != null">AND NEXT_FIRE_TIME = #{next_fire_time}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="start_time != null">AND START_TIME = #{start_time}</if>
+          <if test="end_time != null">AND END_TIME = #{end_time}</if>
+      </where>
+      ORDER BY ID DESC
+    </select>
+    <!-- 查询::oracle -->
+    <select id="findList" resultMap="QrtzExecuteResult" databaseId="oracle" >
+      SELECT * FROM QRTZ_EXECUTE
+      <where>
+          <if test="id != null and id != ''">AND ID = #{id}</if>
+          <if test="pid != null">AND PID = #{pid}</if>
+          <if test="job_type != null and job_type != ''">AND JOB_TYPE = #{job_type}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="cron != null and cron != ''">AND CRON = #{cron}</if>
+          <if test="zone_id != null and zone_id != ''">AND ZONE_ID = #{zone_id}</if>
+          <if test="repeat_count != null">AND REPEAT_COUNT = #{repeat_count}</if>
+          <if test="repeat_interval != null">AND REPEAT_INTERVAL = #{repeat_interval}</if>
+          <if test="time_triggered != null">AND TIME_TRIGGERED = #{time_triggered}</if>
+          <if test="prev_fire_time != null">AND PREV_FIRE_TIME = #{prev_fire_time}</if>
+          <if test="next_fire_time != null">AND NEXT_FIRE_TIME = #{next_fire_time}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="start_time != null">AND START_TIME = #{start_time}</if>
+          <if test="end_time != null">AND END_TIME = #{end_time}</if>
+      </where>
+      ORDER BY ID DESC
+    </select>
+    <!-- 查询::sqlserver -->
+    <select id="findList" resultMap="QrtzExecuteResult" databaseId="sqlserver" >
+      SELECT * FROM QRTZ_EXECUTE
+      <where>
+          <if test="id != null and id != ''">AND ID = #{id}</if>
+          <if test="pid != null">AND PID = #{pid}</if>
+          <if test="job_type != null and job_type != ''">AND JOB_TYPE = #{job_type}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="cron != null and cron != ''">AND CRON = #{cron}</if>
+          <if test="zone_id != null and zone_id != ''">AND ZONE_ID = #{zone_id}</if>
+          <if test="repeat_count != null">AND REPEAT_COUNT = #{repeat_count}</if>
+          <if test="repeat_interval != null">AND REPEAT_INTERVAL = #{repeat_interval}</if>
+          <if test="time_triggered != null">AND TIME_TRIGGERED = #{time_triggered}</if>
+          <if test="prev_fire_time != null">AND PREV_FIRE_TIME = #{prev_fire_time}</if>
+          <if test="next_fire_time != null">AND NEXT_FIRE_TIME = #{next_fire_time}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="start_time != null">AND START_TIME = #{start_time}</if>
+          <if test="end_time != null">AND END_TIME = #{end_time}</if>
+      </where>
+      ORDER BY ID DESC
+    </select>
+
+    <!-- 按主键主键查询::postgresql -->
+    <select id="findById" resultMap="QrtzExecuteResult" databaseId="postgresql">
+        SELECT * from QRTZ_EXECUTE WHERE ID=#{id}
+    </select>
+    <!-- 按主键主键查询::mysql -->
+    <select id="findById" resultMap="QrtzExecuteResult" databaseId="mysql">
+        SELECT * from QRTZ_EXECUTE WHERE ID=#{id}
+    </select>
+    <!-- 按主键主键查询::oracle -->
+    <select id="findById" resultMap="QrtzExecuteResult" databaseId="oracle">
+        SELECT * from QRTZ_EXECUTE WHERE ID=#{id}
+    </select>
+    <!-- 按主键主键查询::sqlserver -->
+    <select id="findById" resultMap="QrtzExecuteResult" databaseId="sqlserver">
+        SELECT * from QRTZ_EXECUTE WHERE ID=#{id}
+    </select>
+
+    <!-- 插入::postgresql -->
+    <insert id="insert" databaseId="postgresql">
+    INSERT INTO QRTZ_EXECUTE(
+        ID,
+        PID,
+        JOB_TYPE,
+        STATE,
+        CRON,
+        ZONE_ID,
+        REPEAT_COUNT,
+        REPEAT_INTERVAL,
+        TIME_TRIGGERED,
+        PREV_FIRE_TIME,
+        NEXT_FIRE_TIME,
+        HOST_IP,
+        HOST_NAME,
+        START_TIME,
+        END_TIME
+    ) values (
+        #{id},
+        #{pid},
+        #{job_type},
+        #{state},
+        #{cron},
+        #{zone_id},
+        #{repeat_count},
+        #{repeat_interval},
+        #{time_triggered},
+        #{prev_fire_time},
+        #{next_fire_time},
+        #{host_ip},
+        #{host_name},
+        #{start_time},
+        #{end_time}
+    )
+    </insert>
+    <!-- 插入::mysql -->
+    <insert id="insert" databaseId="mysql">
+    INSERT INTO QRTZ_EXECUTE(
+        ID,
+        PID,
+        JOB_TYPE,
+        STATE,
+        CRON,
+        ZONE_ID,
+        REPEAT_COUNT,
+        REPEAT_INTERVAL,
+        TIME_TRIGGERED,
+        PREV_FIRE_TIME,
+        NEXT_FIRE_TIME,
+        HOST_IP,
+        HOST_NAME,
+        START_TIME,
+        END_TIME
+    ) values (
+        #{id},
+        #{pid},
+        #{job_type},
+        #{state},
+        #{cron},
+        #{zone_id},
+        #{repeat_count},
+        #{repeat_interval},
+        #{time_triggered},
+        #{prev_fire_time},
+        #{next_fire_time},
+        #{host_ip},
+        #{host_name},
+        #{start_time},
+        #{end_time}
+    )
+    </insert>
+    <!-- 插入::oracle -->
+    <insert id="insert" databaseId="oracle">
+    INSERT INTO QRTZ_EXECUTE(
+        ID,
+        PID,
+        JOB_TYPE,
+        STATE,
+        CRON,
+        ZONE_ID,
+        REPEAT_COUNT,
+        REPEAT_INTERVAL,
+        TIME_TRIGGERED,
+        PREV_FIRE_TIME,
+        NEXT_FIRE_TIME,
+        HOST_IP,
+        HOST_NAME,
+        START_TIME,
+        END_TIME
+    ) values (
+        #{id},
+        #{pid},
+        #{job_type},
+        #{state},
+        #{cron},
+        #{zone_id},
+        #{repeat_count},
+        #{repeat_interval},
+        #{time_triggered},
+        #{prev_fire_time},
+        #{next_fire_time},
+        #{host_ip},
+        #{host_name},
+        #{start_time},
+        #{end_time}
+    )
+    </insert>
+    <!-- 插入::sqlserver -->
+    <insert id="insert" databaseId="sqlserver">
+    INSERT INTO QRTZ_EXECUTE(
+        ID,
+        PID,
+        JOB_TYPE,
+        STATE,
+        CRON,
+        ZONE_ID,
+        REPEAT_COUNT,
+        REPEAT_INTERVAL,
+        TIME_TRIGGERED,
+        PREV_FIRE_TIME,
+        NEXT_FIRE_TIME,
+        HOST_IP,
+        HOST_NAME,
+        START_TIME,
+        END_TIME
+    ) values (
+        #{id},
+        #{pid},
+        #{job_type},
+        #{state},
+        #{cron},
+        #{zone_id},
+        #{repeat_count},
+        #{repeat_interval},
+        #{time_triggered},
+        #{prev_fire_time},
+        #{next_fire_time},
+        #{host_ip},
+        #{host_name},
+        #{start_time},
+        #{end_time}
+    )
+    </insert>
+
+    <!-- 批量插入::postgresql -->
+    <insert id="insertBatch" databaseId="postgresql">
+    INSERT INTO QRTZ_EXECUTE(
+        ID,
+        PID,
+        JOB_TYPE,
+        STATE,
+        CRON,
+        ZONE_ID,
+        REPEAT_COUNT,
+        REPEAT_INTERVAL,
+        TIME_TRIGGERED,
+        PREV_FIRE_TIME,
+        NEXT_FIRE_TIME,
+        HOST_IP,
+        HOST_NAME,
+        START_TIME,
+        END_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.id},
+        #{i.pid},
+        #{i.job_type},
+        #{i.state},
+        #{i.cron},
+        #{i.zone_id},
+        #{i.repeat_count},
+        #{i.repeat_interval},
+        #{i.time_triggered},
+        #{i.prev_fire_time},
+        #{i.next_fire_time},
+        #{i.host_ip},
+        #{i.host_name},
+        #{i.start_time},
+        #{i.end_time}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::mysql -->
+    <insert id="insertBatch" databaseId="mysql">
+    INSERT INTO QRTZ_EXECUTE(
+        ID,
+        PID,
+        JOB_TYPE,
+        STATE,
+        CRON,
+        ZONE_ID,
+        REPEAT_COUNT,
+        REPEAT_INTERVAL,
+        TIME_TRIGGERED,
+        PREV_FIRE_TIME,
+        NEXT_FIRE_TIME,
+        HOST_IP,
+        HOST_NAME,
+        START_TIME,
+        END_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.id},
+        #{i.pid},
+        #{i.job_type},
+        #{i.state},
+        #{i.cron},
+        #{i.zone_id},
+        #{i.repeat_count},
+        #{i.repeat_interval},
+        #{i.time_triggered},
+        #{i.prev_fire_time},
+        #{i.next_fire_time},
+        #{i.host_ip},
+        #{i.host_name},
+        #{i.start_time},
+        #{i.end_time}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::oracle -->
+    <insert id="insertBatch" databaseId="oracle">
+    INSERT INTO QRTZ_EXECUTE(
+        ID,
+        PID,
+        JOB_TYPE,
+        STATE,
+        CRON,
+        ZONE_ID,
+        REPEAT_COUNT,
+        REPEAT_INTERVAL,
+        TIME_TRIGGERED,
+        PREV_FIRE_TIME,
+        NEXT_FIRE_TIME,
+        HOST_IP,
+        HOST_NAME,
+        START_TIME,
+        END_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.id},
+        #{i.pid},
+        #{i.job_type},
+        #{i.state},
+        #{i.cron},
+        #{i.zone_id},
+        #{i.repeat_count},
+        #{i.repeat_interval},
+        #{i.time_triggered},
+        #{i.prev_fire_time},
+        #{i.next_fire_time},
+        #{i.host_ip},
+        #{i.host_name},
+        #{i.start_time},
+        #{i.end_time}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::sqlserver -->
+    <insert id="insertBatch" databaseId="sqlserver">
+    INSERT INTO QRTZ_EXECUTE(
+        ID,
+        PID,
+        JOB_TYPE,
+        STATE,
+        CRON,
+        ZONE_ID,
+        REPEAT_COUNT,
+        REPEAT_INTERVAL,
+        TIME_TRIGGERED,
+        PREV_FIRE_TIME,
+        NEXT_FIRE_TIME,
+        HOST_IP,
+        HOST_NAME,
+        START_TIME,
+        END_TIME
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.id},
+        #{i.pid},
+        #{i.job_type},
+        #{i.state},
+        #{i.cron},
+        #{i.zone_id},
+        #{i.repeat_count},
+        #{i.repeat_interval},
+        #{i.time_triggered},
+        #{i.prev_fire_time},
+        #{i.next_fire_time},
+        #{i.host_ip},
+        #{i.host_name},
+        #{i.start_time},
+        #{i.end_time}
+      )
+    </foreach>
+    </insert>
+
+    <!-- 更新::postgresql -->
+    <update id="update" databaseId="postgresql">
+      UPDATE QRTZ_EXECUTE
+      <set>
+       <if test="pid != null">PID=#{pid},</if>
+       <if test="job_type != null and job_type != ''">JOB_TYPE=#{job_type},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="cron != null and cron != ''">CRON=#{cron},</if>
+       <if test="zone_id != null and zone_id != ''">ZONE_ID=#{zone_id},</if>
+       <if test="repeat_count != null">REPEAT_COUNT=#{repeat_count},</if>
+       <if test="repeat_interval != null">REPEAT_INTERVAL=#{repeat_interval},</if>
+       <if test="time_triggered != null">TIME_TRIGGERED=#{time_triggered},</if>
+       <if test="prev_fire_time != null">PREV_FIRE_TIME=#{prev_fire_time},</if>
+       <if test="next_fire_time != null">NEXT_FIRE_TIME=#{next_fire_time},</if>
+       <if test="host_ip != null and host_ip != ''">HOST_IP=#{host_ip},</if>
+       <if test="host_name != null and host_name != ''">HOST_NAME=#{host_name},</if>
+       <if test="start_time != null">START_TIME=#{start_time},</if>
+       <if test="end_time != null">END_TIME=#{end_time},</if>
+      </set>
+      WHERE ID=#{id}
+    </update>
+    <!-- 更新::mysql -->
+    <update id="update" databaseId="mysql">
+      UPDATE QRTZ_EXECUTE
+      <set>
+       <if test="pid != null">PID=#{pid},</if>
+       <if test="job_type != null and job_type != ''">JOB_TYPE=#{job_type},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="cron != null and cron != ''">CRON=#{cron},</if>
+       <if test="zone_id != null and zone_id != ''">ZONE_ID=#{zone_id},</if>
+       <if test="repeat_count != null">REPEAT_COUNT=#{repeat_count},</if>
+       <if test="repeat_interval != null">REPEAT_INTERVAL=#{repeat_interval},</if>
+       <if test="time_triggered != null">TIME_TRIGGERED=#{time_triggered},</if>
+       <if test="prev_fire_time != null">PREV_FIRE_TIME=#{prev_fire_time},</if>
+       <if test="next_fire_time != null">NEXT_FIRE_TIME=#{next_fire_time},</if>
+       <if test="host_ip != null and host_ip != ''">HOST_IP=#{host_ip},</if>
+       <if test="host_name != null and host_name != ''">HOST_NAME=#{host_name},</if>
+       <if test="start_time != null">START_TIME=#{start_time},</if>
+       <if test="end_time != null">END_TIME=#{end_time},</if>
+      </set>
+      WHERE ID=#{id}
+    </update>
+    <!-- 更新::oracle -->
+    <update id="update" databaseId="oracle">
+      UPDATE QRTZ_EXECUTE
+      <set>
+       <if test="pid != null">PID=#{pid},</if>
+       <if test="job_type != null and job_type != ''">JOB_TYPE=#{job_type},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="cron != null and cron != ''">CRON=#{cron},</if>
+       <if test="zone_id != null and zone_id != ''">ZONE_ID=#{zone_id},</if>
+       <if test="repeat_count != null">REPEAT_COUNT=#{repeat_count},</if>
+       <if test="repeat_interval != null">REPEAT_INTERVAL=#{repeat_interval},</if>
+       <if test="time_triggered != null">TIME_TRIGGERED=#{time_triggered},</if>
+       <if test="prev_fire_time != null">PREV_FIRE_TIME=#{prev_fire_time},</if>
+       <if test="next_fire_time != null">NEXT_FIRE_TIME=#{next_fire_time},</if>
+       <if test="host_ip != null and host_ip != ''">HOST_IP=#{host_ip},</if>
+       <if test="host_name != null and host_name != ''">HOST_NAME=#{host_name},</if>
+       <if test="start_time != null">START_TIME=#{start_time},</if>
+       <if test="end_time != null">END_TIME=#{end_time},</if>
+      </set>
+      WHERE ID=#{id}
+    </update>
+    <!-- 更新::sqlserver -->
+    <update id="update" databaseId="sqlserver">
+      UPDATE QRTZ_EXECUTE
+      <set>
+       <if test="pid != null">PID=#{pid},</if>
+       <if test="job_type != null and job_type != ''">JOB_TYPE=#{job_type},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="cron != null and cron != ''">CRON=#{cron},</if>
+       <if test="zone_id != null and zone_id != ''">ZONE_ID=#{zone_id},</if>
+       <if test="repeat_count != null">REPEAT_COUNT=#{repeat_count},</if>
+       <if test="repeat_interval != null">REPEAT_INTERVAL=#{repeat_interval},</if>
+       <if test="time_triggered != null">TIME_TRIGGERED=#{time_triggered},</if>
+       <if test="prev_fire_time != null">PREV_FIRE_TIME=#{prev_fire_time},</if>
+       <if test="next_fire_time != null">NEXT_FIRE_TIME=#{next_fire_time},</if>
+       <if test="host_ip != null and host_ip != ''">HOST_IP=#{host_ip},</if>
+       <if test="host_name != null and host_name != ''">HOST_NAME=#{host_name},</if>
+       <if test="start_time != null">START_TIME=#{start_time},</if>
+       <if test="end_time != null">END_TIME=#{end_time},</if>
+      </set>
+      WHERE ID=#{id}
+    </update>
+
+    <!-- 按主键删除::postgresql -->
+    <delete id="deleteById" databaseId="postgresql">
+       DELETE FROM QRTZ_EXECUTE WHERE ID=#{id}
+    </delete>
+    <!-- 按主键删除::mysql -->
+    <delete id="deleteById" databaseId="mysql">
+       DELETE FROM QRTZ_EXECUTE WHERE ID=#{id}
+    </delete>
+    <!-- 按主键删除::oracle -->
+    <delete id="deleteById" databaseId="oracle">
+       DELETE FROM QRTZ_EXECUTE WHERE ID=#{id}
+    </delete>
+    <!-- 按主键删除::sqlserver -->
+    <delete id="deleteById" databaseId="sqlserver">
+       DELETE FROM QRTZ_EXECUTE WHERE ID=#{id}
+    </delete>
+
+    <!-- 批量删除::postgresql -->
+    <delete id="deleteBatch" databaseId="postgresql">
+      DELETE FROM QRTZ_EXECUTE WHERE ID IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::mysql -->
+    <delete id="deleteBatch" databaseId="mysql">
+      DELETE FROM QRTZ_EXECUTE WHERE ID IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::oracle -->
+    <delete id="deleteBatch" databaseId="oracle">
+      DELETE FROM QRTZ_EXECUTE WHERE ID IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::sqlserver -->
+    <delete id="deleteBatch" databaseId="sqlserver">
+      DELETE FROM QRTZ_EXECUTE WHERE ID IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+
+</mapper>

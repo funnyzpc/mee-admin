@@ -96,6 +96,7 @@ CREATE TABLE mee_admin.sys_menu (
   update_time TIMESTAMP comment '创建人',
   UPDATE_BY VARCHAR(64) comment '创建时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统::新菜单表';
+
 INSERT INTO sys_menu (id,pid,`type`,title,icon,`path`,target,permission,sub_count,`show`,sort,create_time,create_by,update_time,UPDATE_BY) VALUES
 	 (1,0,1,'主页',NULL,'',NULL,NULL,0,1,1,'2020-11-27 03:09:22','sys','2023-05-08 09:59:44','SYS'),
 	 (2,0,1,'业务系统1',NULL,'',NULL,NULL,4,1,2,'2020-11-27 03:09:24','sys','2023-06-16 14:19:05','1'),
@@ -177,6 +178,17 @@ INSERT INTO sys_menu (id,pid,`type`,title,icon,`path`,target,permission,sub_coun
 	 (2306161419041075,2,1,'地区','','','','',2,1,1,'2023-06-16 14:19:05','1','2023-06-16 14:19:05','1'),
 	 (2306161645031000,20701,3,'导出','','','','sv1:t_offline_store:export',0,0,5,'2023-06-16 16:45:04','1','2023-06-16 16:45:04','1'),
 	 (2406201557181000,40205,3,'添加','','','','sys:sys_shedlock:add',0,0,4,'2024-06-20 15:57:18','1','2024-06-20 15:57:18','1');
+INSERT INTO sys_menu (id,pid,`type`,title,icon,`path`,target,"permission",sub_count,`show`,sort,create_time,create_by,update_time,update_by) VALUES
+	 (2409141751571004,2409141749091000,3,'添加','','','','sys:qrtz_job:add',0,0,4,'2024-09-14 17:51:57.043','1','2024-09-14 17:51:57.043','1'),
+	 (2409141749091000,402,2,'QUARTZ任务-任务&执行','','/sys/qrtz_job','_content','sys:qrtz_job:list',4,1,7,'2024-09-14 17:49:09.821','1','2024-09-14 17:51:57.043','1'),
+	 (2409141103551001,2409141044001000,3,'查询','','','','sys:qrtz_app:list',0,0,1,'2024-09-14 11:03:55.218','1','2024-09-14 11:13:03.218','1'),
+	 (2409141104551002,2409141044001000,3,'更新','','','','sys:qrtz_app:update',0,0,2,'2024-09-14 11:04:55.462','1','2024-09-14 11:13:22.618','1'),
+	 (2409141105481003,2409141044001000,3,'删除','','','','sys:qrtz_app:delete',0,0,3,'2024-09-14 11:05:48.879','1','2024-09-14 11:13:38.601','1'),
+	 (2409141106261004,2409141044001000,3,'添加','','','','sys:qrtz_app:add',0,0,4,'2024-09-14 11:06:26.046','1','2024-09-14 11:14:07.427','1'),
+	 (2409141044001000,402,2,'QUARTZ任务-应用&节点','','/sys/qrtz_app','_content','sys:qrtz_app:list',4,1,6,'2024-09-14 10:44:00.422','1','2024-09-14 17:46:40.544','1'),
+	 (2409141750251001,2409141749091000,3,'查询','','','','sys:qrtz_job:list',0,0,1,'2024-09-14 17:50:25.588','1','2024-09-14 17:50:25.588','1'),
+	 (2409141750581002,2409141749091000,3,'更新','','','','sys:qrtz_job:update',0,0,2,'2024-09-14 17:50:58.505','1','2024-09-14 17:50:58.505','1'),
+	 (2409141751291003,2409141749091000,3,'删除','','','','sys:qrtz_job:delete',0,0,3,'2024-09-14 17:51:29.459','1','2024-09-14 17:51:29.459','1');
 
 DROP TABLE IF EXISTS mee_admin.sys_log;
 CREATE TABLE mee_admin.sys_log (
@@ -200,7 +212,6 @@ INSERT INTO mee_admin.sys_log VALUES (2010231113540080100000, '1 ', 'admin', '20
 INSERT INTO mee_admin.sys_log VALUES (2010231121420080100000, '1 ', 'admin', '2020-10-23 11:21:43', '127.0.0.1', 'user login record');
 INSERT INTO mee_admin.sys_log VALUES (2010231153350080100000, '1 ', 'admin', '2020-10-23 11:53:36', '127.0.0.1', 'user login record');
 INSERT INTO mee_admin.sys_log VALUES (2010231325030080100001, '1 ', 'admin', '2020-10-23 13:25:04', '127.0.0.1', 'user login record');
-
 
 -- 定时任务应用配置
 DROP TABLE IF EXISTS SYS_SHEDLOCK_APP;
@@ -231,7 +242,6 @@ CREATE TABLE SYS_SHEDLOCK_JOB (
   UPDATE_TIME TIMESTAMP(3) NOT NULL COMMENT '创建及更新时间',
   PRIMARY KEY (APPLICATION, NAME)
 ) ENGINE=INNODB DEFAULT CHARSET=UTF8MB4 COMMENT='集群分佈式鎖-任务配置';
-
 
 DROP TABLE IF EXISTS mee_admin.sys_file;
 CREATE TABLE mee_admin.sys_file (
@@ -317,6 +327,9 @@ INSERT INTO mee_admin.sys_dict (id,`name`,description,create_by,update_by,create
 	 (2305311326281004,'del_flag','删除标记',1,1,'2023-05-31 13:26:28.749','2023-05-31 13:26:28.749'),
 	 (2306161442571000,'t_offline_store_brand','测试品牌',1,1,'2023-06-16 14:42:57.169','2023-06-16 14:42:57.169'),
 	 (2306161451241004,'common_status','通用状态',1,1,'2023-06-16 14:51:24.190','2023-06-16 14:51:24.190');
+INSERT INTO sys_menu (id,pid,"type",title,icon,"path",target,"permission",sub_count,"show",sort,create_time,create_by,update_time,update_by) VALUES
+	 (40205,402,2,'定时任务',NULL,'/sys/sys_shedlock_app','_content','sys:sys_shedlock:list',4,1,5,'2020-10-19 05:46:22.000','1','2024-06-19 11:07:38.127','1'),
+	 (2406191107381000,40205,3,'添加','','','','sys:sys_shedlock:add',0,0,4,'2024-06-19 11:07:38.127','1','2024-06-19 11:07:38.127','1');
 INSERT INTO mee_admin.sys_dict (id,name,description,create_by,update_by,create_time,update_time) VALUES
 	 (2406181655071000,'shedlock_state','定时任务状态',1,1,'2024-06-18 16:55:07.974','2024-06-18 16:55:07.974');
 
@@ -750,7 +763,6 @@ INSERT INTO sys_role_menu (id,menu_id,role_id,create_by,create_time) VALUES
 INSERT INTO sys_role_menu (id,menu_id,role_id,create_by,create_time) VALUES
 	 (220325182180100453,30112,2203251821100307,1,'2023-05-28 01:21:48'),
 	 (220325182180100454,30113,2203251821100307,1,'2023-05-28 01:21:48');
-
 
 
 CREATE TABLE mee_admin.sys_role_user (

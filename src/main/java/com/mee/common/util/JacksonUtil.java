@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 /**
  * @author funnyzpc
@@ -20,7 +23,8 @@ public class JacksonUtil {
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
             .setSerializationInclusion(JsonInclude.Include.NON_NULL)
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-            .registerModule(new JavaTimeModule());
+            .registerModule(new JavaTimeModule())
+            .registerModule(new SimpleModule().addSerializer(Date.class,new JsonDateSerializer()));
 
     /** 将java bean转换为json字符串**/
     public static <T> String toJsonString(T object) {
@@ -43,6 +47,7 @@ public class JacksonUtil {
         try {
             return OBJECT_MAPPER.readValue(json, type);
         } catch (Exception e) {
+            e.printStackTrace();
             LOGGER.error("convert JSON to POJO failure", e);
             return null;
         }

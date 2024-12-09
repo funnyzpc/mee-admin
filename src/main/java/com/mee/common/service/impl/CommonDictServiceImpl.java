@@ -29,40 +29,40 @@ public class CommonDictServiceImpl {
     @Autowired
     private DBSQLDao dbSQLDao;
 
-    /**
-     * 获取指定字典类型
-     * @param names 字典
-     * @return 字典数据
-     */
-    public Map getDicts(String[] names) {
-        if( null==names || names.length==0 ){
-            return new HashMap(0);
-        }
-        Map<String,Object> param = new HashMap<>(1);
-        param.put("list",names);
-        List<Map> data_list = dbSQLDao.find("com.mee.xml.SysDictDetail.findByNames",param);
-        if( null==data_list || data_list.isEmpty() ){
-            return new HashMap(0);
-        }
-        // data_list to {"name1":[{"dict_id":1,"label":"开","value":"1"}],"name2":[{"dict_id":1,"label":"关","value":"0"}]}
-        Map<String,List> result_data = new HashMap<>(names.length,1);
-        for( Map<String,Object> item:data_list ){
-            item.put("l",item.remove("label"));
-            item.put("v",item.remove("value"));
-            String name = (String) item.get("name");
-            if( result_data.containsKey(name)){
-                result_data.get(name).add(item);
-            }else{
-                List<Map> sub_list = new ArrayList<>(8);
-                sub_list.add(item);
-                result_data.put(name,sub_list);
-            }
-        }
-        data_list.clear();
-        return result_data;
-    }
+//    /**
+//     * 获取指定字典类型
+//     * @param names 字典
+//     * @return 字典数据
+//     */
+//    public Map getDicts(String[] names) {
+//        if( null==names || names.length==0 ){
+//            return new HashMap(0);
+//        }
+//        Map<String,Object> param = new HashMap<>(1);
+//        param.put("list",names);
+//        List<Map> data_list = dbSQLDao.find("com.mee.xml.SysDictDetail.findByNames",param);
+//        if( null==data_list || data_list.isEmpty() ){
+//            return new HashMap(0);
+//        }
+//        // data_list to {"name1":[{"dict_id":1,"label":"开","value":"1"}],"name2":[{"dict_id":1,"label":"关","value":"0"}]}
+//        Map<String,List> result_data = new HashMap<>(names.length,1);
+//        for( Map<String,Object> item:data_list ){
+//            item.put("l",item.remove("label"));
+//            item.put("v",item.remove("value"));
+//            String name = (String) item.get("name");
+//            if( result_data.containsKey(name)){
+//                result_data.get(name).add(item);
+//            }else{
+//                List<Map> sub_list = new ArrayList<>(8);
+//                sub_list.add(item);
+//                result_data.put(name,sub_list);
+//            }
+//        }
+//        data_list.clear();
+//        return result_data;
+//    }
 
-    public Map getDicts2(String[] names) {
+    public Map getDicts(String[] names) {
         if( null==names || names.length==0 ){
             return new HashMap(0);
         }

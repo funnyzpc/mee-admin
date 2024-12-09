@@ -3,7 +3,16 @@
  这是一套由本人写到的后台系统，从0开始，其中v1.5是从2022年12月份开始一直开发现在(2023年7月3日)，这个项目耗费了我太多心血❤,如果您看到了觉得还行请[点赞](https://github.com/funnyzpc/mee-admin)
 如果能[FORK🎈](https://github.com/funnyzpc/mee-admin/fork)那可太感谢了~😉
 
-### v1.6 __new🎉__
+### v1.1.0  **🎉**
++ 添加Quartz后管
++ 修复了菜单按钮展示在菜单的问题
++ 添加js事件
++ 表单展示优化
++ excel操作类优化
++ 
+
+
+### v1.0.2
 + js对象合并问题
 + fetch请求在session失效时重定向问题
 + 文件下载bug
@@ -13,7 +22,7 @@
 + 
 
 
-### v1.5+相较于v1.0
+### v1.0.1+相较于v1.0.0
 + 🍊几乎重构了所有前端页面
 + 🍎前端合理化布局及添加了复杂交互
 + 💃后端接口拆分及细致化权限管理
@@ -39,6 +48,7 @@
 >![...](./view/7.jpg)
 >![...](./view/8.jpg)
 >![...](./view/9.jpg)
+>![...](./view/10.jpg)
 
 #### 主要技术栈
 + SpringBoot 2.6
@@ -52,8 +62,8 @@
 ### 快速开始（quick start）
 + 准备IDE(推荐IDEA community)、jdk17、mysql或postgresql
 + 导入sql文件：
-  - [mysql_init.sql](docs%2Fmysql_init.sql)为mysql数据表，schema为mee_admin
-  - [pg_init.sql](docs%2Fpg_init.sql)为postgresql数据表,schema为mee_admin,先建库再建schema(不要使用public schema)
+  - [mysql_init.sql](doc%2Fmysql_init.sql)为mysql数据表，schema为mee_admin
+  - [pg_init.sql](doc%2Fpg_init.sql)为postgresql数据表,schema为mee_admin,先建库再建schema(不要使用public schema)
 + Fork 项目[MEE-ADMIN](https://github.com/funnyzpc/mee-admin/fork) 到自己的账号下
 + clone项目到本地
 + IDE文件调整为UTF-8 : setting->File encoding(文件编码)

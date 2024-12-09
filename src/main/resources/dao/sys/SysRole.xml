@@ -21,7 +21,7 @@
 
     <!-- 查询 -->
     <select id="findList" resultMap="SysRoleResult">
-        select * from sys_role
+        SELECT * FROM SYS_ROLE
         <where>
             <if test="id != null and id != ''"> and id = #{id}</if>
             <if test="name != null and name != ''"> and name like #{name}</if>
@@ -32,7 +32,7 @@
             <if test="update_by != null"> and update_by = #{update_by}</if>
             <if test="update_time != null"> and update_time = #{update_time}</if>
         </where>
-        order by id desc
+        ORDER BY ID DESC
     </select>
 
     <!-- 按主键id查询 -->

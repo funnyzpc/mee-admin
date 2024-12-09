@@ -202,7 +202,7 @@ function invokeForm( type,data,_form_struct,submit_func ){
 
     // 02.模板生成后做的事情
     let show_after_func = action.show_after_func;
-    if( show_after_func && true!==show_after_func(type,action,dialog_dom) ){
+    if( show_after_func && true!==show_after_func(type,action,data,dialog_dom) ){
         console.log("show_after_func执行结果为false，在此终止");
         return;
     }
@@ -370,6 +370,7 @@ function buildBody( type,action,field_list,dicts ){
     let attrs = buildAttrs(field);
     let required_str = buildRequiredStr(field);
     let field_type =  field.type;
+    let _title_elem = field.title && ""!==field.title.trim ? `title="${field.title}" style="color:#1717a0;"` : "";
 
     // 第一个
     if( 0===i ){
@@ -410,7 +411,7 @@ function buildBody( type,action,field_list,dicts ){
         case "datetime-local":
           field_str = field_str + `
                        <div class="col-sm-${field_col}">
-                           <label class="control-label">${field.label} ${required_str}</label>
+                           <label class="control-label" ${_title_elem} >${field.label} ${required_str}</label>
                            <input type="datetime-local" step="1" name="${field.name}" class="form-control" style="background-color:rgb(252,252,252);height: 33px;" value="{{${field.name}}}" ${attrs} field_idx="${i}">
                        </div>`;
           break;
@@ -422,7 +423,7 @@ function buildBody( type,action,field_list,dicts ){
            let _default_type = (field_type?field_type:"text");
            field_str = field_str + `
                      <div class="col-sm-${field_col}">
-                         <label class="control-label">${field.label} ${required_str}</label>
+                         <label class="control-label" ${_title_elem} >${field.label} ${required_str}</label>
                          <input type="${_default_type}" name="${field.name}" class="form-control input-sm" value="{{${field.name}}}" ${attrs} field_idx="${i}">
                      </div>`;
            break;
@@ -436,14 +437,15 @@ function buildBody( type,action,field_list,dicts ){
 // 构建下拉框
 function buildSelect( idx,field ,field_col,attrs,dict,required_str){
     let option_str = "<option value=''>--</option>";
+    let _title_elem = field.title && ""!==field.title.trim ? `title="${field.title}" style="color:#1717a0;"` : "";
     if( dict ){
         for( let v in dict ){
           let l = dict[v].l;
-          option_str=option_str+`<option value="${v}" {{#equal ${field.name} "${v}"}}selected{{/equal}}>${l}</option>`;
+          option_str=option_str+`<option value="${v}" {{#equal ${field.name} "${v}"}}selected{{/equal}} title="${v} ${l}">${l}</option>`;
         }
     }
     return `<div class="col-sm-${field_col}">
-            <label class="control-label">${field.label} ${required_str}</label>
+            <label class="control-label" ${_title_elem} >${field.label} ${required_str}</label>
             <div style="width:100%;">
                 <select name="${field.name}" value="{{${field.name}}}" field_idx="${idx}" ${attrs} class="form-control">
                     ${option_str}
@@ -457,14 +459,15 @@ function buildSelect( idx,field ,field_col,attrs,dict,required_str){
 function buildRadio( idx,field ,field_col,attrs,dict,required_str ){
     // 之际从dicts数组拿，拿不到就是空( "" )
     let radio_str = ""
+    let _title_elem = field.title && ""!==field.title.trim ? `title="${field.title}" style="color:#1717a0;"` : "";
     if( dict ){
         for( let v in dict ){
           let l = dict[v].l;
-          radio_str=radio_str+`<input type="radio" name="${field.name}" value="${v}" field_idx="${idx}" ${attrs} {{#equal ${field.name} "${v}"}}checked{{/equal}} >${l} &nbsp;&nbsp;`;
+          radio_str=radio_str+`<input type="radio" name="${field.name}" value="${v}" field_idx="${idx}" ${attrs} {{#equal ${field.name} "${v}"}}checked{{/equal}} title="${v} ${l}">${l} &nbsp;&nbsp;`;
         }
     }
     return `<div class="col-sm-${field_col}">
-                <label class="control-label">${field.label} ${required_str}</label>
+                <label class="control-label" ${_title_elem} >${field.label} ${required_str}</label>
                 <div style="width:100%;">
                     ${radio_str}
                 </div>
@@ -475,15 +478,16 @@ function buildRadio( idx,field ,field_col,attrs,dict,required_str ){
 function buildCheckbox( idx,field ,field_col,attrs,dict,required_str ){
     // 之际从dicts数组拿，拿不到就是空( "" )
     let checkbox_str = ""
+    let _title_elem = field.title && ""!==field.title.trim ? `title="${field.title}" style="color:#1717a0;"` : "";
     if( dict ){
         for( let v in dict ){
           let l = dict[v].l;
           //    <input type="checkbox" aria-hidden="false" name="多选" value="2">香蕉</input>
-          checkbox_str=checkbox_str+`<input type="checkbox" name="${field.name}" value="${v}" field_idx="${idx}" ${attrs} {{#equal ${field.name} "${v}"}}checked{{/equal}}>${l}</input>&nbsp;&nbsp;`;
+          checkbox_str=checkbox_str+`<input type="checkbox" name="${field.name}" value="${v}" field_idx="${idx}" ${attrs} {{#equal ${field.name} "${v}"}}checked{{/equal}} title="${v} ${l}">${l}</input>&nbsp;&nbsp;`;
         }
     }
     return `<div class="col-sm-${field_col}">
-                <label class="control-label">${field.label} ${required_str}</label>
+                <label class="control-label" ${_title_elem} >${field.label} ${required_str}</label>
                 <div style="width:100%;">
                     ${checkbox_str}
                 </div>
@@ -492,16 +496,18 @@ function buildCheckbox( idx,field ,field_col,attrs,dict,required_str ){
 
 // 构建文本域
 function buildTextarea( idx,field ,field_col,attrs,required_str ){
+    let _title_elem = field.title && ""!==field.title.trim ? `title="${field.title}" style="color:#1717a0;"` : "";
     return `<div class="col-sm-${field_col}">
-        <label class="control-label">${field.label} ${required_str}</label>
+        <label class="control-label" ${_title_elem} >${field.label} ${required_str}</label>
         <textarea type="text" name="${field.name}" class="form-control input-sm" value="{{${field.name}}}" ${attrs} field_idx="${idx}"></textarea>
         </div>`;
 }
 
 // 构建文本输入域
 function buildInputFile( idx,field ,field_col,attrs,required_str ){
+    let _title_elem = field.title && ""!==field.title.trim ? `title="${field.title}" style="color:#1717a0;"` : "";
     return `<div class="col-sm-${field_col}">
-                 <label class="control-label">${field.label} ${required_str}</label>
+                 <label class="control-label" ${_title_elem} >${field.label} ${required_str}</label>
                  <input type="file" name="${field.name}" class="form-control" value="{{${field.name}}}" ${attrs} field_idx="${idx}" >
              </div>`;
 }

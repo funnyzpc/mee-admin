@@ -11,7 +11,7 @@
 
     <groupId>com.mee.admin</groupId>
     <artifactId>mee-admin</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <name>mee-admin</name>
     <packaging>jar</packaging>
     <description>分離工程後端</description>
@@ -40,6 +40,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${springboot.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                    <artifactId>tomcat-embed-el</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                    <artifactId>tomcat-embed-websocket</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -199,6 +209,13 @@
             <scope>system</scope>
             <systemPath>${pom.basedir}/src/main/resources/lib/mee_timed-1.0.1.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler.internal</groupId>
+            <artifactId>quartz-client</artifactId>
+            <version>2.3.2</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/resources/lib/quartz-client-2.3.2.jar</systemPath>
+        </dependency>
 
     </dependencies>
 
@@ -349,7 +366,7 @@
                     <!-- 预构建文档目录 -->
                     <sourceDirectory>./target/docs</sourceDirectory>
                     <!-- 文档输出目录 -->
-                    <outputDirectory>./docs</outputDirectory>
+                    <outputDirectory>doc</outputDirectory>
                     <headerFooter>true</headerFooter>
                     <doctype>book</doctype>
                     <backend>html</backend>

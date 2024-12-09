@@ -27,8 +27,8 @@ public class IndexController {
     public IndexServiceImpl indexService;
 
     /**
-     * 页面
-     * @return
+     * 主页
+     * @return 主页页面
      */
     @RequestMapping
     public String index(){
@@ -38,7 +38,7 @@ public class IndexController {
     /**
      * 获取菜单树
      *
-     * @return
+     * @return MeeResult<List<SysMenuVO>>
      */
     @GetMapping(value = "menu",produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

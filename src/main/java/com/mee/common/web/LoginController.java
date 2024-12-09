@@ -3,6 +3,8 @@ import com.mee.common.service.impl.ShiroAccountLockedServiceImpl;
 import com.mee.core.configuration.ShiroUtils;
 import com.mee.sys.entity.SysUser;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,7 @@ public class LoginController {
 
 	/**
 	 * 登陆/重定向
-	 * @return
+	 * @return index/login
 	 */
 	@GetMapping("/login")
 	public String index(){
@@ -72,13 +74,15 @@ public class LoginController {
 
 	/**
 	 * 退出登陆
-	 * @return
+	 * @return login page
 	 */
 	@GetMapping("/logout")
 	public String logout(){
 		// ServiceContext.getInstance().setUser(null);
 		// 退出前要清空
 		Subject subject = SecurityUtils.getSubject();
+		SecurityManager securityManager = SecurityUtils.getSecurityManager();
+		securityManager.logout(subject);
 		subject.logout();
 		return "redirect:login";
 	}

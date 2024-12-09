@@ -12,7 +12,7 @@ var global_module = {
     form_struct:{ on:false },
     /* 分页表单的默认参数 _selected:已选择的数据体id，一般定义多选框需要此参数*/
     search_form:{"page_no":1,"page_size":10,"_total":0,"_page_count":0,"_selected":[]},
-    /* 主键字段,如果module定义了则会覆盖此字段 */
+    /* 主键字段,如果module定义了则会覆盖此字段,一般为单string单字段，也可为Array类型["pk1","pk2"] */
     id_field:"id",
     /* 表头事件，默认是 module中定义的会合并此 */
     events:{"query": doQuery,"add":toAdd,"export":doExport,"import":doImport,"delete_batch":deleteBatch,/*分页方法start*/"previous_page":previousPage,"first_page":firstPage,"last_page":lastPage,"next_page":nextPage,"_page_size":pageSize},
@@ -423,6 +423,12 @@ function doExport(/*event*/){
 function toUpdate( data,idx,dom ){
     //  type,data,submit_func
     Form.invokeForm("update",data,global_module.form_struct,/* async */ function (  dialog_dom,action,data ){
+         // 01.新增之前做的事情
+         let do_update0 = global_module.data_events.do_update0;
+         if( do_update0 && true!==do_update0( dialog_dom,action,data ) ){
+             console.log("do_update0执行结果为false，在此终止");
+             return;
+         }
         // 执行表单数据新增(fetch请求)
         // 新增
         //"add":{"api":"/sys_menu2/add","enc":"json","method":"POST","title":"菜单新增"},
@@ -461,6 +467,12 @@ function toAdd(data){
 
 //// 执行表单数据新增(fetch请求)
 function doAdd( dialog_dom,action,data ){
+     // 01.新增之前做的事情
+     let do_add0 = global_module.data_events.do_add0;
+     if( do_add0 && true!==do_add0( dialog_dom,action,data ) ){
+         console.log("do_add0执行结果为false，在此终止");
+         return;
+     }
     // 执行表单数据新增(fetch请求)
     // 新增
     //"add":{"api":"/sys_menu2/add","enc":"json","method":"POST","title":"菜单新增"},
@@ -516,14 +528,31 @@ function doImport( data ){
 */
 function toDelete( data,idx,elem ){
   if (!confirm("您确认删除此项数据？删除后将不可恢复！")){
-          return;
+      return;
   }
-  let primary_field = global_module.id_field;
-  let primary_value = global_module.data[idx][primary_field]
-  if( !primary_field || !primary_value ){
+  let primary_fields = global_module.id_field;
+  if( !primary_fields ){
     alert("主键字段未定义或主键为空(*m*)");
     return;
   }
+  let _param = {};
+  let _param_str = "";
+  if( (typeof primary_fields) === "string" ){
+    let _pv = data[primary_fields];
+    _param[primary_fields]=(""+_pv);
+    _param_str = primary_fields+"="+_pv;
+  }else{
+     for( let i=0;i<primary_fields.length;i++ ){
+          let _pk = primary_fields[i];
+          let _pv = data[primary_fields[i]];
+          _param[_pk]=(""+_pv);
+          _param_str = (i===0) ? (_pk+"="+_pv) : _param_str+"&"+(_pk+"="+_pv);
+     }
+  }
+//  if( !primary_field || !primary_value ){
+//    alert("主键字段未定义或主键为空(*m*)");
+//    return;
+//  }
 
   // 01.删除之前做的事情
   let before_delete_func = global_module.data_events.before_delete_func;
@@ -532,9 +561,8 @@ function toDelete( data,idx,elem ){
       return;
   }
 
-  let param = {};
-  param[primary_field]=(""+primary_value);
-  FetchUtils.fetchDelete(global_module.api["delete"]+`?${primary_field}=${primary_value}`,param,function(res){
+//  FetchUtils.fetchDelete(global_module.api["delete"]+`?${primary_field}=${primary_value}`,param,function(res){
+  FetchUtils.fetchDelete(global_module.api["delete"]+`?${_param_str}`,_param,function(res){
     // 02.删除之后做的事情
     let after_delete_func = global_module.data_events.after_delete_func;
     if( after_delete_func && true!==after_delete_func( data,idx,elem,res ) ){

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    定时任务::应用表 QrtzApp(QRTZ_APP) DAO
+@author         ash
+@date           2024-09-14 10:23:41
+-->
+<!--<mapper namespace="com.mee.module.mapper.QrtzAppMapper">-->
+<!--<mapper namespace="com.mee.xml.QrtzApp">-->
+<mapper namespace="com.mee.xml.sys.QrtzApp">
+
+    <!-- 字段 -->
+    <!--<resultMap type="com.mee.module.entity.QrtzApp" id="QrtzAppResult">-->
+    <resultMap type="org.quartz.impl.QrtzApp" id="QrtzAppResult">
+      <result property="application" column="application"/>
+      <result property="state" column="state"/>
+      <result property="timePre" column="time_pre"/>
+      <result property="timeNext" column="time_next"/>
+      <result property="timeInterval" column="time_interval"/>
+    </resultMap>
+
+    <!-- 查询::postgresql -->
+    <select id="findList" resultMap="QrtzAppResult" databaseId="postgresql" >
+      SELECT * FROM QRTZ_APP
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="timePre != null">AND TIME_PRE = #{timePre}</if>
+          <if test="timeNext != null">AND TIME_NEXT = #{timeNext}</if>
+          <if test="timeInterval != null">AND TIME_INTERVAL = #{timeInterval}</if>
+      </where>
+      ORDER BY APPLICATION DESC,TIME_PRE DESC
+    </select>
+    <!-- 查询::mysql -->
+    <select id="findList" resultMap="QrtzAppResult" databaseId="mysql" >
+      SELECT * FROM QRTZ_APP
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="timePre != null">AND TIME_PRE = #{timePre}</if>
+          <if test="timeNext != null">AND TIME_NEXT = #{timeNext}</if>
+          <if test="timeInterval != null">AND TIME_INTERVAL = #{timeInterval}</if>
+      </where>
+      ORDER BY APPLICATION DESC,TIME_PRE DESC
+    </select>
+    <!-- 查询::oracle -->
+    <select id="findList" resultMap="QrtzAppResult" databaseId="oracle" >
+      SELECT * FROM QRTZ_APP
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="timePre != null">AND TIME_PRE = #{timePre}</if>
+          <if test="timeNext != null">AND TIME_NEXT = #{timeNext}</if>
+          <if test="timeInterval != null">AND TIME_INTERVAL = #{timeInterval}</if>
+      </where>
+      ORDER BY APPLICATION DESC,TIME_PRE DESC
+    </select>
+    <!-- 查询::sqlserver -->
+    <select id="findList" resultMap="QrtzAppResult" databaseId="sqlserver" >
+      SELECT * FROM QRTZ_APP
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="timePre != null">AND TIME_PRE = #{timePre}</if>
+          <if test="timeNext != null">AND TIME_NEXT = #{timeNext}</if>
+          <if test="timeInterval != null">AND TIME_INTERVAL = #{timeInterval}</if>
+      </where>
+      ORDER BY APPLICATION DESC,TIME_PRE DESC
+    </select>
+
+    <!-- 按主键主键查询::postgresql -->
+    <select id="findByApplication" resultMap="QrtzAppResult" databaseId="postgresql">
+        SELECT * FROM QRTZ_APP WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::mysql -->
+    <select id="findByApplication" resultMap="QrtzAppResult" databaseId="mysql">
+        SELECT * FROM QRTZ_APP WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::oracle -->
+    <select id="findByApplication" resultMap="QrtzAppResult" databaseId="oracle">
+        SELECT * FROM QRTZ_APP WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::sqlserver -->
+    <select id="findByApplication" resultMap="QrtzAppResult" databaseId="sqlserver">
+        SELECT * FROM QRTZ_APP WHERE APPLICATION=#{application}
+    </select>
+
+    <!-- 插入::postgresql -->
+    <insert id="insert" databaseId="postgresql">
+    INSERT INTO QRTZ_APP(
+        APPLICATION,
+        STATE,
+        TIME_PRE,
+        TIME_NEXT,
+        TIME_INTERVAL
+    ) values (
+        #{application},
+        #{state},
+        #{timePre},
+        #{timeNext},
+        #{timeInterval}
+    )
+    </insert>
+    <!-- 插入::mysql -->
+    <insert id="insert" databaseId="mysql">
+    INSERT INTO QRTZ_APP(
+        APPLICATION,
+        STATE,
+        TIME_PRE,
+        TIME_NEXT,
+        TIME_INTERVAL
+    ) values (
+        #{application},
+        #{state},
+        #{timePre},
+        #{timeNext},
+        #{timeInterval}
+    )
+    </insert>
+    <!-- 插入::oracle -->
+    <insert id="insert" databaseId="oracle">
+    INSERT INTO QRTZ_APP(
+        APPLICATION,
+        STATE,
+        TIME_PRE,
+        TIME_NEXT,
+        TIME_INTERVAL
+    ) values (
+        #{application},
+        #{state},
+        #{timePre},
+        #{timeNext},
+        #{timeInterval}
+    )
+    </insert>
+    <!-- 插入::sqlserver -->
+    <insert id="insert" databaseId="sqlserver">
+    INSERT INTO QRTZ_APP(
+        APPLICATION,
+        STATE,
+        TIME_PRE,
+        TIME_NEXT,
+        TIME_INTERVAL
+    ) values (
+        #{application},
+        #{state},
+        #{timePre},
+        #{timeNext},
+        #{timeInterval}
+    )
+    </insert>
+
+    <!-- 批量插入::postgresql -->
+    <insert id="insertBatch" databaseId="postgresql">
+    INSERT INTO QRTZ_APP(
+        APPLICATION,
+        STATE,
+        TIME_PRE,
+        TIME_NEXT,
+        TIME_INTERVAL
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.state},
+        #{i.timePre},
+        #{i.timeNext},
+        #{i.timeInterval}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::mysql -->
+    <insert id="insertBatch" databaseId="mysql">
+    INSERT INTO QRTZ_APP(
+        APPLICATION,
+        STATE,
+        TIME_PRE,
+        TIME_NEXT,
+        TIME_INTERVAL
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.state},
+        #{i.timePre},
+        #{i.timeNext},
+        #{i.timeInterval}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::oracle -->
+    <insert id="insertBatch" databaseId="oracle">
+    INSERT INTO QRTZ_APP(
+        APPLICATION,
+        STATE,
+        TIME_PRE,
+        TIME_NEXT,
+        TIME_INTERVAL
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.state},
+        #{i.timePre},
+        #{i.timeNext},
+        #{i.timeInterval}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::sqlserver -->
+    <insert id="insertBatch" databaseId="sqlserver">
+    INSERT INTO QRTZ_APP(
+        APPLICATION,
+        STATE,
+        TIME_PRE,
+        TIME_NEXT,
+        TIME_INTERVAL
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.state},
+        #{i.timePre},
+        #{i.timeNext},
+        #{i.timeInterval}
+      )
+    </foreach>
+    </insert>
+
+    <!-- 更新::postgresql -->
+    <update id="update" databaseId="postgresql">
+      UPDATE QRTZ_APP
+      <set>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="timePre != null">TIME_PRE=#{timePre},</if>
+       <if test="timeNext != null">TIME_NEXT=#{timeNext},</if>
+       <if test="timeInterval != null">TIME_INTERVAL=#{timeInterval},</if>
+      </set>
+      WHERE APPLICATION=#{application}
+    </update>
+    <!-- 更新::mysql -->
+    <update id="update" databaseId="mysql">
+      UPDATE QRTZ_APP
+      <set>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="timePre != null">TIME_PRE=#{timePre},</if>
+       <if test="timeNext != null">TIME_NEXT=#{timeNext},</if>
+       <if test="timeInterval != null">TIME_INTERVAL=#{timeInterval},</if>
+      </set>
+      WHERE APPLICATION=#{application}
+    </update>
+    <!-- 更新::oracle -->
+    <update id="update" databaseId="oracle">
+      UPDATE QRTZ_APP
+      <set>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="timePre != null">TIME_PRE=#{timePre},</if>
+       <if test="timeNext != null">TIME_NEXT=#{timeNext},</if>
+       <if test="timeInterval != null">TIME_INTERVAL=#{timeInterval},</if>
+      </set>
+      WHERE APPLICATION=#{application}
+    </update>
+    <!-- 更新::sqlserver -->
+    <update id="update" databaseId="sqlserver">
+      UPDATE QRTZ_APP
+      <set>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="timePre != null">TIME_PRE=#{timePre},</if>
+       <if test="timeNext != null">TIME_NEXT=#{timeNext},</if>
+       <if test="timeInterval != null">TIME_INTERVAL=#{timeInterval},</if>
+      </set>
+      WHERE APPLICATION=#{application}
+    </update>
+
+<!--    &lt;!&ndash; 按主键删除::postgresql &ndash;&gt;-->
+<!--    <delete id="deleteByApplication" databaseId="postgresql">-->
+<!--       DELETE FROM QRTZ_APP WHERE APPLICATION=#{application}-->
+<!--    </delete>-->
+<!--    &lt;!&ndash; 按主键删除::mysql &ndash;&gt;-->
+<!--    <delete id="deleteByApplication" databaseId="mysql">-->
+<!--       DELETE FROM QRTZ_APP WHERE APPLICATION=#{application}-->
+<!--    </delete>-->
+<!--    &lt;!&ndash; 按主键删除::oracle &ndash;&gt;-->
+<!--    <delete id="deleteByApplication" databaseId="oracle">-->
+<!--       DELETE FROM QRTZ_APP WHERE APPLICATION=#{application}-->
+<!--    </delete>-->
+<!--    &lt;!&ndash; 按主键删除::sqlserver &ndash;&gt;-->
+<!--    <delete id="deleteByApplication" databaseId="sqlserver">-->
+<!--       DELETE FROM QRTZ_APP WHERE APPLICATION=#{application}-->
+<!--    </delete>-->
+
+    <!-- 批量删除::postgresql -->
+    <delete id="deleteBatch" databaseId="postgresql">
+      DELETE FROM QRTZ_APP WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::mysql -->
+    <delete id="deleteBatch" databaseId="mysql">
+      DELETE FROM QRTZ_APP WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::oracle -->
+    <delete id="deleteBatch" databaseId="oracle">
+      DELETE FROM QRTZ_APP WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::sqlserver -->
+    <delete id="deleteBatch" databaseId="sqlserver">
+      DELETE FROM QRTZ_APP WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+
+    <!-- 更新状态 -->
+    <update id="updateState" >
+        UPDATE QRTZ_APP SET STATE=#{state}
+        WHERE APPLICATION=#{application} AND TIME_NEXT=#{timeNext} <!-- 因为存在更新版本的问题，此处需要依据此做版本 -->
+    </update>
+
+</mapper>

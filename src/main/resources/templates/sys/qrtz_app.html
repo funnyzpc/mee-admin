@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <#include "../decorator/head.html"/>
+<!--    <link rel="stylesheet" href="${ctxPath}/static/css/fix-table.css">-->
+    <title>${applicationName}-定时任务::应用表</title>
+</head>
+<body>
+<div class="row">
+    <!-- 查询表单 -->
+    <div id="data-search">
+        <h4>定时任务::应用</h4>
+        <!-- 业务内容 -->
+        <form method="GET" id="search-form" class="form-search">
+            <label class="form-label" title="调度名称/应用名称">调度名称/应用名</label>
+            <input type="text" name="application" placeholder="调度名称/应用名称">&nbsp;
+            <label class="form-label" title="状态 N.停止/不可用  Y.开启/可用">状态</label>
+<!--            <input type="text" name="state" placeholder="状态 N.停止/不可用  Y.开启/可用">&nbsp;-->
+            <span _dom_type="select" _field_name="state" _dict_type="qrtz_app_state"></span>&nbsp;&nbsp;
+            <button _func="query" type="submit" class="btn btn-primary">查询</button>
+       <button _func="add" class="btn btn-success">新增</button>
+            <!--
+         <button _func="delete_batch" class="btn btn-danger">删除</button>-->
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list"></div>
+    <!-- dialog -->
+    <div id="data-dialog"></div>
+</div>
+<!-- 定时任务：任务明细-->
+<div class="row">
+    <!-- 查询表单 -->
+    <div id="data-search2">
+        <h4>定时任务::节点实例</h4>
+        <form method="GET" id="search-form2" class="form-search">
+            <label class="form-label" title="调度名称/应用名称">调度名称/应用名</label>
+            <input type="text" name="application" style="color:red;">&nbsp;
+            <label class="form-label" >实例机器IP</label>
+            <input type="text" name="host_ip" placeholder="实例机器IP">&nbsp;
+            <label class="form-label" >实例机器名称</label>
+            <input type="text" name="host_name" placeholder="实例机器名称">&nbsp;
+            <label class="form-label" title="状态 N.停止/不可用  Y.开启/可用">状态</label>
+<!--            <input type="text" name="state" placeholder="状态 N.停止/不可用  Y.开启/可用">&nbsp;-->
+            <span _dom_type="select" _field_name="state" _dict_type="qrtz_node_state"></span>&nbsp;&nbsp;
+
+            <button _func="query" type="submit" class="btn btn-primary">查询</button>
+<!--            <button _func="add" class="btn btn-success">新增</button>-->
+        </form>
+    </div>
+    <!-- table -->
+    <div id="data-list2" style="width:100%;"></div>
+    <!-- dialog -->
+    <div id="data-dialog2"></div>
+</div>
+
+</body>
+<#include "../decorator/foot.html"/>
+<script type="text/cc-template" id="template-data-list">
+<!--    <div style="overflow-x: scroll; white-space: nowrap;">-->
+<table class="table table-bordered table-condensed table-hover">
+    <thead class="table-dark">
+    <tr>
+        <th _idx="1" title="调度名称/应用名称" func="show_node"> 调度名称/应用名 </th>
+        <th _idx="2" title="状态 N.停止/不可用  Y.开启/可用">状态</th>
+        <th _idx="3" title="上一次check时间"> 上一次check </th>
+        <th _idx="4" title="下一次check时间"> 下一次check </th>
+        <th _idx="5" title="check的检查间隔(毫秒)"> check的检查 </th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each data}}
+    <tr>
+        <td _idx="1" func="show_node"><a href="#" title="点击可筛选节点">{{application}}</a></td>
+        <td _idx="2" func="app_state"><a href="#" title="点击可切换状态" {{#equal state 'N'}}style="color:red;"{{/equal}} >已{{qrtz_app_state state}}</a></td>
+        <td _idx="3">{{#equal timePre -1}} {{else}} {{datetime timePre}} {{/equal}}</td>
+        <td _idx="4">{{datetime timeNext}}</td>
+        <td _idx="5">{{timeInterval}}毫秒</td>
+        <td>
+<!--            <a href="#" func="update">修改</a>-->
+            <a href="#" func="add_sub">新增节点</a>
+            <a href="#" func="delete">删除</a>
+        </td>
+    </tr>
+    {{/each}}
+    </tbody>
+</table>
+<!--    </div>-->
+<#include "../decorator/page-form.html"/>
+</script>
+
+<script type="text/cc-template" id="template-data-list2">
+    <div style="overflow-x: scroll; white-space: nowrap;">
+        <table class="table table-bordered table-condensed table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th _idx="1" title="调度名称/应用名称"> 调度名称/应用名 </th>
+                <th _idx="2" > 实例机器IP </th>
+                <th _idx="3" > 实例机器名称 </th>
+                <th _idx="4" title="状态 N.停止/不可用  Y.开启/可用">状态</th>
+                <th _idx="5" > 检查时间 </th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each data}}
+            <tr>
+                <td _idx="1">{{application}}</td>
+                <td _idx="2">{{hostIp}}</td>
+                <td _idx="3">{{hostName}}</td>
+                <td _idx="4" func="node_state"><a href="#" title="点击可切换状态" {{#equal state 'N'}}style="color:red;"{{/equal}}>已{{qrtz_node_state state}}</a></td>
+                <td _idx="5">{{datetime timeCheck}}</td>
+                <td>
+                    <a href="#" func="update">修改</a>
+                    <a href="#" func="delete">删除</a>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <#include "../decorator/page-form.html"/>
+</script>
+
+<script type="module">
+    import { init } from "${ctxPath}/public/sys/qrtz_app.js"
+    init();
+</script>
+</html>

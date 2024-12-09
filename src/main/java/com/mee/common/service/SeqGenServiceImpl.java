@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -86,6 +89,51 @@ public class SeqGenServiceImpl {
             return dataTime.format(DATE_SHORT_FORMAT)+port.substring(port.length()-2)+ MEDIUM_IT.getAndIncrement();
         }
         return dataTime.format(DATE_SHORT_FORMAT)+port+ MEDIUM_IT.getAndIncrement();
+    }
+
+    /** 生成主键(18位)：12(日期时间YYMMDDHHMISS)+2(seq_key)+4(有序序列) **/
+    private static final Map<String,AtomicInteger> TABLE_SEQ = new HashMap<>(16);
+    private static volatile Long THREAD_ID = null;
+    private static /*volatile*/ String PORT = null;
+    public  String genPrimaryKey(String table_name){
+        if(null==table_name || "".equals(table_name=table_name.toUpperCase().trim())){
+            throw new RuntimeException("必要参数不可为空");
+        }
+        LocalDateTime dataTime = LocalDateTime.now(zoneId);
+        AtomicInteger seq = TABLE_SEQ.get(table_name);
+        if(null==seq){
+            seq = this.createField(table_name);
+        }
+        if( seq.get()==9999 ){
+            // 睡眠以防止并发不够
+            // TODO~ 这个地方其实是有问题的，这个THREAD_NAME其实应该跟当前table绑定才是
+            if( Thread.currentThread().getId()==THREAD_ID ){
+                try {
+                    LOG.info("开始休眠1s...");
+                    TimeUnit.SECONDS.sleep(1);
+                }catch (Exception e){
+                    LOG.error("sleep异常...:{}",table_name,e);
+                }
+            }
+            THREAD_ID = Thread.currentThread().getId();
+            LOG.info("重置计数器:{}",seq);
+            seq.getAndSet(1000);
+        }
+        return dataTime.format(DATE_SHORT_FORMAT)+PORT+ (seq.getAndIncrement());
+    }
+
+    private synchronized AtomicInteger createField(String table_name){
+        if( null==PORT ){
+            String port =  environment.getProperty("local.server.port");
+            PORT = "00"+(null==port?"":port);
+        }
+        AtomicInteger seq ;
+        if((seq=TABLE_SEQ.get(table_name))!=null){
+            return seq;
+        }
+        THREAD_ID =Thread.currentThread().getId();
+        TABLE_SEQ.put(table_name,seq = new AtomicInteger(1000));
+        return seq;
     }
 
 

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+@description    定时任务::节点实例表 QrtzNode(QRTZ_NODE) DAO
+@author         ash
+@date           2024-09-14 10:24:05
+-->
+<!--<mapper namespace="com.mee.module.mapper.QrtzNodeMapper">-->
+<!--<mapper namespace="com.mee.xml.QrtzNode">-->
+<mapper namespace="com.mee.xml.sys.QrtzNode">
+
+    <!-- 字段 -->
+    <!--<resultMap type="com.mee.module.entity.QrtzNode" id="QrtzNodeResult">-->
+    <resultMap type="org.quartz.impl.QrtzNode" id="QrtzNodeResult">
+      <result property="application" column="application"/>
+      <result property="hostIp" column="host_ip"/>
+      <result property="hostName" column="host_name"/>
+      <result property="state" column="state"/>
+      <result property="timeCheck" column="time_check"/>
+    </resultMap>
+
+    <!-- 查询::postgresql -->
+    <select id="findList" resultMap="QrtzNodeResult" databaseId="postgresql" >
+      SELECT * FROM QRTZ_NODE
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="timeCheck != null">AND TIME_CHECK = #{timeCheck}</if>
+      </where>
+      ORDER BY APPLICATION DESC,TIME_CHECK DESC
+    </select>
+    <!-- 查询::mysql -->
+    <select id="findList" resultMap="QrtzNodeResult" databaseId="mysql" >
+      SELECT * FROM QRTZ_NODE
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="timeCheck != null">AND TIME_CHECK = #{timeCheck}</if>
+      </where>
+        ORDER BY APPLICATION DESC,TIME_CHECK DESC
+    </select>
+    <!-- 查询::oracle -->
+    <select id="findList" resultMap="QrtzNodeResult" databaseId="oracle" >
+      SELECT * FROM QRTZ_NODE
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="timeCheck != null">AND TIME_CHECK = #{timeCheck}</if>
+      </where>
+        ORDER BY APPLICATION DESC,TIME_CHECK DESC
+    </select>
+    <!-- 查询::sqlserver -->
+    <select id="findList" resultMap="QrtzNodeResult" databaseId="sqlserver" >
+      SELECT * FROM QRTZ_NODE
+      <where>
+          <if test="application != null and application != ''">AND APPLICATION LIKE #{application}</if>
+          <if test="host_ip != null and host_ip != ''">AND HOST_IP = #{host_ip}</if>
+          <if test="host_name != null and host_name != ''">AND HOST_NAME = #{host_name}</if>
+          <if test="state != null and state != ''">AND STATE = #{state}</if>
+          <if test="timeCheck != null">AND TIME_CHECK = #{timeCheck}</if>
+      </where>
+        ORDER BY APPLICATION DESC,TIME_CHECK DESC
+    </select>
+
+    <!-- 按主键主键查询::postgresql -->
+    <select id="findByApplication" resultMap="QrtzNodeResult" databaseId="postgresql">
+        SELECT * from QRTZ_NODE WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::mysql -->
+    <select id="findByApplication" resultMap="QrtzNodeResult" databaseId="mysql">
+        SELECT * from QRTZ_NODE WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::oracle -->
+    <select id="findByApplication" resultMap="QrtzNodeResult" databaseId="oracle">
+        SELECT * from QRTZ_NODE WHERE APPLICATION=#{application}
+    </select>
+    <!-- 按主键主键查询::sqlserver -->
+    <select id="findByApplication" resultMap="QrtzNodeResult" databaseId="sqlserver">
+        SELECT * from QRTZ_NODE WHERE APPLICATION=#{application}
+    </select>
+
+<!--    &lt;!&ndash; 插入::postgresql &ndash;&gt;-->
+<!--    <insert id="insert" databaseId="postgresql">-->
+<!--    INSERT INTO QRTZ_NODE(-->
+<!--        APPLICATION,-->
+<!--        HOST_IP,-->
+<!--        HOST_NAME,-->
+<!--        STATE,-->
+<!--        TIME_CHECK-->
+<!--    ) values (-->
+<!--        #{application},-->
+<!--        #{hostIp},-->
+<!--        #{hostName},-->
+<!--        #{state},-->
+<!--        #{timeCheck}-->
+<!--    )-->
+<!--    </insert>-->
+<!--    &lt;!&ndash; 插入::mysql &ndash;&gt;-->
+<!--    <insert id="insert" databaseId="mysql">-->
+<!--    INSERT INTO QRTZ_NODE(-->
+<!--        APPLICATION,-->
+<!--        HOST_IP,-->
+<!--        HOST_NAME,-->
+<!--        STATE,-->
+<!--        TIME_CHECK-->
+<!--    ) values (-->
+<!--        #{application},-->
+<!--        #{hostIp},-->
+<!--        #{hostName},-->
+<!--        #{state},-->
+<!--        #{timeCheck}-->
+<!--    )-->
+<!--    </insert>-->
+<!--    &lt;!&ndash; 插入::oracle &ndash;&gt;-->
+<!--    <insert id="insert" databaseId="oracle">-->
+<!--    INSERT INTO QRTZ_NODE(-->
+<!--        APPLICATION,-->
+<!--        HOST_IP,-->
+<!--        HOST_NAME,-->
+<!--        STATE,-->
+<!--        TIME_CHECK-->
+<!--    ) values (-->
+<!--        #{application},-->
+<!--        #{hostIp},-->
+<!--        #{hostName},-->
+<!--        #{state},-->
+<!--        #{timeCheck}-->
+<!--    )-->
+<!--    </insert>-->
+<!--    &lt;!&ndash; 插入::sqlserver &ndash;&gt;-->
+<!--    <insert id="insert" databaseId="sqlserver">-->
+<!--    INSERT INTO QRTZ_NODE(-->
+<!--        APPLICATION,-->
+<!--        HOST_IP,-->
+<!--        HOST_NAME,-->
+<!--        STATE,-->
+<!--        TIME_CHECK-->
+<!--    ) values (-->
+<!--        #{application},-->
+<!--        #{hostIp},-->
+<!--        #{hostName},-->
+<!--        #{state},-->
+<!--        #{timeCheck}-->
+<!--    )-->
+<!--    </insert>-->
+
+    <!-- 批量插入::postgresql -->
+    <insert id="insertBatch" databaseId="postgresql">
+    INSERT INTO QRTZ_NODE(
+        APPLICATION,
+        HOST_IP,
+        HOST_NAME,
+        STATE,
+        TIME_CHECK
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.hostIp},
+        #{i.hostName},
+        #{i.state},
+        #{i.timeCheck}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::mysql -->
+    <insert id="insertBatch" databaseId="mysql">
+    INSERT INTO QRTZ_NODE(
+        APPLICATION,
+        HOST_IP,
+        HOST_NAME,
+        STATE,
+        TIME_CHECK
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.hostIp},
+        #{i.hostName},
+        #{i.state},
+        #{i.timeCheck}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::oracle -->
+    <insert id="insertBatch" databaseId="oracle">
+    INSERT INTO QRTZ_NODE(
+        APPLICATION,
+        HOST_IP,
+        HOST_NAME,
+        STATE,
+        TIME_CHECK
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.hostIp},
+        #{i.hostName},
+        #{i.state},
+        #{i.timeCheck}
+      )
+    </foreach>
+    </insert>
+    <!-- 批量插入::sqlserver -->
+    <insert id="insertBatch" databaseId="sqlserver">
+    INSERT INTO QRTZ_NODE(
+        APPLICATION,
+        HOST_IP,
+        HOST_NAME,
+        STATE,
+        TIME_CHECK
+    ) values
+    <foreach collection ="list" item="i" separator =",">
+      (
+        #{i.application},
+        #{i.hostIp},
+        #{i.hostName},
+        #{i.state},
+        #{i.timeCheck}
+      )
+    </foreach>
+    </insert>
+
+    <!-- 更新::postgresql -->
+    <update id="update" databaseId="postgresql">
+      UPDATE QRTZ_NODE
+      <set>
+       <if test="hostName != null and hostName != ''">HOST_NAME=#{hostName},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="timeCheck != null">TIME_CHECK=#{timeCheck},</if>
+      </set>
+      WHERE APPLICATION=#{application} AND HOST_IP=#{host_ip}
+    </update>
+    <!-- 更新::mysql -->
+    <update id="update" databaseId="mysql">
+      UPDATE QRTZ_NODE
+      <set>
+       <if test="hostName != null and hostName != ''">HOST_NAME=#{hostName},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="timeCheck != null">TIME_CHECK=#{timeCheck},</if>
+      </set>
+      WHERE APPLICATION=#{application} AND HOST_IP=#{host_ip}
+    </update>
+    <!-- 更新::oracle -->
+    <update id="update" databaseId="oracle">
+      UPDATE QRTZ_NODE
+      <set>
+       <if test="hostName != null and hostName != ''">HOST_NAME=#{hostName},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="timeCheck != null">TIME_CHECK=#{timeCheck},</if>
+      </set>
+      WHERE APPLICATION=#{application} AND HOST_IP=#{host_ip}
+    </update>
+    <!-- 更新::sqlserver -->
+    <update id="update" databaseId="sqlserver">
+      UPDATE QRTZ_NODE
+      <set>
+       <if test="hostName != null and hostName != ''">HOST_NAME=#{hostName},</if>
+       <if test="state != null and state != ''">STATE=#{state},</if>
+       <if test="timeCheck != null">TIME_CHECK=#{timeCheck},</if>
+      </set>
+      WHERE APPLICATION=#{application} AND HOST_IP=#{hostIp}
+    </update>
+
+    <!-- 按主键删除::postgresql -->
+    <delete id="deleteByApplication" databaseId="postgresql">
+       DELETE FROM QRTZ_NODE WHERE APPLICATION=#{application} AND HOST_IP=#{hostIp}
+    </delete>
+    <!-- 按主键删除::mysql -->
+    <delete id="deleteByApplication" databaseId="mysql">
+       DELETE FROM QRTZ_NODE WHERE APPLICATION=#{application} AND HOST_IP=#{hostIp}
+    </delete>
+    <!-- 按主键删除::oracle -->
+    <delete id="deleteByApplication" databaseId="oracle">
+       DELETE FROM QRTZ_NODE WHERE APPLICATION=#{application} AND HOST_IP=#{hostIp}
+    </delete>
+    <!-- 按主键删除::sqlserver -->
+    <delete id="deleteByApplication" databaseId="sqlserver">
+       DELETE FROM QRTZ_NODE WHERE APPLICATION=#{application} AND HOST_IP=#{hostIp}
+    </delete>
+
+    <!-- 批量删除::postgresql -->
+    <delete id="deleteBatch" databaseId="postgresql">
+      DELETE FROM QRTZ_NODE WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::mysql -->
+    <delete id="deleteBatch" databaseId="mysql">
+      DELETE FROM QRTZ_NODE WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::oracle -->
+    <delete id="deleteBatch" databaseId="oracle">
+      DELETE FROM QRTZ_NODE WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+    <!-- 批量删除::sqlserver -->
+    <delete id="deleteBatch" databaseId="sqlserver">
+      DELETE FROM QRTZ_NODE WHERE APPLICATION IN
+      <foreach collection ="list" item="item" open="(" close=")" separator =",">
+          #{item}
+      </foreach>
+    </delete>
+
+    <!-- 更新状态 -->
+    <update id="updateState" >
+        UPDATE QRTZ_NODE SET STATE=#{state},TIME_CHECK=#{timeCheck} WHERE APPLICATION = #{application} AND HOST_IP=#{hostIp} AND STATE != #{state}
+    </update>
+
+</mapper>
